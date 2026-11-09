@@ -1083,11 +1083,78 @@
      
     .preview-scroll-wrapper {
       width: 100%;
+      max-width: 100%;
       overflow-x: auto;
       overflow-y: visible;
       -webkit-overflow-scrolling: touch;
-      padding: 8px 0;
+      touch-action: pan-x pan-y;
+      overscroll-behavior-x: contain;
+      padding: 4px 0 16px 0;
       margin: 0 auto;
+      position: relative;
+      box-sizing: border-box;
+    }
+
+     
+    .preview-scroll-wrapper::-webkit-scrollbar {
+      height: 4px;
+    }
+    .preview-scroll-wrapper::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.03);
+      border-radius: 10px;
+    }
+    .preview-scroll-wrapper::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 10px;
+    }
+
+     
+    .mobile-scroll-hint {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: rgba(248, 249, 250, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      color: #333333;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin: 0 auto 10px auto;
+      width: fit-content;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      letter-spacing: 0.3px;
+    }
+    .mobile-scroll-hint svg {
+      width: 13px;
+      height: 13px;
+      stroke: var(--primary-red);
+      fill: none;
+      stroke-width: 2.2;
+    }
+
+    @media (max-width: 768px) {
+      .mobile-scroll-hint {
+        display: inline-flex;
+      }
+      .preview-scroll-wrapper .a4-page {
+        min-width: 780px !important;  
+        margin: 0 !important;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.06) !important;
+      }
+       
+      table.data-table td[contenteditable="true"]:focus,
+      .seat-grid-table td[contenteditable="true"]:focus,
+      .seat-box[contenteditable="true"]:focus {
+        outline: 2px solid var(--primary-red) !important;
+        background: #FFFFFF !important;
+        box-shadow: 0 0 10px rgba(211, 47, 47, 0.25) !important;
+        z-index: 10;
+        position: relative;
+      }
     }
 
      
@@ -1666,21 +1733,34 @@
         <button type="button" id="btnLabelPrev" title="上一頁">
           <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
         </button>
-        <span class="pagination-info" id="labelPageIndicator">第 1 頁 / 共 1 頁 (A4 標籤紙，每頁 8 位來賓)</span>
+        <span class="pagination-info" id="labelPageIndicator">1/1</span>
         <button type="button" id="btnLabelNext" title="下一頁">
           <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </button>
       </div>
 
-      <div class="a4-page">
-        
-        <div class="labels-a4-sheet" id="labelsGridContainer"></div>
+      <div class="mobile-scroll-hint">
+        <svg viewBox="0 0 24 24"><path d="M7 16l-4-4 4-4m10 8l4-4-4-4M3 12h18"></path></svg>
+        <span>左右滑動檢視全景 ｜ 點擊標籤文字直接編輯</span>
+      </div>
+
+      <div class="preview-scroll-wrapper">
+        <div class="a4-page">
+          
+          <div class="labels-a4-sheet" id="labelsGridContainer"></div>
+        </div>
       </div>
     </div>
 
     
     <div class="tab-content" id="tabSeats">
-      <div class="a4-page">
+      <div class="mobile-scroll-hint">
+        <svg viewBox="0 0 24 24"><path d="M7 16l-4-4 4-4m10 8l4-4-4-4M3 12h18"></path></svg>
+        <span>左右滑動檢視全景 ｜ 點擊任一席位直接編輯</span>
+      </div>
+
+      <div class="preview-scroll-wrapper">
+        <div class="a4-page">
         
         <div class="seat-banner-box" id="seatChartBanner">
           2026/11/05 座位表 會員53人 - 來賓2人
@@ -1725,6 +1805,7 @@
           </thead>
           <tbody id="seatGridTbody"></tbody>
         </table>
+        </div>
       </div>
     </div>
 
