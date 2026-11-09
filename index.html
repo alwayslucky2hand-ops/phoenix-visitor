@@ -1,1 +1,3680 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>台中市區鳳凰分會-來賓接待系統</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    :root {
+      --bg: #FFFFFF;
+      --surface: #FFFFFF;
+      --surface-subtle: #FAFAFA;
+      --border: #E0E0E0;
+      --border-dark: #111111;
+      --text: #111111;
+      --text-muted: #666666;
+      --primary-red: #D32F2F;
+      --red-deep: #B71C1C;
+      --red-light: #FFEBEE;
+      --red-accent: #FFCDD2;
+      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
+       
+      --color-signin-header: #434343;
+      --color-task-header: #BDD6EE;
+      --color-task-group: #F4CCCC;
+      --color-task-top: #990000;
+      --color-seat-guest: #FFF9C4;
+      --color-seat-head: #D9D2E9;
+      --color-seat-banner: #CCCCCC;
+      --color-label-blue: #1A73E8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-main);
+      line-height: 1.5;
+      padding: 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      border-bottom: 2px solid var(--border-dark);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .title-area h1 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .title-area h1 span.indicator {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      background: var(--primary-red);
+    }
+
+    .title-area p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .header-inputs {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field-group label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input[type="date"],
+    input[type="text"],
+    textarea,
+    select {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 12px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s ease;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      box-sizing: border-box;
+      max-width: 100%;
+    }
+
+    .header-leader-input {
+      width: 140px;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--primary-red);
+    }
+
+    button {
+      background: var(--surface);
+      border: 1px solid var(--border-dark);
+      color: var(--text);
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.15s ease;
+    }
+
+    button:hover {
+      background: var(--red-light);
+      border-color: var(--primary-red);
+      color: var(--primary-red);
+    }
+
+    button:active {
+      transform: scale(0.96);
+    }
+
+    button svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    button.btn-primary {
+      background: var(--primary-red);
+      border-color: var(--primary-red);
+      color: #FFFFFF;
+      min-width: 48px;
+    }
+
+    button.btn-primary:hover {
+      background: var(--red-deep);
+      border-color: var(--red-deep);
+      color: #FFFFFF;
+    }
+
+    button.btn-primary svg {
+      stroke: #FFFFFF;
+    }
+
+    button.is-loading {
+      pointer-events: none;
+      background: var(--red-deep);
+      border-color: var(--red-deep);
+      color: #FFFFFF;
+      min-width: 76px;
+      padding: 0 6px;
+    }
+
+    button .progress-badge {
+      display: none;
+      font-size: 12px;
+      font-weight: 700;
+      margin-left: 6px;
+      letter-spacing: -0.5px;
+    }
+
+    button.is-loading .progress-badge {
+      display: inline-block;
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .input-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .input-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+
+    .input-card-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .input-card-title svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--primary-red);
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .input-card textarea {
+      width: 100%;
+      height: 150px;
+      resize: vertical;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+
+     
+    .upload-dropzone {
+      border: 1.5px dashed var(--border);
+      background: var(--surface-subtle);
+      border-radius: 4px;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .upload-dropzone:hover, .upload-dropzone.dragover {
+      border-color: var(--primary-red);
+      background: #FFF8F8;
+    }
+
+    .upload-prompt {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+    }
+
+    .upload-prompt svg {
+      width: 32px;
+      height: 32px;
+      stroke: var(--primary-red);
+      stroke-width: 1.8;
+      fill: none;
+    }
+
+    .upload-prompt p {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .upload-prompt span {
+      font-size: 11px;
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      gap: 8px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .preview-thumb-box {
+      position: relative;
+      width: 100%;
+      padding-top: 100%;
+      border: 1px solid var(--border);
+      background: #FFFFFF;
+      overflow: hidden;
+      border-radius: 3px;
+    }
+
+    .preview-thumb-box img {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    .preview-thumb-box .btn-remove-thumb {
+      position: absolute;
+      top: 2px; right: 2px;
+      width: 18px; height: 18px;
+      background: rgba(0,0,0,0.6);
+      color: #FFF;
+      border: none;
+      border-radius: 50%;
+      font-size: 11px;
+      line-height: 18px;
+      text-align: center;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .preview-thumb-box .btn-remove-thumb:hover {
+      background: var(--primary-red);
+    }
+
+    .stage-controls-bar {
+      border: 1px solid var(--border);
+      background: var(--surface-subtle);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+     
+    .tabs-top-actions-bar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .tabs-top-buttons-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: nowrap;
+    }
+
+    .stage-buttons-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .stage-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .status-panel {
+      border: 1px solid var(--border);
+      padding: 10px 16px;
+      background: #FFFFFF;
+      margin-bottom: 20px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .status-panel.active {
+      display: flex;
+    }
+
+    .status-info {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-info .dot {
+      width: 8px;
+      height: 8px;
+      background: var(--primary-red);
+      border-radius: 50%;
+      animation: pulse 1s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { opacity: 0.3; }
+      to { opacity: 1; }
+    }
+
+    .progress-bar-container {
+      flex: 1;
+      max-width: 280px;
+      height: 6px;
+      background: var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--primary-red);
+      width: 0%;
+      transition: width 0.2s ease;
+    }
+
+    .bullet-section {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      padding: 18px;
+      margin-bottom: 24px;
+    }
+
+    .bullet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+    }
+
+    .bullet-header h3 {
+      font-size: 14.5px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bullet-content {
+      font-family: inherit;
+      font-size: 13px;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      color: var(--text);
+      background: var(--surface-subtle);
+      padding: 14px;
+      border: 1px solid var(--border);
+    }
+
+    .tabs-header {
+      display: flex;
+      gap: 2px;
+      border-bottom: 2px solid var(--border-dark);
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      width: auto;
+      height: 38px;
+      padding: 0 16px;
+      border: 1px solid var(--border);
+      border-bottom: none;
+      background: var(--surface-subtle);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: var(--surface);
+      border-color: var(--border-dark);
+      border-bottom: 2px solid var(--surface);
+      color: var(--primary-red);
+      margin-bottom: -2px;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .a4-page {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      padding: 28px;
+      margin: 0 auto 24px auto;
+      max-width: 1120px;
+      min-height: 500px;
+      position: relative;
+    }
+
+    .a4-page-header {
+      text-align: center;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--border-dark);
+      padding-bottom: 12px;
+    }
+
+    .a4-page-header h2 {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .a4-page-header .subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .pagination-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+
+    .pagination-info {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      margin-bottom: 16px;
+    }
+
+    table.data-table th, table.data-table td {
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      text-align: left;
+    }
+
+    table.data-table.signin-table th {
+      background: var(--color-signin-header);
+      color: #FFFFFF;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    table.data-table.task-table {
+      table-layout: fixed !important;
+      width: 100% !important;
+      border-collapse: collapse;
+    }
+
+    table.data-table.task-table th {
+      background: var(--color-task-header);
+      color: var(--text);
+      font-weight: 700;
+      text-align: center;
+      padding: 7px 6px;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    table.data-table.task-table td {
+      padding: 7px 8px;
+      font-size: 12px;
+      word-break: break-word !important;
+      line-height: 1.5;
+    }
+
+     
+    #fullPreviewPagesContainer [contenteditable] {
+      pointer-events: none !important;
+      user-select: none !important;
+      outline: none !important;
+      cursor: default !important;
+    }
+    #fullPreviewPagesContainer td:hover {
+      background: inherit !important;
+      outline: none !important;
+    }
+
+    table.data-table td.center {
+      text-align: center;
+    }
+
+    table.data-table td[contenteditable="true"]:hover {
+      background: #FFFDE7;
+      outline: 1px dashed var(--primary-red);
+    }
+
+    table.data-table td[contenteditable="true"]:focus {
+      background: #FFFFFF;
+      outline: 2px solid var(--primary-red);
+    }
+
+     
+    #tabSignIn .a4-page {
+      width: 210mm;
+      height: 297mm;
+      padding: 9mm 10mm;  
+      box-sizing: border-box;
+      margin: 0 auto 24px auto;
+      background: #FFFFFF;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    #tabSignIn .a4-page-header {
+      margin-bottom: 6px;
+      border-bottom: 2px solid var(--border-dark);
+      padding-bottom: 6px;
+      text-align: center;
+    }
+
+    #tabSignIn .a4-page-header h2 {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      margin-bottom: 2px;
+    }
+
+    #tabSignIn table.signin-table {
+      width: 190mm;
+      border-collapse: collapse;
+      table-layout: fixed;
+      height: 246mm;  
+      margin-bottom: 4px;
+    }
+
+    #tabSignIn table.signin-table th {
+      background: var(--color-signin-header);
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 13px;
+      text-align: center;
+      vertical-align: middle;
+      padding: 2px 2px;
+      height: 12mm;
+      line-height: 1.25;
+      box-sizing: border-box;
+    }
+
+    #tabSignIn table.signin-table tr {
+      height: calc((246mm - 12mm) / 15);  
+    }
+
+    #tabSignIn table.signin-table td {
+      border: 1px solid var(--border);
+      padding: 4px 6px;
+      text-align: left;
+      vertical-align: middle;
+      font-size: 12px;
+      height: calc((246mm - 12mm) / 15);
+      box-sizing: border-box;
+    }
+
+    #tabSignIn table.signin-table td.center {
+      text-align: center;
+    }
+
+     
+    #tabTasks .a4-page,
+    #tabSeats .a4-page {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 9mm 10mm;
+      box-sizing: border-box;
+      margin: 0 auto 24px auto;
+      background: #FFFFFF;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+    }
+
+    #tabTasks .data-table {
+      margin-bottom: 12px;
+    }
+
+    #tabTasks h4 {
+      font-size: 13px;
+      font-weight: 700;
+      margin: 10px 0 6px 0;
+      color: var(--primary-red);
+    }
+
+     
+    #tabLabels .a4-page {
+      width: 210mm;
+      height: 297mm;
+      padding: 9.5mm 10mm;
+      box-sizing: border-box;
+      margin: 0 auto 24px auto;
+      background: #FFFFFF;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .labels-a4-sheet {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: repeat(4, 69.5mm);
+      row-gap: 0;
+      column-gap: 8mm;
+      height: 278mm;
+      width: 190mm;
+      box-sizing: border-box;
+      margin: 0 auto;
+    }
+
+    .labels-a4-sheet {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: repeat(4, 69.5mm);  
+      row-gap: 0;
+      column-gap: 8mm;
+      height: 278mm;
+      box-sizing: border-box;
+    }
+
+    .label-sticker-card {
+      border: 1.5px solid #222222;
+      background: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      height: 69.5mm;
+      box-sizing: border-box;
+      margin-bottom: -1.5px;  
+    }
+
+    .label-sticker-header {
+      border-bottom: 1.5px solid #222222;
+      height: 19mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    .label-sticker-industry {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: #1155CC;
+      letter-spacing: 1px;
+    }
+
+    .label-sticker-body {
+      flex: 1;
+      height: 50.5mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      box-sizing: border-box;
+      gap: 3px;
+    }
+
+    .label-sticker-name {
+      font-size: 28px;
+      font-weight: 800;
+      color: #1155CC;
+      letter-spacing: 2px;
+      line-height: 1.2;
+    }
+
+    .label-sticker-company {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1155CC;
+    }
+
+     
+    .seat-banner-box {
+      background: var(--color-seat-banner);
+      border: 1px solid #999999;
+      padding: 8px;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .seat-special-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 12px;
+      padding-right: 60px;
+    }
+
+    .seat-badge-special {
+      border: 1px solid #888888;
+      background: #FCE5CD;
+      padding: 6px 16px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .seat-head-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 24px;
+      border: 1px dashed #CCCCCC;
+      padding: 12px;
+      background: #FCFCFC;
+    }
+
+    .seat-box {
+      border: 1px solid #777777;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      min-width: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .seat-grid-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 8px;
+      margin-bottom: 20px;
+    }
+
+    .seat-grid-table td {
+      border: 1px solid #777777;
+      text-align: center;
+      padding: 10px 4px;
+      font-size: 13px;
+      font-weight: 600;
+      min-width: 80px;
+    }
+
+    .seat-grid-table td.guest-seat {
+      background: var(--color-seat-guest) !important;
+      border: 2px solid #E0B400;
+      font-weight: 800;
+      color: #B78103;
+    }
+
+    .seat-grid-table td.empty-seat {
+      background: #FAFAFA;
+      border: 1px dashed #DDDDDD;
+      color: #AAA;
+    }
+
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .toast {
+      background: var(--text);
+      color: #FFFFFF;
+      padding: 10px 16px;
+      font-size: 13px;
+      border-left: 4px solid var(--primary-red);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      animation: slideIn 0.2s ease;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: #FFFFFF;
+      border: 1px solid var(--border-dark);
+      padding: 24px;
+      width: 480px;
+      max-width: 90vw;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+
+    .modal-header h4 {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+     
+    .preview-scroll-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: visible;
+      -webkit-overflow-scrolling: touch;
+      padding: 8px 0;
+      margin: 0 auto;
+    }
+
+     
+    .officer-card-container {
+      margin-bottom: 16px;
+      border-left: 4px solid var(--primary-red) !important;
+      background: #FFFDFD !important;
+      box-sizing: border-box !important;
+      max-width: 100% !important;
+    }
+
+    .officer-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .officer-card-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    .officer-card-title svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--primary-red);
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    .officer-rows-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    .officer-rows-control label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #1155CC;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .officer-rows-control select {
+      padding: 6px 10px;
+      font-size: 13px;
+      font-weight: 700;
+      border: 1.5px solid #1155CC;
+      border-radius: 4px;
+      background: #FFFFFF;
+      outline: none;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+     
+    @media (max-width: 768px) {
+      html, body {
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
+        margin: 0 !important;
+      }
+
+      body {
+        padding: 12px 14px !important;  
+      }
+
+       
+      .title-area {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      .title-area h1 {
+        font-size: 18px !important;
+        line-height: 1.35 !important;
+        flex-wrap: wrap !important;
+      }
+
+      .title-area p {
+        font-size: 11px !important;
+        word-break: break-word !important;
+      }
+
+       
+      header {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+      }
+
+      .header-inputs {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        gap: 10px !important;
+        box-sizing: border-box !important;
+      }
+
+      .field-group {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+      }
+
+       
+      .field-group input[type="date"],
+      .field-group input[type="text"],
+      .field-group select {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+        display: block !important;
+        margin: 0 !important;
+        padding: 9px 12px !important;
+        font-size: 14px !important;
+        border-radius: 4px !important;
+      }
+
+      .header-leader-input {
+        width: 100% !important;
+      }
+
+      .header-actions-group {
+        align-items: flex-start !important;
+      }
+
+      .header-btn-row {
+        display: flex !important;
+        gap: 8px !important;
+        width: 100% !important;
+      }
+
+      .input-grid {
+        grid-template-columns: 1fr !important;
+        gap: 14px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+
+       
+      .officer-card-header {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+      }
+
+      .officer-card-title {
+        white-space: normal !important;
+        font-size: 14px !important;
+        line-height: 1.4 !important;
+      }
+
+       
+      .officer-rows-control {
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        background: var(--surface-subtle) !important;
+        padding: 6px 10px !important;
+        border-radius: 4px !important;
+        border: 1px solid var(--border) !important;
+        box-sizing: border-box !important;
+      }
+
+      .officer-rows-control label {
+        font-size: 12px !important;
+        white-space: nowrap !important;
+        color: #1155CC !important;
+      }
+
+      .officer-rows-control select {
+        flex: 1 !important;
+        min-width: 0 !important;
+        width: 100% !important;
+        font-size: 12.5px !important;
+        padding: 5px 8px !important;
+        border-color: #1155CC !important;
+      }
+
+       
+      .officer-settings-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+
+      .officer-settings-grid > div:last-child {
+        grid-column: 1 / -1 !important;  
+      }
+
+      .officer-settings-grid label {
+        font-size: 11px !important;
+        display: block !important;
+        margin-bottom: 2px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+      }
+
+      .officer-settings-grid input {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        font-size: 13px !important;
+        padding: 6px 8px !important;
+      }
+
+      .bullet-header {
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+      }
+
+      .stage-controls-bar {
+        justify-content: flex-start !important;
+        padding: 10px 14px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+
+       
+      .tabs-top-actions-bar {
+        justify-content: flex-start !important;
+        margin-bottom: 10px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+
+      .tabs-top-buttons-group {
+        gap: 8px !important;
+      }
+
+      .tabs-header-bar {
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 8px !important;
+      }
+
+      .tabs-header {
+        overflow-x: auto !important;
+        flex-wrap: nowrap !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding-bottom: 2px !important;
+      }
+
+      .tab-btn {
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        padding: 0 12px !important;
+        font-size: 12.5px !important;
+      }
+
+      table.data-table td, table.data-table th {
+        word-break: break-word !important;
+        white-space: normal !important;
+      }
+    }
+
+     
+    #print-container {
+      display: none;
+    }
+
+    @media print {
+      body.printing-active-tab {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #FFFFFF !important;
+        max-width: 100% !important;
+      }
+
+       
+      body.printing-active-tab > *:not(#print-container) {
+        display: none !important;
+      }
+
+      body.printing-active-tab #print-container {
+        display: block !important;
+        width: 210mm !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+        background: #FFFFFF !important;
+      }
+
+      body.printing-active-tab #print-container * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+
+      body.printing-active-tab #print-container .a4-page {
+        margin: 0 auto !important;
+        box-shadow: none !important;
+        border: none !important;
+        width: 210mm !important;
+        min-height: 297mm !important;
+        padding: 9mm 10mm !important;
+        box-sizing: border-box !important;
+        page-break-after: always !important;
+        break-after: page !important;
+      }
+
+      body.printing-active-tab #print-container .a4-page:last-child {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
+
+      @page {
+        size: A4 portrait;
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  
+  <header>
+    <div class="title-area">
+      <h1><span class="indicator"></span>台中市區鳳凰分會-來賓接待系統</h1>
+      <p>Phoenix Chapter Visitor Reception & Table Generation System</p>
+    </div>
+
+    <div class="header-inputs">
+      <div class="field-group">
+        <label for="inputMeetingDate">例會日期 (西元年月日)</label>
+        <input type="date" id="inputMeetingDate" value="2026-11-05">
+      </div>
+
+      <div class="field-group">
+        <label for="inputLeaderName">接待負責人姓名</label>
+        <input type="text" id="inputLeaderName" placeholder="填寫負責人姓名" value="森森" class="header-leader-input">
+      </div>
+
+      <div class="field-group header-actions-group">
+        <label>&nbsp;</label>
+        <div class="header-btn-row">
+          
+          <button type="button" id="btnSettings" title="系統設定與參考試算表">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          </button>
+          
+          
+          <button type="button" id="btnSaveToHistory" title="儲存當前資料至歷史紀錄工作表">
+            <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  
+  <div class="input-grid">
+    
+    <div class="input-card">
+      <div class="input-card-header">
+        <div class="input-card-title">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+          1. 來賓報名表文字資訊
+        </div>
+      </div>
+      <textarea id="inputGuestsText" placeholder="請直接貼上每週秘財來賓報名表文字（支援直接由 Google 試算表整列複製貼入，系統自動過濾時間戳記）。"></textarea>
+    </div>
+
+    
+    <div class="input-card">
+      <div class="input-card-header">
+        <div class="input-card-title">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          2. 群組例會通知 (代理人 / 外帶早餐)
+        </div>
+      </div>
+      <textarea id="inputLineNoticeText" placeholder="請直接貼上 Line 群組每週例會通知（系統將自動識別「代理人接龍」請假排除與「外帶餐盒」需求）。"></textarea>
+    </div>
+
+    
+    <div class="input-card">
+      <div class="input-card-header">
+        <div class="input-card-title">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          3. 來賓加入意願截圖 (不限張數)
+        </div>
+        
+        <button type="button" id="btnClearImages" title="清空截圖" style="width: 32px; height: 32px; display: none;">
+          <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+        </button>
+      </div>
+
+      <div class="upload-dropzone" id="willingnessDropZone">
+        <input type="file" id="inputWillingnessImages" accept="image/*" multiple style="display: none;">
+        <div class="upload-prompt" id="uploadPrompt">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <p>（AI自動解析姓名與意願）</p>
+        </div>
+        <div class="preview-grid" id="willingnessPreviewGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="bullet-section officer-card-container">
+    <div class="officer-card-header">
+      <h3 class="officer-card-title">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        九大幹部席位與排數設定
+      </h3>
+      <div class="officer-rows-control">
+        <label for="selectSeatRows">座位表排數：</label>
+        <select id="selectSeatRows">
+          <option value="8" selected>8 排 (預設標準)</option>
+          <option value="9">9 排</option>
+          <option value="10">10 排</option>
+          <option value="11">11 排</option>
+          <option value="12">12 排</option>
+          <option value="13">13 排</option>
+          <option value="14">14 排</option>
+          <option value="15">15 排</option>
+          <option value="16">16 排</option>
+          <option value="17">17 排</option>
+          <option value="18">18 排</option>
+          <option value="19">19 排</option>
+          <option value="20">20 排 (常規極限)</option>
+          <option value="25">25 排 (大型商務日 - 50 位來賓)</option>
+          <option value="30">30 排 (擴大商務日 - 60 位來賓)</option>
+          <option value="35">35 排 (超大商務日 - 70 位來賓)</option>
+          <option value="40">40 排 (百人商務日 - 80 位來賓)</option>
+        </select>
+        <span id="capacityBadge" style="font-size: 11.5px; font-weight: 700; color: #1155CC; margin-left: 6px; white-space: nowrap;">(來賓容量 16 人 ｜ 總席位 55 席)</span>
+      </div>
+    </div>
+    <div class="officer-settings-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(115px, 1fr)); gap: 8px; margin-top: 10px;">
+      <div><label style="font-size: 11px; color:#666; display:block;">成長協調員</label><input type="text" id="off_headC" value="" placeholder="載入前次紀錄..." oninput="syncOfficerColor(this); saveOfficersLocal();" style="width:100%; padding:4px 6px;"></div>
+      <div><label style="font-size: 11px; color:#666; display:block;">副主席</label><input type="text" id="off_headE" value="" placeholder="載入前次紀錄..." oninput="syncOfficerColor(this); saveOfficersLocal();" style="width:100%; padding:4px 6px;"></div>
+      <div><label style="font-size: 11px; color:#666; display:block;">主席</label><input type="text" id="off_headG" value="" placeholder="載入前次紀錄..." oninput="syncOfficerColor(this); saveOfficersLocal();" style="width:100%; padding:4px 6px;"></div>
+      <div><label style="font-size: 11px; color:#666; display:block;">秘書財務</label><input type="text" id="off_headO" value="" placeholder="載入前次紀錄..." oninput="syncOfficerColor(this); saveOfficersLocal();" style="width:100%; padding:4px 6px;"></div>
+      <div><label style="font-size: 11px; color:#666; display:block;">活動協調員</label><input type="text" id="off_headQ" value="" placeholder="載入前次紀錄..." oninput="syncOfficerColor(this); saveOfficersLocal();" style="width:100%; padding:4px 6px;"></div>
+      <div><label style="font-size: 11px; color:#666; display:block;">教育協調員</label><input type="text" id="off_headS" value="" placeholder="載入前次紀錄..." oninput="syncOfficerColor(this); saveOfficersLocal();" style="width:100%; padding:4px 6px;"></div>
+      <div><label style="font-size: 11px; color:#1155CC; font-weight:700; display:block;">資訊協調員 (Row 7)</label><input type="text" id="off_specialQ7" value="" placeholder="載入前次紀錄..." oninput="syncOfficerColor(this); saveOfficersLocal();" style="width:100%; padding:4px 6px;"></div>
+      <div><label style="font-size: 11px; color:#B78103; font-weight:700; display:block;">導師協調員 (排1左)</label><input type="text" id="off_topLeft" value="" placeholder="載入前次紀錄..." oninput="syncOfficerColor(this); saveOfficersLocal();" style="width:100%; padding:4px 6px;"></div>
+      <div><label style="font-size: 11px; color:#B78103; font-weight:700; display:block;">來賓接待長 (排1右)</label><input type="text" id="off_topRight" value="" placeholder="載入前次紀錄..." oninput="syncOfficerColor(this); saveOfficersLocal();" style="width:100%; padding:4px 6px;"></div>
+    </div>
+  </div>
+
+  
+  <div class="stage-controls-bar">
+    <div class="stage-buttons-group">
+      
+      <button type="button" id="btnStage1" title="【階段一】產出來賓簽到表與名牌標籤貼紙">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line></svg>
+        <span class="progress-badge" id="btnStage1Progress">0%</span>
+      </button>
+    </div>
+  </div>
+
+  
+  <div class="status-panel" id="statusPanel">
+    <div class="status-info">
+      <span class="dot"></span>
+      <span id="statusMessage">系統就緒，請點選上方階段按鈕分別運作</span>
+    </div>
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" id="progressBarFill"></div>
+    </div>
+  </div>
+
+  
+  <div class="bullet-section" id="bulletSection">
+    <div class="bullet-header">
+      <h3>
+        <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; stroke: var(--primary-red); fill: none;"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+        本週來賓的訊息 (條列整理)
+      </h3>
+      <button type="button" id="btnCopyBullets" title="複製條列內容至剪貼簿">
+        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      </button>
+    </div>
+    <div class="bullet-content" id="bulletContent">請點擊「階段一」按鈕開始運作...</div>
+  </div>
+
+  
+  <div id="outputTabsContainer">
+    
+    <div class="tabs-top-actions-bar">
+      <div class="tabs-top-buttons-group">
+        
+        <button type="button" id="btnStage2" title="【階段二】座位表智慧排位">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span class="progress-badge" id="btnStage2Progress">0%</span>
+        </button>
+
+        
+        <button type="button" id="btnStage3" title="【階段三】任務表_主全體工作分配">
+          <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+          <span class="progress-badge" id="btnStage3Progress">0%</span>
+        </button>
+      </div>
+    </div>
+
+    
+    <div class="tabs-header-bar" style="display: flex; justify-content: flex-start; align-items: center; border-bottom: 2px solid var(--border-dark); margin-bottom: 16px;">
+      <div class="tabs-header" style="display: flex; gap: 2px; border-bottom: none; margin-bottom: 0;">
+        <div class="tab-btn active" data-tab="tabSignIn">簽到表</div>
+        <div class="tab-btn" data-tab="tabLabels">標籤貼紙</div>
+        <div class="tab-btn" data-tab="tabSeats">座位表</div>
+        <div class="tab-btn" data-tab="tabTasks">任務表</div>
+      </div>
+    </div>
+
+    
+    <div class="tab-content active" id="tabSignIn">
+      <div class="pagination-bar">
+        <button type="button" id="btnSignInPrev" title="上一頁">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <span class="pagination-info" id="signInPageIndicator">第 1 頁 / 共 2 頁 (A4 每頁 15 位)</span>
+        <button type="button" id="btnSignInNext" title="下一頁">
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+
+      <div class="preview-scroll-wrapper">
+        <div class="a4-page">
+        <div class="a4-page-header">
+          <h2 id="signInTitle">鳳凰分會例會來賓簽到表</h2>
+          <div class="subtitle" id="signInSubtitle">例會日期：民國 115/11/05 ｜ 列印專用 A4 格式</div>
+        </div>
+
+        <table class="data-table signin-table" id="tableSignIn">
+          <thead>
+            <tr>
+              <th style="width: 10mm;">序號</th>
+              <th style="width: 22mm;">來賓大名</th>
+              <th style="width: 35mm;">公司名稱</th>
+              <th style="width: 15mm; line-height: 1.2;">產業<br>衝突</th>
+              <th style="width: 20mm;">介紹人</th>
+              <th style="width: 18mm;">保母</th>
+              <th style="width: 26mm;">來賓簽名</th>
+              <th style="width: 14mm; line-height: 1.2;">名片<br>一張</th>
+              <th style="width: 14mm; line-height: 1.2;">繳費<br>註記</th>
+              <th style="width: 16mm;">早餐</th>
+            </tr>
+          </thead>
+          <tbody id="signInTbody"></tbody>
+        </table>
+        <div style="font-size: 11px; color: var(--text-muted); margin-top: 10px;">
+          ※ 來賓入席費用 700 元。表格內容支援點擊直接線上編輯與修改。
+        </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="tab-content" id="tabLabels">
+      <div class="pagination-bar">
+        <button type="button" id="btnLabelPrev" title="上一頁">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <span class="pagination-info" id="labelPageIndicator">第 1 頁 / 共 1 頁 (A4 標籤紙，每頁 8 位來賓)</span>
+        <button type="button" id="btnLabelNext" title="下一頁">
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+
+      <div class="a4-page">
+        
+        <div class="labels-a4-sheet" id="labelsGridContainer"></div>
+      </div>
+    </div>
+
+    
+    <div class="tab-content" id="tabSeats">
+      <div class="a4-page">
+        
+        <div class="seat-banner-box" id="seatChartBanner">
+          2026/11/05 座位表 會員53人 - 來賓2人
+        </div>
+
+        
+        <div class="seat-special-row">
+          <div class="seat-badge-special" style="background: #FAFAFA; border: 1.5px dashed #999; color: #555;">
+            <span style="font-size: 10px; color: #888; display: block;">資訊協調員</span>
+            <span class="officer-name" style="font-size: 12px; font-weight: 600;">(點擊填寫)</span>
+          </div>
+        </div>
+
+        
+        <div style="font-size: 11.5px; font-weight: 700; color: #555; margin-bottom: 4px;">
+          【 主席台 / 幹部席 (Row 10) 】
+        </div>
+        <div class="seat-head-row" id="seatHeadRowContainer">
+          <div class="seat-box" style="background: #FAFAFA; border: 1px dashed #999; flex-direction: column;"><span style="font-size: 10px; color: #888;">成長協調員</span><span style="font-size: 12px; color: #666;">(空)</span></div>
+          <div class="seat-box" style="background: #FAFAFA; border: 1px dashed #999; flex-direction: column;"><span style="font-size: 10px; color: #888;">副主席</span><span style="font-size: 12px; color: #666;">(空)</span></div>
+          <div class="seat-box" style="background: #FAFAFA; border: 1px dashed #999; flex-direction: column;"><span style="font-size: 10px; color: #888;">主席</span><span style="font-size: 12px; color: #666;">(空)</span></div>
+          <div class="seat-box" style="background: #FAFAFA; border: 1px dashed #999; flex-direction: column;"><span style="font-size: 10px; color: #888;">秘書財務</span><span style="font-size: 12px; color: #666;">(空)</span></div>
+          <div class="seat-box" style="background: #FAFAFA; border: 1px dashed #999; flex-direction: column;"><span style="font-size: 10px; color: #888;">活動協調員</span><span style="font-size: 12px; color: #666;">(空)</span></div>
+          <div class="seat-box" style="background: #FAFAFA; border: 1px dashed #999; flex-direction: column;"><span style="font-size: 10px; color: #888;">教育協調員</span><span style="font-size: 12px; color: #666;">(空)</span></div>
+        </div>
+
+        
+        <div style="font-size: 11.5px; font-weight: 700; color: #555; margin-bottom: 4px;">
+          【 會員與來賓席 (Rows 13 ~ 20) 】
+        </div>
+        <table class="seat-grid-table" id="seatMainGridTable">
+          <thead>
+            <tr style="background: #EEEEEE; font-size: 11.5px;">
+              <th style="width: 50px;">排次</th>
+              <th>左席 (Col E)</th>
+              <th>左席 (Col G)</th>
+              <th style="background: #FFF9C4; color: #8D6E00;">來賓/中席 1</th>
+              <th style="background: #FFF9C4; color: #8D6E00;">來賓/中席 2</th>
+              <th>右席 (Col O)</th>
+              <th>右席 (Col Q)</th>
+            </tr>
+          </thead>
+          <tbody id="seatGridTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    
+    <div class="tab-content" id="tabTasks">
+      <div class="pagination-bar">
+        <button type="button" id="btnTaskPrev" title="上一頁">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <span class="pagination-info" id="taskPageIndicator">第 1 頁 / 共 2 頁 (A4 任務表)</span>
+        <button type="button" id="btnTaskNext" title="下一頁">
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+
+      <div class="preview-scroll-wrapper">
+        
+        <div class="a4-page" id="taskPage1">
+          <div style="height: 4px; background: var(--color-task-top); margin-bottom: 12px;"></div>
+          <div class="a4-page-header">
+            <h2>任務表_主 (來賓接待組例會全體工作分配) - 頁一</h2>
+            <div class="subtitle">備註欄嚴格鎖定保護，組員若請假已自動排除並標記實習 ｜ 列印專用 A4 格式</div>
+          </div>
+
+          <h4>一、行政任務與行前準備</h4>
+          <table class="data-table task-table" id="tableAdminTasks">
+            <thead>
+              <tr>
+                <th style="width: 140px;">工作任務</th>
+                <th style="width: 100px;">負責人</th>
+                <th>固定備註 (嚴禁修改)</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyAdminTasks"></tbody>
+          </table>
+
+          <h4>二、現場各組工作分配</h4>
+          <table class="data-table task-table" id="tableFieldTasks">
+            <thead>
+              <tr>
+                <th style="width: 130px;">工作任務</th>
+                <th style="width: 160px;">負責人 (含實習)</th>
+                <th>工作標準備註 (嚴禁修改)</th>
+                <th style="width: 170px;">注意事項</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyFieldTasks"></tbody>
+          </table>
+        </div>
+
+        
+        <div class="a4-page" id="taskPage2" style="display: none;">
+          <div style="height: 4px; background: var(--color-task-top); margin-bottom: 12px;"></div>
+          <div class="a4-page-header">
+            <h2>任務表_主 (來賓接待組例會全體工作分配) - 頁二</h2>
+            <div class="subtitle">三、來賓交流任務 (專屬保母配對) ｜ 列印專用 A4 格式</div>
+          </div>
+
+          <h4>三、來賓交流任務 (專屬保母配對名冊)</h4>
+          <table class="data-table task-table" id="tableNannyTasks">
+            <thead>
+              <tr>
+                <th style="width: 11%;">交流任務</th>
+                <th style="width: 13%;">保母</th>
+                <th style="width: 13%;">來賓姓名</th>
+                <th style="width: 20%;">公司名稱</th>
+                <th style="width: 19%;">想對接產業代表</th>
+                <th style="width: 24%;">注意事項</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyNannyTasks"></tbody>
+          </table>
+        </div>
+
+        
+        <div class="a4-page" id="taskPage3" style="display: none;">
+          <div style="height: 4px; background: var(--color-task-top); margin-bottom: 12px;"></div>
+          <div class="a4-page-header">
+            <h2>任務表_主 (來賓接待組例會全體工作分配) - 頁三</h2>
+            <div class="subtitle">四、撤場任務 ＆ 五、會後諮詢締結組 ｜ 列印專用 A4 格式</div>
+          </div>
+
+          <h4>四、撤場任務</h4>
+          <table class="data-table task-table" id="tableTearDown">
+            <thead>
+              <tr>
+                <th style="width: 14%;">工作事項</th>
+                <th style="width: 22%;">負責人</th>
+                <th style="width: 38%;">工作標準備註</th>
+                <th style="width: 26%;">注意事項</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyTearDown"></tbody>
+          </table>
+
+          <h4 style="margin-top: 18px;">五、會後接待 (諮詢締結組)</h4>
+          <table class="data-table task-table" id="tableClosingTasks">
+            <thead>
+              <tr>
+                <th style="width: 13%;">工作事項</th>
+                <th style="width: 14%;">諮詢師 (締結)</th>
+                <th style="width: 12%;">來賓姓名</th>
+                <th style="width: 20%;">公司名稱</th>
+                <th style="width: 15%;">邀約人</th>
+                <th style="width: 26%;">注意事項</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyClosingTasks"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    
+    <div style="margin-top: 24px; padding: 18px 0; border-top: 2px solid var(--border-dark); display: flex; justify-content: center; align-items: center; width: 100%; box-sizing: border-box;">
+      <button type="button" class="btn-primary" id="btnToggleFullPreview" title="就地展開全套 A4 文件預覽" style="width: 44px; height: 44px; border-radius: 4px;">
+        <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+      </button>
+    </div>
+
+    
+    <div id="fullPreviewSection" style="display: none; margin-top: 24px; padding: 24px 0; border-top: 2px solid var(--primary-red); width: 100%; box-sizing: border-box;">
+      <div id="fullPreviewPagesContainer" style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 32px;">
+        
+      </div>
+
+      
+      <div style="margin-top: 32px; padding-top: 20px; border-top: 1.5px solid var(--border); display: flex; flex-direction: column; align-items: center; gap: 14px; width: 100%; box-sizing: border-box;">
+        <button type="button" class="btn-primary" id="btnUploadFullPdfToDrive" title="建立完整 A4 PDF 並上傳至 Google 雲端硬碟" style="width: 46px; height: 46px; background: #137333; border-color: #137333; border-radius: 4px;">
+          <svg viewBox="0 0 24 24" style="stroke: #FFFFFF; width: 22px; height: 22px;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+        </button>
+
+        
+        <div id="driveExportResultCard" style="display: none; width: 100%; max-width: 680px; background: var(--surface-subtle); border: 1.5px solid var(--border); padding: 14px 18px; box-sizing: border-box;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+            <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; stroke: #137333; fill: none; stroke-width: 2;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span id="driveResultFileName" style="font-size: 13px; font-weight: 700; color: var(--text);">PDF 建檔完成</span>
+          </div>
+          <div style="display: flex; gap: 8px; width: 100%; align-items: center;">
+            <input type="text" id="inputDriveResultUrl" readonly style="flex: 1; font-size: 13px; padding: 8px 12px; background: #FFF; border: 1px solid var(--border); color: #1155CC;" value="">
+            <a id="linkOpenDrivePdf" href="#" target="_blank" class="btn-primary" title="開啟雲端硬碟 PDF" style="width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; border-radius: 4px;">
+              <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            </a>
+            <button type="button" id="btnCopyDriveUrl" title="複製連結至剪貼簿" style="width: 40px; height: 40px; border-radius: 4px;">
+              <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h4>系統設定與參考試算表</h4>
+        <button type="button" id="btnCloseSettings" title="關閉">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="field-group" style="margin-bottom: 12px;">
+        <label>參考試算表 ID (含歷史紀錄)</label>
+        <input type="text" id="inputRefSpreadsheetId" value="1b5Wd3tswlUbG68BMzA1ggY-mZp3wvnNq496sZfNFqQs">
+      </div>
+
+      <div class="field-group" style="margin-bottom: 20px;">
+        <label>指定匯出 Google 雲端硬碟資料夾 ID</label>
+        <input type="text" id="inputTargetFolderId" value="1EFxS3UGZvk2c6uerM4KWS-IP4aINGpA2">
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 8px;">
+        <button type="button" class="btn-primary" id="btnSaveSettings" style="width: auto; height: 36px; padding: 0 16px; font-size: 13px; font-weight: 600;">儲存設定</button>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    
+  var appData = {
+    meetingDate: '',
+    leaderName: '',
+    parsedPackage: null,
+    currentPageSignIn: 1,
+    currentPageLabel: 1
+  };
+
+  window.addEventListener('DOMContentLoaded', function() {
+    initEventHandlers();
+    renderDefaultEmptyTables();
+    loadLatestOfficersFromHistory();
+
+    
+    setTimeout(function() {
+      var dateEl = document.getElementById('inputMeetingDate');
+      var actualChosenDate = dateEl ? dateEl.value.trim() : '';
+      if (actualChosenDate) {
+        appData.meetingDate = actualChosenDate;
+        checkHistoryForDate(actualChosenDate);
+      }
+    }, 150);
+  });
+
+    
+    function loadLatestOfficersFromHistory() {
+      
+      try {
+        var cached = localStorage.getItem('phoenix_officers');
+        if (cached) applyOfficersToInputs(JSON.parse(cached));
+      } catch (e) {}
+
+      
+      var refId = document.getElementById('inputRefSpreadsheetId').value.trim();
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(function(off) {
+            if (off) {
+              applyOfficersToInputs(off);
+              try { localStorage.setItem('phoenix_officers', JSON.stringify(off)); } catch(e){}
+            }
+          })
+          .getLastSavedOfficers(refId);
+      }
+    }
+
+    function applyOfficersToInputs(off) {
+      if (!off) return;
+      var map = {
+        'off_headC': off.headC, 'off_headE': off.headE, 'off_headG': off.headG,
+        'off_headO': off.headO, 'off_headQ': off.headQ, 'off_headS': off.headS,
+        'off_specialQ7': off.specialQ7, 'off_topLeft': off.topLeft, 'off_topRight': off.topRight
+      };
+      for (var id in map) {
+        var el = document.getElementById(id);
+        if (el && map[id]) {
+          el.value = map[id];
+          syncOfficerColor(el);
+        }
+      }
+    }
+
+    function saveOfficersLocal() {
+      var off = {
+        headC: (document.getElementById('off_headC') || {}).value || '',
+        headE: (document.getElementById('off_headE') || {}).value || '',
+        headG: (document.getElementById('off_headG') || {}).value || '',
+        headO: (document.getElementById('off_headO') || {}).value || '',
+        headQ: (document.getElementById('off_headQ') || {}).value || '',
+        headS: (document.getElementById('off_headS') || {}).value || '',
+        specialQ7: (document.getElementById('off_specialQ7') || {}).value || '',
+        topLeft: (document.getElementById('off_topLeft') || {}).value || '',
+        topRight: (document.getElementById('off_topRight') || {}).value || ''
+      };
+      try { localStorage.setItem('phoenix_officers', JSON.stringify(off)); } catch(e){}
+    }
+
+    function showToast(message) {
+      var container = document.getElementById('toastContainer');
+      var toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = 
+        '<svg viewBox="0 0 24 24" style="width: 16px; height: 16px; stroke: #fff; fill: none; stroke-width: 2;">' +
+        '<circle cx="12" cy="12" r="10"></circle>' +
+        '<line x1="12" y1="8" x2="12" y2="12"></line>' +
+        '<line x1="12" y1="16" x2="12.01" y2="16"></line>' +
+        '</svg>' +
+        '<span>' + message + '</span>';
+      container.appendChild(toast);
+      setTimeout(function() {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(function() { toast.remove(); }, 300);
+      }, 3500);
+    }
+
+    
+    function updateProgress(btnId, percent, message) {
+      var btn = document.getElementById(btnId);
+      var badge = document.getElementById(btnId + 'Progress');
+      var statusPanel = document.getElementById('statusPanel');
+      var statusMsg = document.getElementById('statusMessage');
+      var barFill = document.getElementById('progressBarFill');
+
+      if (statusPanel) statusPanel.classList.add('active');
+      if (statusMsg && message) statusMsg.innerText = message;
+      if (barFill) barFill.style.width = percent + '%';
+
+      if (percent > 0 && percent < 100) {
+        if (btn) btn.classList.add('is-loading');
+        if (badge) badge.innerText = percent + '%';
+      } else {
+        if (btn) btn.classList.remove('is-loading');
+        if (badge) badge.innerText = '完成';
+        setTimeout(function() {
+          if (badge) badge.innerText = '0%';
+        }, 3000);
+      }
+    }
+
+    
+    function extractOfficersFromChart(sc) {
+      if (!sc) return null;
+      var off = {
+        headC: '', headE: '', headG: '', headO: '', headQ: '', headS: '',
+        specialQ7: (sc.specialMember && sc.specialMember.name) ? sc.specialMember.name : '',
+        topLeft: '', topRight: ''
+      };
+      (sc.headTable || []).forEach(function(ht) {
+        if (ht.col === 'C') off.headC = ht.name || '';
+        if (ht.col === 'E') off.headE = ht.name || '';
+        if (ht.col === 'G') off.headG = ht.name || '';
+        if (ht.col === 'O') off.headO = ht.name || '';
+        if (ht.col === 'Q') off.headQ = ht.name || '';
+        if (ht.col === 'S') off.headS = ht.name || '';
+      });
+      if (sc.seatGrid && sc.seatGrid[0]) {
+        if (sc.seatGrid[0].left1) off.topLeft = sc.seatGrid[0].left1.name || '';
+        if (sc.seatGrid[0].right2) off.topRight = sc.seatGrid[0].right2.name || '';
+      }
+      return off;
+    }
+
+    
+    function checkHistoryForDate(dateStr) {
+      if (!dateStr) return;
+      var refId = document.getElementById('inputRefSpreadsheetId').value.trim();
+      showToast('正在檢索 ' + dateStr + ' 的歷史存檔...');
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(function(res) {
+            if (res && res.found) {
+              
+              
+              
+              if (res.leaderName) document.getElementById('inputLeaderName').value = res.leaderName;
+              document.getElementById('inputGuestsText').value = res.rawInputGuests || '';
+              document.getElementById('inputLineNoticeText').value = res.rawInputLine || '';
+              document.getElementById('bulletContent').innerText = res.guestBulletText || '此存檔無條列摘要';
+
+              
+              if (res.rawInputWillingness) {
+                var wLines = res.rawInputWillingness.split('\n');
+                wLines.forEach(function(wl) {
+                  var parts = wl.split(/[：:]/);
+                  if (parts.length >= 2) {
+                    var wName = parts[0].trim();
+                    var wStat = parts[1].trim();
+                    if (wName) parsedWillingnessMap[wName] = wStat;
+                  }
+                });
+              }
+
+              uploadedWillingnessImages = [];
+              renderImagePreviews();
+
+              if (!appData.parsedPackage) appData.parsedPackage = {};
+              appData.parsedPackage.guests = res.guests || [];
+              appData.parsedPackage.signInRows = res.signInRows || [];
+              appData.parsedPackage.labelCards = res.labelCards || [];
+              appData.parsedPackage.seatingChart = res.seatingChart || {};
+              appData.parsedPackage.taskTableMain = res.taskTableMain || {};
+              appData.parsedPackage.dateInfo = { minguoDateStr: res.minguoDate || dateStr };
+              appData.parsedPackage.leaderName = res.leaderName || document.getElementById('inputLeaderName').value;
+
+              
+              if (res.officers) {
+                applyOfficersToInputs(res.officers);
+              } else if (res.seatingChart) {
+                if (res.seatingChart.numRows) {
+                  var selRows = document.getElementById('selectSeatRows');
+                  if (selRows) selRows.value = String(res.seatingChart.numRows);
+                }
+                var chartOfficers = extractOfficersFromChart(res.seatingChart);
+                if (chartOfficers) applyOfficersToInputs(chartOfficers);
+              }
+
+              renderSignInTable();
+              renderLabels();
+              renderSeatingChart();
+              renderTaskTable();
+              showToast('已成功載入第 ' + res.rowNumber + ' 列存檔（日期：' + res.meetingDate + '）！');
+            } else {
+              
+              
+              
+              document.getElementById('inputGuestsText').value = '';
+              document.getElementById('inputLineNoticeText').value = '';
+              uploadedWillingnessImages = [];
+              renderImagePreviews();
+              document.getElementById('bulletContent').innerText = '請點擊「階段一」按鈕開始運作...';
+
+              appData.parsedPackage = null;
+              renderDefaultEmptyTables();
+
+              
+              loadLatestOfficersFromHistory();
+              showToast('此日期尚未建立紀錄，內容已重設為空（已自動帶入最新幹部名冊）');
+            }
+          })
+          .getMeetingHistory(dateStr, refId);
+      } else {
+        
+        loadLatestOfficersFromHistory();
+        renderDefaultEmptyTables();
+        showToast('本地模擬：已重設表格並保留最新幹部資訊');
+      }
+    }
+
+    
+    var uploadedWillingnessImages = [];
+
+    function initEventHandlers() {
+      var dateEl = document.getElementById('inputMeetingDate');
+      if (dateEl) {
+        
+        function handleUserDateSelect(chosenVal) {
+          var cleanDate = (chosenVal || '').trim();
+          if (!cleanDate) return;
+          appData.meetingDate = cleanDate; 
+          checkHistoryForDate(cleanDate);  
+        }
+        dateEl.addEventListener('change', function(e) { handleUserDateSelect(e.target.value); });
+        dateEl.addEventListener('input', function(e) { handleUserDateSelect(e.target.value); });
+      }
+
+      
+      var dropZone = document.getElementById('willingnessDropZone');
+      var fileInput = document.getElementById('inputWillingnessImages');
+
+      dropZone.addEventListener('click', function(e) {
+        if (e.target.closest('.btn-remove-thumb')) return;
+        fileInput.click();
+      });
+
+      
+      dropZone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+      });
+      dropZone.addEventListener('dragleave', function() {
+        dropZone.classList.remove('dragover');
+      });
+      dropZone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        if (e.dataTransfer && e.dataTransfer.files) {
+          handleImageFiles(e.dataTransfer.files);
+        }
+      });
+
+      fileInput.addEventListener('change', function(e) {
+        if (e.target.files) {
+          handleImageFiles(e.target.files);
+        }
+      });
+
+      document.getElementById('btnClearImages').addEventListener('click', function() {
+        uploadedWillingnessImages = [];
+        renderImagePreviews();
+        fileInput.value = '';
+        showToast('已清空意願截圖');
+      });
+
+      document.getElementById('btnSettings').addEventListener('click', function() {
+        document.getElementById('settingsModal').classList.add('active');
+      });
+      document.getElementById('btnCloseSettings').addEventListener('click', function() {
+        document.getElementById('settingsModal').classList.remove('active');
+      });
+      document.getElementById('btnSaveSettings').addEventListener('click', function() {
+        document.getElementById('settingsModal').classList.remove('active');
+        showToast('設定已更新');
+      });
+
+      document.querySelectorAll('.tab-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+          document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+          btn.classList.add('active');
+          var target = document.getElementById(btn.dataset.tab);
+          if (target) target.classList.add('active');
+        });
+      });
+
+      document.getElementById('btnCopyBullets').addEventListener('click', function() {
+        var text = document.getElementById('bulletContent').innerText;
+        navigator.clipboard.writeText(text).then(function() {
+          showToast('已複製條列內容至剪貼簿');
+        });
+      });
+
+      
+      var btnTogglePrev = document.getElementById('btnToggleFullPreview');
+      if (btnTogglePrev) {
+        btnTogglePrev.addEventListener('click', toggleInlineFullPreview);
+      }
+
+      
+      var btnUploadDrive = document.getElementById('btnUploadFullPdfToDrive');
+      if (btnUploadDrive) {
+        btnUploadDrive.addEventListener('click', executeExportPdfToDrive);
+      }
+
+      
+      var btnCopyUrl = document.getElementById('btnCopyDriveUrl');
+      if (btnCopyUrl) {
+        btnCopyUrl.addEventListener('click', function() {
+          var input = document.getElementById('inputDriveResultUrl');
+          if (input && input.value) {
+            navigator.clipboard.writeText(input.value).then(function() {
+              showToast('已複製雲端硬碟連結至剪貼簿');
+            });
+          }
+        });
+      }
+
+      
+      var selRowsEl = document.getElementById('selectSeatRows');
+      if (selRowsEl) {
+        selRowsEl.addEventListener('change', function() {
+          var chosenRows = parseInt(this.value, 10) || 8;
+          syncCapacityWithRows(chosenRows);
+        });
+      }
+
+      document.getElementById('btnSignInPrev').addEventListener('click', function() {
+        if (appData.currentPageSignIn > 1) {
+          appData.currentPageSignIn--;
+          renderSignInTable();
+        }
+      });
+      document.getElementById('btnSignInNext').addEventListener('click', function() {
+        var totalSignPages = calcCurrentSignPages();
+        if (appData.currentPageSignIn < totalSignPages) {
+          appData.currentPageSignIn++;
+          renderSignInTable();
+        }
+      });
+
+      document.getElementById('btnLabelPrev').addEventListener('click', function() {
+        if (appData.currentPageLabel > 1) {
+          appData.currentPageLabel--;
+          renderLabels();
+        }
+      });
+      document.getElementById('btnLabelNext').addEventListener('click', function() {
+        var totalLabelPages = calcCurrentLabelPages();
+        if (appData.currentPageLabel < totalLabelPages) {
+          appData.currentPageLabel++;
+          renderLabels();
+        }
+      });
+
+      
+      document.getElementById('btnTaskPrev').addEventListener('click', function() {
+        var cur = appData.currentPageTask || 1;
+        if (cur > 1) switchTaskPage(cur - 1);
+      });
+      document.getElementById('btnTaskNext').addEventListener('click', function() {
+        var cur = appData.currentPageTask || 1;
+        var total = calcTotalTaskPages();
+        if (cur < total) switchTaskPage(cur + 1);
+      });
+
+      
+      document.getElementById('btnStage1').addEventListener('click', runStage1);
+      document.getElementById('btnStage2').addEventListener('click', runStage2);
+      document.getElementById('btnStage3').addEventListener('click', runStage3);
+
+      document.getElementById('btnSaveToHistory').addEventListener('click', saveCurrentToHistory);
+      var btnExport = document.getElementById('btnExportDrive');
+      if (btnExport) btnExport.addEventListener('click', exportToDriveWorkflow);
+    }
+
+    
+    var parsedWillingnessMap = {};
+
+    
+    function getWillingnessText() {
+      var lines = [];
+      for (var name in parsedWillingnessMap) {
+        if (parsedWillingnessMap[name]) {
+          lines.push(name + '：' + parsedWillingnessMap[name]);
+        }
+      }
+      uploadedWillingnessImages.forEach(function(img) {
+        if (img.status && img.status.indexOf('：') !== -1 && lines.indexOf(img.status) === -1) {
+          lines.push(img.status);
+        }
+      });
+      return lines.join('\n');
+    }
+
+    function handleImageFiles(files) {
+      if (!files || files.length === 0) return;
+      var fileArray = Array.from(files);
+      var remaining = fileArray.length;
+
+      fileArray.forEach(function(file) {
+        if (!file.type.startsWith('image/')) {
+          remaining--;
+          return;
+        }
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          var fullBase64 = e.target.result;
+          var commaIdx = fullBase64.indexOf(',');
+          var pureBase64 = commaIdx !== -1 ? fullBase64.substring(commaIdx + 1) : fullBase64;
+          var imgObj = {
+            name: file.name,
+            mimeType: file.type || 'image/jpeg',
+            base64: pureBase64,
+            dataUrl: fullBase64,
+            status: '解析中...'
+          };
+          uploadedWillingnessImages.push(imgObj);
+          remaining--;
+
+          if (remaining === 0) {
+            renderImagePreviews();
+            showToast('已加入截圖，開始逐張輪流調用金鑰預解析意願...');
+            autoBatchAnalyzeImages(); 
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    
+    function autoBatchAnalyzeImages() {
+      var refId = document.getElementById('inputRefSpreadsheetId').value.trim();
+      uploadedWillingnessImages.forEach(function(imgObj, idx) {
+        if (imgObj.parsed) return;
+        if (typeof google !== 'undefined' && google.script && google.script.run) {
+          google.script.run
+            .withSuccessHandler(function(res) {
+              if (res && res.success && res.data) {
+                var d = res.data;
+                imgObj.status = (d.name || '來賓') + '：' + (d.willingness || '有意願');
+                imgObj.parsed = true;
+                if (d.name) {
+                  parsedWillingnessMap[d.name.trim()] = d.willingness.trim();
+                }
+                renderImagePreviews();
+                showToast('已辨識：' + imgObj.status);
+                
+                autoSyncHistorySilent();
+              }
+            })
+            .analyzeSingleWillingnessImage({ mimeType: imgObj.mimeType, base64: imgObj.base64 }, refId);
+        } else {
+          imgObj.status = '待後端解析';
+          renderImagePreviews();
+        }
+      });
+    }
+
+    function renderImagePreviews() {
+      var grid = document.getElementById('willingnessPreviewGrid');
+      var prompt = document.getElementById('uploadPrompt');
+      var btnClear = document.getElementById('btnClearImages');
+
+      grid.innerHTML = '';
+      if (uploadedWillingnessImages.length > 0) {
+        prompt.style.display = 'none';
+        btnClear.style.display = 'inline-block';
+        uploadedWillingnessImages.forEach(function(imgObj, idx) {
+          var box = document.createElement('div');
+          box.style.display = 'flex';
+          box.style.flexDirection = 'column';
+          box.style.alignItems = 'center';
+          box.style.gap = '4px';
+
+          var thumb = document.createElement('div');
+          thumb.className = 'preview-thumb-box';
+          thumb.style.width = '70px';
+          thumb.style.height = '70px';
+          thumb.innerHTML = 
+            '<img src="' + imgObj.dataUrl + '" alt="preview">' +
+            '<button type="button" class="btn-remove-thumb" onclick="removeImageAt(' + idx + ', event)">×</button>';
+
+          var badge = document.createElement('div');
+          badge.style.fontSize = '11px';
+          badge.style.fontWeight = '700';
+          badge.style.color = (imgObj.status && imgObj.status.includes('沒有')) ? 'var(--primary-red)' : '#1A73E8';
+          badge.style.textAlign = 'center';
+          badge.style.wordBreak = 'break-all';
+          badge.innerText = imgObj.status || '分析中...';
+
+          box.appendChild(thumb);
+          box.appendChild(badge);
+          grid.appendChild(box);
+        });
+      } else {
+        
+        var wKeys = Object.keys(parsedWillingnessMap);
+        if (wKeys.length > 0) {
+          prompt.style.display = 'none';
+          btnClear.style.display = 'none';
+          var summaryBox = document.createElement('div');
+          summaryBox.style.padding = '10px';
+          summaryBox.style.textAlign = 'center';
+          summaryBox.style.fontSize = '12px';
+          summaryBox.style.color = '#1155CC';
+          summaryBox.style.fontWeight = '700';
+          summaryBox.innerHTML = '<span style="color:#666;">（已載入歷史意願存檔）</span><br>' + wKeys.map(function(k) {
+            return '<span style="display:inline-block; padding:2px 8px; margin:2px; background:#E8F0FE; border-radius:3px;">' + k + '：' + parsedWillingnessMap[k] + '</span>';
+          }).join('');
+          grid.appendChild(summaryBox);
+        } else {
+          prompt.style.display = 'flex';
+          btnClear.style.display = 'none';
+        }
+      }
+    }
+
+    function removeImageAt(index, event) {
+      if (event) event.stopPropagation();
+      uploadedWillingnessImages.splice(index, 1);
+      renderImagePreviews();
+    }
+
+    
+    function saveOfficersLocal() {
+      var off = {
+        headC: document.getElementById('off_headC') ? document.getElementById('off_headC').value.trim() : '',
+        headE: document.getElementById('off_headE') ? document.getElementById('off_headE').value.trim() : '',
+        headG: document.getElementById('off_headG') ? document.getElementById('off_headG').value.trim() : '',
+        headO: document.getElementById('off_headO') ? document.getElementById('off_headO').value.trim() : '',
+        headQ: document.getElementById('off_headQ') ? document.getElementById('off_headQ').value.trim() : '',
+        headS: document.getElementById('off_headS') ? document.getElementById('off_headS').value.trim() : '',
+        specialQ7: document.getElementById('off_specialQ7') ? document.getElementById('off_specialQ7').value.trim() : '',
+        topLeft: document.getElementById('off_topLeft') ? document.getElementById('off_topLeft').value.trim() : '',
+        topRight: document.getElementById('off_topRight') ? document.getElementById('off_topRight').value.trim() : ''
+      };
+      if (typeof appData !== 'undefined') appData.savedOfficers = off;
+    }
+
+    function collectInputs() {
+      var rowSelect = document.getElementById('selectSeatRows');
+      var selRows = rowSelect ? parseInt(rowSelect.value, 10) : 8;
+
+      return {
+        meetingDate: document.getElementById('inputMeetingDate').value,
+        leaderName: document.getElementById('inputLeaderName').value.trim() || '森森',
+        rawGuestsText: document.getElementById('inputGuestsText').value,
+        rawLineText: document.getElementById('inputLineNoticeText').value,
+        parsedWillingnessMap: parsedWillingnessMap,
+        numRows: selRows,
+        willingnessImages: uploadedWillingnessImages.map(function(img) {
+          return { mimeType: img.mimeType, base64: img.base64, name: img.name };
+        }),
+        refSpreadsheetId: document.getElementById('inputRefSpreadsheetId').value.trim(),
+        officers: {
+          headC: document.getElementById('off_headC') ? document.getElementById('off_headC').value.trim() : '',
+          headE: document.getElementById('off_headE') ? document.getElementById('off_headE').value.trim() : '',
+          headG: document.getElementById('off_headG') ? document.getElementById('off_headG').value.trim() : '',
+          headO: document.getElementById('off_headO') ? document.getElementById('off_headO').value.trim() : '',
+          headQ: document.getElementById('off_headQ') ? document.getElementById('off_headQ').value.trim() : '',
+          headS: document.getElementById('off_headS') ? document.getElementById('off_headS').value.trim() : '',
+          specialQ7: document.getElementById('off_specialQ7') ? document.getElementById('off_specialQ7').value.trim() : '',
+          topLeft: document.getElementById('off_topLeft') ? document.getElementById('off_topLeft').value.trim() : '',
+          topRight: document.getElementById('off_topRight') ? document.getElementById('off_topRight').value.trim() : ''
+        }
+      };
+    }
+
+    
+    function autoSyncHistorySilent() {
+      var inputs = collectInputs();
+      var payload = {
+        meetingDate: inputs.meetingDate,
+        leaderName: inputs.leaderName,
+        rawInputGuests: inputs.rawGuestsText || '',
+        rawInputLine: inputs.rawLineText || '',
+        rawInputWillingness: getWillingnessText(), 
+        guestBulletText: document.getElementById('bulletContent').innerText || '',
+        guests: appData.parsedPackage ? (appData.parsedPackage.guests || []) : [],
+        signInRows: appData.parsedPackage ? (appData.parsedPackage.signInRows || []) : [],
+        labelCards: appData.parsedPackage ? (appData.parsedPackage.labelCards || []) : [],
+        seatingChart: appData.parsedPackage ? (appData.parsedPackage.seatingChart || {}) : {},
+        taskTableMain: appData.parsedPackage ? (appData.parsedPackage.taskTableMain || {}) : {},
+        refSpreadsheetId: inputs.refSpreadsheetId,
+        officers: inputs.officers
+      };
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(function(res) {
+            if (res && res.success) console.log('歷史紀錄自動寫入成功（列號：' + res.targetRow + '，日期：' + res.savedDate + '）');
+          })
+          .withFailureHandler(function(err) {
+            console.error('歷史紀錄自動寫入失敗: ', err);
+          })
+          .saveMeetingHistory(payload);
+      }
+    }
+
+    
+    function runStage1() {
+      var params = collectInputs();
+      if (!params.rawGuestsText || !params.rawGuestsText.trim()) {
+        showToast('請先貼入【1. 來賓報名表文字資訊】！');
+        return;
+      }
+
+      updateProgress('btnStage1', 40, '【階段一】Gemini 正在讀取輸入資訊與分會名冊，分析產業衝突與早餐...');
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(function(res) {
+            if (!appData.parsedPackage) appData.parsedPackage = {};
+            Object.assign(appData.parsedPackage, res);
+            document.getElementById('bulletContent').innerText = res.guestBulletText || '';
+            renderSignInTable();
+            renderLabels();
+            updateProgress('btnStage1', 100, '【階段一完成】簽到表與標籤貼紙已產出！');
+            showToast('階段一完成，已自動更新至歷史紀錄');
+            autoSyncHistorySilent();
+          })
+          .withFailureHandler(function(err) {
+            showToast('階段一失敗: ' + err.toString());
+            updateProgress('btnStage1', 100, '階段一執行異常');
+          })
+          .executeStage1(params);
+      } else {
+        updateProgress('btnStage1', 100, '非 GAS 環境，請於 Google 試算表 Web App 執行');
+      }
+    }
+
+    
+    function runStage2() {
+      if (!appData.parsedPackage || !appData.parsedPackage.guests || appData.parsedPackage.guests.length === 0) {
+        showToast('請先完成【階段一】，系統需依據階段一產出之來賓名單與意願分層進行排位！');
+        return;
+      }
+
+      var params = collectInputs();
+      params.guests = appData.parsedPackage.guests;
+      updateProgress('btnStage2', 50, '【階段二】Gemini 正在參照 30 秒產業鏈、會員年資與來賓意願最佳化座位表...');
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(function(res) {
+            if (!appData.parsedPackage) appData.parsedPackage = {};
+            appData.parsedPackage.seatingChart = res.seatingChart;
+            renderSeatingChart();
+            updateProgress('btnStage2', 100, '【階段二完成】座位表配置完畢！');
+            showToast('階段二完成，已自動更新至歷史紀錄');
+            autoSyncHistorySilent();
+          })
+          .withFailureHandler(function(err) {
+            showToast('階段二失敗: ' + err.toString());
+            updateProgress('btnStage2', 100, '階段二執行異常');
+          })
+          .executeStage2(params);
+      } else {
+        updateProgress('btnStage2', 100, '非 GAS 環境，請於 Google 試算表 Web App 執行');
+      }
+    }
+
+    
+    function runStage3() {
+      if (!appData.parsedPackage || !appData.parsedPackage.guests || appData.parsedPackage.guests.length === 0) {
+        showToast('請先完成【階段一】，系統需依據來賓對接產業進行保母配對與締結指派！');
+        return;
+      }
+
+      var params = collectInputs();
+      params.guests = appData.parsedPackage.guests;
+
+      if (!appData.parsedPackage.taskTableMain) {
+        appData.parsedPackage.taskTableMain = {};
+      }
+
+      
+      updateProgress('btnStage3', 15, '【階段三 1/4】調用 API Key 分析人力會期，排定行政與現場各組任務 (15%)...');
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        
+        google.script.run
+          .withSuccessHandler(function(res1) {
+            if (!res1 || !res1.success) throw new Error(res1 ? res1.error : '步驟 1 失敗');
+            appData.parsedPackage.taskTableMain.adminTasks = res1.adminTasks;
+            appData.parsedPackage.taskTableMain.fieldTasks = res1.fieldTasks;
+            renderTaskTable();
+
+            
+            updateProgress('btnStage3', 45, '【階段三 2/4】現場各組完成！調用下一組 API Key 比對專業，媒合專屬保母 (45%)...');
+            google.script.run
+              .withSuccessHandler(function(res2) {
+                if (!res2 || !res2.success) throw new Error(res2 ? res2.error : '步驟 2 失敗');
+                appData.parsedPackage.taskTableMain.nannyTasks = res2.nannyTasks;
+                renderTaskTable();
+
+                
+                updateProgress('btnStage3', 70, '【階段三 3/4】保母配對完成！調用下一組 API Key 分配撤場任務 (70%)...');
+                google.script.run
+                  .withSuccessHandler(function(res3) {
+                    if (!res3 || !res3.success) throw new Error(res3 ? res3.error : '步驟 3 失敗');
+                    appData.parsedPackage.taskTableMain.tearDownTasks = res3.tearDownTasks;
+                    renderTaskTable();
+
+                    
+                    updateProgress('btnStage3', 88, '【階段三 4/4】撤場組排定完成！調用下一組 API Key 執行會後締結意願分級 (88%)...');
+                    google.script.run
+                      .withSuccessHandler(function(res4) {
+                        if (!res4 || !res4.success) throw new Error(res4 ? res4.error : '步驟 4 失敗');
+                        appData.parsedPackage.taskTableMain.closingTasks = res4.closingTasks;
+                        renderTaskTable();
+
+                        updateProgress('btnStage3', 100, '【階段三完成】任務表_主全體配置完畢！(100%)');
+                        showToast('階段三全部區塊完成，已自動更新至歷史紀錄');
+                        autoSyncHistorySilent();
+                      })
+                      .withFailureHandler(function(err) {
+                        showToast('步驟 4 (會後接待) 失敗: ' + err.toString());
+                        updateProgress('btnStage3', 100, '階段三部分執行異常');
+                      })
+                      .executeStage3Step(4, params);
+                  })
+                  .withFailureHandler(function(err) {
+                    showToast('步驟 3 (撤場組) 失敗: ' + err.toString());
+                    updateProgress('btnStage3', 100, '階段三部分執行異常');
+                  })
+                  .executeStage3Step(3, params);
+              })
+              .withFailureHandler(function(err) {
+                showToast('步驟 2 (保母配對) 失敗: ' + err.toString());
+                updateProgress('btnStage3', 100, '階段三部分執行異常');
+              })
+              .executeStage3Step(2, params);
+          })
+          .withFailureHandler(function(err) {
+            showToast('步驟 1 (現場工作) 失敗: ' + err.toString());
+            updateProgress('btnStage3', 100, '階段三執行異常');
+          })
+          .executeStage3Step(1, params);
+      } else {
+        
+        setTimeout(function() {
+          updateProgress('btnStage3', 35, '【本地模擬 1/4】現場各組任務排定 (35%)...');
+          setTimeout(function() {
+            updateProgress('btnStage3', 65, '【本地模擬 2/4】專屬保母配對完成 (65%)...');
+            setTimeout(function() {
+              updateProgress('btnStage3', 85, '【本地模擬 3/4】撤場組分配完畢 (85%)...');
+              setTimeout(function() {
+                updateProgress('btnStage3', 100, '【階段三完成】任務表_主配置完畢！(100%)');
+                showToast('本地環境模擬完成');
+              }, 400);
+            }, 400);
+          }, 400);
+        }, 400);
+      }
+    }
+
+    function renderDefaultEmptyTables() {
+      const tbody = document.getElementById('signInTbody');
+      tbody.innerHTML = '';
+      for (let i = 1; i <= 15; i++) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="center" style="font-weight: 700;">${i}</td>
+          <td contenteditable="true"></td>
+          <td contenteditable="true"></td>
+          <td class="center" contenteditable="true"></td>
+          <td contenteditable="true"></td>
+          <td contenteditable="true"></td>
+          <td class="center" contenteditable="true"></td>
+          <td class="center" contenteditable="true"></td>
+          <td class="center" contenteditable="true"></td>
+          <td class="center" contenteditable="true"></td>
+        `;
+        tbody.appendChild(tr);
+      }
+
+      const lGrid = document.getElementById('labelsGridContainer');
+      lGrid.innerHTML = '';
+      for (let k = 0; k < 8; k++) {
+        lGrid.innerHTML += `
+          <div class="label-sticker-card">
+            <div class="label-sticker-header">
+              <div class="label-sticker-industry">[產業名稱]</div>
+            </div>
+            <div class="label-sticker-body">
+              <div class="label-sticker-name">來賓名字</div>
+              <div class="label-sticker-company">(公司名)</div>
+            </div>
+          </div>
+        `;
+      }
+
+      const tbAdmin = document.getElementById('tbodyAdminTasks');
+      tbAdmin.innerHTML = `
+        <tr><td style="font-weight:700;">印製來賓名牌</td><td contenteditable="true"></td><td style="color:var(--text-muted);">協助印製，隔天帶到例會現場</td></tr>
+        <tr><td style="font-weight:700;">印製簽到表</td><td contenteditable="true"></td><td style="color:var(--text-muted);">協助印製，隔天帶到例會現場</td></tr>
+        <tr><td style="font-weight:700;">座位安排</td><td contenteditable="true"></td><td style="color:var(--text-muted);">週三製作完成，傳到大群及來賓接待群組</td></tr>
+        <tr><td style="font-weight:700;">例會行前通知</td><td contenteditable="true"></td><td style="color:var(--text-muted);">請負責人通知分會夥伴，將來賓加入群組，並確認出席狀況</td></tr>
+      `;
+
+      const tbField = document.getElementById('tbodyFieldTasks');
+      tbField.innerHTML = `
+        <tr><td style="font-weight:700; background:var(--color-task-group);">佈置組</td><td contenteditable="true" style="color:var(--text-muted); font-style:italic;">(執行階段三由AI依分組排定)</td><td style="white-space:pre-wrap; color:var(--text-muted);">06:15前完成\n舞台－旗幟*3、易拉展、立牌\n座位區－桌牌、獎牌、響鈴、麥克風*4、旗子\n會後接待區－評議表、入會申請書</td><td contenteditable="true">請來賓接待組所有組員，6:10前到場</td></tr>
+        <tr><td style="font-weight:700; background:var(--color-task-group);">迎賓櫃檯</td><td contenteditable="true" style="color:var(--text-muted); font-style:italic;">(執行階段三由AI依分組排定)</td><td style="white-space:pre-wrap; color:var(--text-muted);">請提早6:15完成接待桌佈置:桌布、文具、名片盒\n準備來賓名牌，向來賓蒐集一張名片交給主席\n檢查會員服裝儀容(正式服裝、Pin章、名牌)\n協助收場地費，清點後交給秘財\n裁切餐券、點好數量交給秉量</td><td contenteditable="true"></td></tr>
+        <tr><td style="font-weight:700; background:var(--color-task-group);">響鈴手</td><td contenteditable="true" style="color:var(--text-muted); font-style:italic;">(執行階段三由AI依分組排定)</td><td style="white-space:pre-wrap; color:var(--text-muted);">負責五段議程的響鈴提醒\n1.三分鐘培訓 2.會員30秒 3.來賓自我介紹 4.主題短講 5.會員引薦</td><td contenteditable="true"></td></tr>
+        <tr><td style="font-weight:700; background:var(--color-task-group);">麥克風手</td><td contenteditable="true" style="color:var(--text-muted); font-style:italic;">(執行階段三由AI依分組排定)</td><td style="white-space:pre-wrap; color:var(--text-muted);">會議前須測試麥克風四支(2、1、1支)\n四個議程中傳遞 1.會員30秒 2.來賓自我介紹 3.引薦分享 4.引薦查核</td><td contenteditable="true"></td></tr>
+        <tr><td style="font-weight:700; background:var(--color-task-group);">拍照手</td><td contenteditable="true" style="color:var(--text-muted); font-style:italic;">(執行階段三由AI依分組排定)</td><td style="white-space:pre-wrap; color:var(--text-muted);">四個議程中協助拍照、錄影\n1.頒獎 2.會員30秒 3.短講 4.抽獎</td><td contenteditable="true"></td></tr>
+        <tr><td style="font-weight:700; background:var(--color-task-group);">餐卷停車券</td><td contenteditable="true" style="color:var(--text-muted); font-style:italic;">(執行階段三由AI依分組排定)</td><td style="white-space:pre-wrap; color:var(--text-muted);">引薦環節發放、餐卷一人一張不補發</td><td contenteditable="true"></td></tr>
+      `;
+
+      const tbTD = document.getElementById('tbodyTearDown');
+      tbTD.innerHTML = `
+        <tr><td style="font-weight:700; background:var(--color-task-group);">撤場組</td><td contenteditable="true" style="color:var(--text-muted); font-style:italic;">(執行階段三由AI依分組排定)</td><td style="white-space:pre-wrap; color:var(--text-muted);">旗幟、易拉展收到旁邊角落，桌牌、獎牌、響鈴、名片、桌巾等收妥入黑箱\n檢查所有座位及物品</td><td contenteditable="true" style="white-space:pre-wrap;">將桌牌收成，九長一疊\n其餘會員由前到後收成6疊\n記得收鈴鐺和名片盒</td></tr>
+      `;
+
+      // 三、來賓交流任務 (會前交流) 預設標準呈現
+      const tbNanny = document.getElementById('tbodyNannyTasks');
+      tbNanny.innerHTML = `
+        <tr>
+          <td style="font-weight: 700; background: #F4CCCC; text-align: center; vertical-align: middle;">會前交流</td>
+          <td contenteditable="true" style="background: #FFF9C4; color: var(--text-muted); font-style: italic;">(待階段三排定)</td>
+          <td contenteditable="true" style="background: #FFF9C4;"></td>
+          <td contenteditable="true" style="background: #FFF9C4;"></td>
+          <td contenteditable="true" style="background: #FFF9C4;"></td>
+          <td style="white-space: pre-wrap; font-size: 11.5px; line-height: 1.6; color: #111; vertical-align: middle;"><strong>1.請提早6:15分簽到</strong><br>協助來賓交流想對接的夥伴交流<br><strong>2.6:45協助來賓與三長交流</strong></td>
+        </tr>
+      `;
+
+      // 五、會後接待 (諮詢組) 預設標準呈現
+      const tbClose = document.getElementById('tbodyClosingTasks');
+      tbClose.innerHTML = `
+        <tr>
+          <td style="font-weight: 700; background: #D9EAD3; text-align: center; vertical-align: middle;">會後接待<br>(諮詢組)</td>
+          <td contenteditable="true" style="background: #FFF9C4; color: var(--text-muted); font-style: italic;">(待階段三排定)</td>
+          <td contenteditable="true" style="background: #FFF9C4;"></td>
+          <td contenteditable="true" style="background: #FFF9C4;"></td>
+          <td contenteditable="true" style="background: #FFF9C4;"></td>
+          <td style="white-space: pre-wrap; font-size: 11.5px; line-height: 1.5; color: #111;">1.協助引導評議表填寫<br>2.評議表填寫以填寫入會申請書為目標<br>3.填寫評議表時，回收來賓掛牌吊帶<br>4.如來賓有入會意願，請當下填寫入會申請表，並互留聯繫方式，傳送刷卡連結務必協助做刷卡繳費。<br>5.如來賓已確定刷卡或繳費，請回傳刷卡畫面及繳費通知到群組。<br><span style="color: var(--primary-red); font-weight: 700;">6.務必協助來賓上樓用餐及交流，不要落單！</span></td>
+        </tr>
+      `;
+    }
+
+    function renderSignInTable() {
+      const pkg = appData.parsedPackage;
+      if (!pkg) return;
+
+      const title = document.getElementById('signInTitle');
+      const subtitle = document.getElementById('signInSubtitle');
+      title.innerText = `鳳凰分會例會來賓簽到表 (${pkg.dateInfo?.minguoDateStr || ''})`;
+      subtitle.innerText = `負責人：${pkg.leaderName || '森森'} ｜ 列印專用 A4 格式`;
+
+      const tbody = document.getElementById('signInTbody');
+      tbody.innerHTML = '';
+
+      
+      const validGuestCount = (pkg.guests && pkg.guests.length > 0) 
+        ? pkg.guests.length 
+        : (pkg.signInRows ? pkg.signInRows.filter(r => r.name && r.name.trim() !== '').length : 0);
+
+      const totalPages = Math.max(1, Math.ceil(validGuestCount / 15));
+      const targetRowCount = totalPages * 15;
+
+      
+      if (!pkg.signInRows) pkg.signInRows = [];
+      while (pkg.signInRows.length < targetRowCount) {
+        pkg.signInRows.push({
+          seq: pkg.signInRows.length + 1,
+          name: '', company: '', conflict: '', introducer: '', nanny: '',
+          signed: '', card: '', feeNote: '', breakfast: ''
+        });
+      }
+      if (pkg.signInRows.length > targetRowCount) {
+        pkg.signInRows = pkg.signInRows.slice(0, targetRowCount);
+      }
+
+      const curPage = Math.min(appData.currentPageSignIn || 1, totalPages);
+      appData.currentPageSignIn = curPage;
+
+      const startIndex = (curPage - 1) * 15;
+      const pageRows = pkg.signInRows.slice(startIndex, startIndex + 15);
+
+      const indicator = document.getElementById('signInPageIndicator');
+      if (indicator) {
+        indicator.innerText = `第 ${curPage} 頁 / 共 ${totalPages} 頁 (A4 每頁 15 位 ｜ 本次共 ${validGuestCount} 位來賓)`;
+      }
+
+      pageRows.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="center" style="font-weight: 700;">${r.seq}</td>
+          <td contenteditable="true" onblur="updateRowData(${r.seq - 1}, 'name', this.innerText)">${r.name}</td>
+          <td contenteditable="true" onblur="updateRowData(${r.seq - 1}, 'company', this.innerText)">${r.company}</td>
+          <td class="center" contenteditable="true" style="color: ${r.conflict ? 'var(--primary-red)' : 'inherit'}; font-weight: ${r.conflict ? '700' : 'normal'};" onblur="updateRowData(${r.seq - 1}, 'conflict', this.innerText)">${r.conflict}</td>
+          <td contenteditable="true" onblur="updateRowData(${r.seq - 1}, 'introducer', this.innerText)">${r.introducer}</td>
+          <td contenteditable="true" onblur="updateRowData(${r.seq - 1}, 'nanny', this.innerText)">${r.nanny}</td>
+          <td class="center" contenteditable="true">${r.signed}</td>
+          <td class="center" contenteditable="true">${r.card}</td>
+          <td class="center" contenteditable="true">${r.feeNote}</td>
+          <td class="center" contenteditable="true" onblur="updateRowData(${r.seq - 1}, 'breakfast', this.innerText)">${r.breakfast}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateRowData(index, field, val) {
+      if (appData.parsedPackage?.signInRows?.[index]) {
+        appData.parsedPackage.signInRows[index][field] = val.trim();
+        showToast('簽到表資料已即時更新');
+      }
+    }
+
+    
+    function renderLabels() {
+      var pkg = appData.parsedPackage;
+      var container = document.getElementById('labelsGridContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      
+      var allLabels = (pkg && pkg.labelCards) ? pkg.labelCards : [];
+      var validLabels = allLabels.filter(function(lbl) {
+        return lbl && lbl.name && lbl.name !== '來賓名字' && lbl.name.trim() !== '';
+      });
+
+      var totalGuests = validLabels.length;
+      var totalPages = Math.max(1, Math.ceil(totalGuests / 8));
+      var curPage = Math.min(appData.currentPageLabel || 1, totalPages);
+      appData.currentPageLabel = curPage;
+
+      var startIndex = (curPage - 1) * 8;
+      var pageLabels = validLabels.slice(startIndex, startIndex + 8);
+
+      var indicator = document.getElementById('labelPageIndicator');
+      if (indicator) {
+        indicator.innerText = '第 ' + curPage + ' 頁 / 共 ' + totalPages + ' 頁 (本頁列印 ' + pageLabels.length + ' 張 ｜ 全場共 ' + totalGuests + ' 位來賓)';
+      }
+
+      
+      for (var i = 0; i < 8; i++) {
+        var lbl = pageLabels[i];
+        var card = document.createElement('div');
+
+        if (lbl) {
+          card.className = 'label-sticker-card';
+          card.innerHTML = 
+            '<div class="label-sticker-header">' +
+              '<div class="label-sticker-industry" contenteditable="true" onblur="updateLabelField(' + (startIndex + i) + ', \'industry\', this.innerText)">' + lbl.industry + '</div>' +
+            '</div>' +
+            '<div class="label-sticker-body">' +
+              '<div class="label-sticker-name" contenteditable="true" onblur="updateLabelField(' + (startIndex + i) + ', \'name\', this.innerText)">' + lbl.name + '</div>' +
+              '<div class="label-sticker-company" contenteditable="true" onblur="updateLabelField(' + (startIndex + i) + ', \'company\', this.innerText)">' + lbl.company + '</div>' +
+            '</div>';
+        } else {
+          
+          card.className = 'label-sticker-card empty-slot';
+          card.style.cssText = 'border: none !important; background: transparent !important; visibility: hidden !important;';
+          card.innerHTML = '';
+        }
+        container.appendChild(card);
+      }
+    }
+
+    function updateLabelField(index, field, val) {
+      if (appData.parsedPackage?.labelCards?.[index]) {
+        appData.parsedPackage.labelCards[index][field] = val.trim();
+        showToast('標籤資料已即時更新');
+      }
+    }
+
+    
+    function syncOfficerColor(inputEl) {
+      if (!inputEl) return;
+      var name = inputEl.value.trim();
+      var cMap = (appData.parsedPackage && appData.parsedPackage.memberColorMap) ? appData.parsedPackage.memberColorMap : {};
+      if (cMap[name]) {
+        inputEl.style.backgroundColor = cMap[name];
+        inputEl.style.fontWeight = '700';
+      } else {
+        inputEl.style.backgroundColor = '#FFFFFF';
+        inputEl.style.fontWeight = 'normal';
+      }
+    }
+
+    
+    function renderSeatingChart() {
+      const pkg = appData.parsedPackage;
+      if (!pkg || !pkg.seatingChart) return;
+      const sc = pkg.seatingChart;
+
+      document.getElementById('seatChartBanner').innerText = sc.title || '';
+
+      
+      const specialEl = document.querySelector('.seat-badge-special');
+      if (specialEl && sc.specialMember) {
+        specialEl.setAttribute('contenteditable', 'true');
+        const sName = (sc.specialMember.name || '').trim();
+        specialEl.style.background = sc.specialMember.color || '#FAFAFA';
+        specialEl.style.border = sName ? '1px solid #777' : '1.5px dashed #999';
+        specialEl.innerHTML = `<span style="font-size: 10px; color: #888; display: block;">${sc.specialMember.role || '資訊協調員'}</span><strong>${sName || '(點擊填寫)'}</strong>`;
+        specialEl.onblur = function() {
+          const val = this.innerText.replace(sc.specialMember.role || '', '').replace('(點擊填寫)', '').trim();
+          sc.specialMember.name = val;
+          const cMap = (appData.parsedPackage && appData.parsedPackage.memberColorMap) ? appData.parsedPackage.memberColorMap : {};
+          if (cMap[val]) this.style.background = cMap[val];
+          showToast('資訊協調員席已更新');
+        };
+      }
+
+      
+      const headContainer = document.getElementById('seatHeadRowContainer');
+      headContainer.innerHTML = '';
+      (sc.headTable || []).forEach((ht, hIdx) => {
+        const box = document.createElement('div');
+        box.className = 'seat-box';
+        const hName = (ht.name || '').trim();
+        box.style.background = ht.color || '#FAFAFA';
+        box.style.border = hName ? '1px solid #777' : '1.5px dashed #999';
+        box.style.flexDirection = 'column';
+        box.innerHTML = `<span style="font-size: 10px; color: #777;">${ht.role || ''}</span><strong>${hName || '(空)'}</strong>`;
+        box.setAttribute('contenteditable', 'true');
+        box.onblur = function() {
+          const val = this.innerText.replace(ht.role || '', '').replace('(空)', '').trim();
+          sc.headTable[hIdx].name = val;
+          const cMap = (appData.parsedPackage && appData.parsedPackage.memberColorMap) ? appData.parsedPackage.memberColorMap : {};
+          if (cMap[val]) this.style.background = cMap[val];
+          showToast(`幹部席 [${ht.role}] 已更新`);
+        };
+        headContainer.appendChild(box);
+      });
+
+      
+      const tbody = document.getElementById('seatGridTbody');
+      tbody.innerHTML = '';
+
+      (sc.seatGrid || []).forEach((row, rIdx) => {
+        const tr = document.createElement('tr');
+        
+        let midCell1 = '';
+        let midCell2 = '';
+
+        if (row.guest1) {
+          midCell1 = `<td class="guest-seat" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'guest1', this.innerText)">${row.guest1.name || ''}</td>`;
+        } else if (row.mid1 && row.mid1.name) {
+          midCell1 = `<td style="background:${row.mid1.color};" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'mid1', this.innerText)">${row.mid1.name}</td>`;
+        } else {
+          midCell1 = `<td class="empty-seat" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'mid1', this.innerText)"></td>`;
+        }
+
+        if (row.guest2) {
+          midCell2 = `<td class="guest-seat" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'guest2', this.innerText)">${row.guest2.name || ''}</td>`;
+        } else if (row.mid2 && row.mid2.name) {
+          midCell2 = `<td style="background:${row.mid2.color};" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'mid2', this.innerText)">${row.mid2.name}</td>`;
+        } else {
+          midCell2 = `<td class="empty-seat" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'mid2', this.innerText)"></td>`;
+        }
+
+        const left1Name = row.left1 ? row.left1.name : '';
+        const left1Color = row.left1 ? row.left1.color : '#FAFAFA';
+        const left2Name = row.left2 ? row.left2.name : '';
+        const left2Color = row.left2 ? row.left2.color : '#FAFAFA';
+        const right1Name = row.right1 ? row.right1.name : '';
+        const right1Color = row.right1 ? row.right1.color : '#FAFAFA';
+        const right2Name = row.right2 ? row.right2.name : '';
+        const right2Color = row.right2 ? row.right2.color : '#FAFAFA';
+
+        tr.innerHTML = `
+          <td style="font-weight:700; background:#FAFAFA;">第 ${row.rowNum} 排</td>
+          <td style="background:${left1Color}; ${rIdx === 0 ? 'border: 2px solid #D32F2F; font-weight:700;' : ''}" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'left1', this.innerText)">${left1Name}</td>
+          <td style="background:${left2Color};" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'left2', this.innerText)">${left2Name}</td>
+          ${midCell1}
+          ${midCell2}
+          <td style="background:${right1Color};" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'right1', this.innerText)">${right1Name}</td>
+          <td style="background:${right2Color}; ${rIdx === 0 ? 'border: 2px solid #D32F2F; font-weight:700;' : ''}" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'right2', this.innerText)">${right2Name}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateSeatGridCell(rowIdx, colKey, val) {
+      if (appData.parsedPackage?.seatingChart?.seatGrid?.[rowIdx]) {
+        const row = appData.parsedPackage.seatingChart.seatGrid[rowIdx];
+        if (row[colKey]) {
+          row[colKey].name = val.trim();
+          showToast('座位表第 ' + (rowIdx + 1) + ' 排席位已更新');
+        }
+      }
+    }
+
+    function renderTaskTable() {
+      const pkg = appData.parsedPackage;
+      if (!pkg || !pkg.taskTableMain) return;
+      const t = pkg.taskTableMain;
+
+      const tbAdmin = document.getElementById('tbodyAdminTasks');
+      tbAdmin.innerHTML = '';
+      (t.adminTasks || []).forEach(at => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-weight: 700;">${at.task}</td>
+          <td contenteditable="true">${at.owner}</td>
+          <td style="color: var(--text-muted); background: var(--surface-subtle);">${at.remark}</td>
+        `;
+        tbAdmin.appendChild(tr);
+      });
+
+      const tbField = document.getElementById('tbodyFieldTasks');
+      tbField.innerHTML = '';
+      (t.fieldTasks || []).forEach(ft => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-weight: 700; background: var(--color-task-group);">${ft.task}</td>
+          <td contenteditable="true" style="font-weight: 600; color: var(--primary-red);">${ft.owners.join('、')}</td>
+          <td style="white-space: pre-wrap; color: var(--text-muted); background: var(--surface-subtle);">${ft.remark}</td>
+          <td contenteditable="true">${ft.note || ''}</td>
+        `;
+        tbField.appendChild(tr);
+      });
+
+      const tbNanny = document.getElementById('tbodyNannyTasks');
+      tbNanny.innerHTML = '';
+      (t.nannyTasks || []).forEach((nt, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-weight: 700; background: #F4CCCC; text-align: center; vertical-align: middle;">會前交流</td>
+          <td contenteditable="true" style="font-weight: 700; color: #1155CC; background: #FFF9C4;">${nt.nanny}</td>
+          <td contenteditable="true" style="background: #FFF9C4;">${nt.guest}</td>
+          <td contenteditable="true" style="background: #FFF9C4;">${nt.company}</td>
+          <td contenteditable="true" style="background: #FFF9C4;">${nt.target}</td>
+          <td style="white-space: pre-wrap; font-size: 11.5px; line-height: 1.6; color: #111;">${nt.note}</td>
+        `;
+        tbNanny.appendChild(tr);
+      });
+
+      const tbTD = document.getElementById('tbodyTearDown');
+      tbTD.innerHTML = '';
+      const td = t.tearDownTasks || {};
+      const trTD = document.createElement('tr');
+      trTD.innerHTML = `
+        <td style="font-weight: 700; background: var(--color-task-group);">${td.task || '撤場組'}</td>
+        <td contenteditable="true" style="font-weight: 600; color: var(--primary-red);">${(td.owners || []).join('、')}</td>
+        <td style="white-space: pre-wrap; color: var(--text-muted); background: var(--surface-subtle);">${td.remark || ''}</td>
+        <td contenteditable="true" style="white-space: pre-wrap;">${td.note || ''}</td>
+      `;
+      tbTD.appendChild(trTD);
+
+      const tbClose = document.getElementById('tbodyClosingTasks');
+      tbClose.innerHTML = '';
+      (t.closingTasks || []).forEach(ct => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-weight: 700; background: #D9EAD3; text-align: center; vertical-align: middle;">會後接待<br>(諮詢組)</td>
+          <td contenteditable="true" style="font-weight: 700; color: #1155CC; background: #FFF9C4;">${ct.consultant}</td>
+          <td contenteditable="true" style="background: #FFF9C4;">${ct.guest}</td>
+          <td contenteditable="true" style="background: #FFF9C4;">${ct.company}</td>
+          <td contenteditable="true" style="background: #FFF9C4;">${ct.inviter}</td>
+          <td style="white-space: pre-wrap; font-size: 11.5px; line-height: 1.5; color: #111;">${ct.note}</td>
+        `;
+        tbClose.appendChild(tr);
+      });
+    }
+
+    function saveCurrentToHistory() {
+      var inputs = collectInputs();
+      var payload = {
+        meetingDate: inputs.meetingDate,
+        leaderName: inputs.leaderName,
+        rawInputGuests: inputs.rawGuestsText || '',
+        rawInputLine: inputs.rawLineText || '',
+        rawInputWillingness: getWillingnessText(), 
+        guestBulletText: document.getElementById('bulletContent').innerText || '',
+        guests: (appData.parsedPackage && appData.parsedPackage.guests) ? appData.parsedPackage.guests : [],
+        signInRows: (appData.parsedPackage && appData.parsedPackage.signInRows) ? appData.parsedPackage.signInRows : [],
+        labelCards: (appData.parsedPackage && appData.parsedPackage.labelCards) ? appData.parsedPackage.labelCards : [],
+        seatingChart: (appData.parsedPackage && appData.parsedPackage.seatingChart) ? appData.parsedPackage.seatingChart : {},
+        taskTableMain: (appData.parsedPackage && appData.parsedPackage.taskTableMain) ? appData.parsedPackage.taskTableMain : {},
+        refSpreadsheetId: inputs.refSpreadsheetId,
+        officers: inputs.officers 
+      };
+
+      showToast('正在儲存當前資料至歷史紀錄...');
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(function(res) {
+            if (res && res.success) {
+              showToast('已成功寫入第 ' + res.targetRow + ' 列（含 O 欄九大幹部）！');
+            } else {
+              showToast('儲存失敗: ' + (res ? res.error : '未知錯誤'));
+            }
+          })
+          .withFailureHandler(function(err) {
+            showToast('儲存發生通訊異常: ' + err.toString());
+          })
+          .saveMeetingHistory(payload);
+      } else {
+        setTimeout(function() { showToast('已成功寫入歷史紀錄工作表！'); }, 600);
+      }
+    }
+
+    
+    function calcCurrentSignPages() {
+      var pkg = appData.parsedPackage;
+      var count = 0;
+      if (pkg && pkg.guests && pkg.guests.length > 0) {
+        count = pkg.guests.length;
+      } else if (pkg && pkg.signInRows) {
+        count = pkg.signInRows.filter(function(r) {
+          return r && r.name && r.name.trim() !== '';
+        }).length;
+      }
+      return Math.max(1, Math.ceil(count / 15));
+    }
+
+    
+    function calcCurrentLabelPages() {
+      var pkg = appData.parsedPackage;
+      var count = 0;
+      if (pkg && pkg.guests && pkg.guests.length > 0) {
+        count = pkg.guests.length;
+      } else if (pkg && pkg.labelCards) {
+        count = pkg.labelCards.filter(function(c) {
+          return c && c.name && c.name !== '來賓名字' && c.name.trim() !== '';
+        }).length;
+      }
+      return Math.max(1, Math.ceil(count / 8));
+    }
+
+    
+    function calcTotalTaskPages() {
+      return 3;
+    }
+
+    
+    function switchTaskPage(pageNum) {
+      var total = 3;
+      pageNum = Math.max(1, Math.min(pageNum, total));
+      appData.currentPageTask = pageNum;
+      var p1 = document.getElementById('taskPage1');
+      var p2 = document.getElementById('taskPage2');
+      var p3 = document.getElementById('taskPage3');
+      var indicator = document.getElementById('taskPageIndicator');
+
+      if (indicator) {
+        var pageDesc = pageNum === 1 ? '一、行政與現場各組' : (pageNum === 2 ? '三、來賓專屬保母配對' : '四、撤場 ＆ 五、會後諮詢');
+        indicator.innerText = '第 ' + pageNum + ' 頁 / 共 ' + total + ' 頁 (' + pageDesc + ')';
+      }
+
+      if (p1) p1.style.display = (pageNum === 1) ? 'flex' : 'none';
+      if (p2) p2.style.display = (pageNum === 2) ? 'flex' : 'none';
+      if (p3) p3.style.display = (pageNum === 3) ? 'flex' : 'none';
+    }
+
+    
+    function renderTaskPageSubIndex(pageNum) {
+      var pkg = appData.parsedPackage;
+      if (!pkg || !pkg.taskTableMain) return;
+      var t = pkg.taskTableMain;
+      var total = calcTotalTaskPages();
+
+      var tbNanny = document.getElementById('tbodyNannyTasks');
+      var tbTD = document.getElementById('tbodyTearDown');
+      var tbClose = document.getElementById('tbodyClosingTasks');
+
+      var nTasks = t.nannyTasks || [];
+      var cTasks = t.closingTasks || [];
+
+      if (total === 2) {
+        
+        renderTaskTable();
+        return;
+      }
+
+      
+      if (pageNum < total) {
+        
+        var nStartIndex = (pageNum - 2) * 12;
+        var nSlice = nTasks.slice(nStartIndex, nStartIndex + 12);
+        if (tbNanny) {
+          tbNanny.innerHTML = '';
+          nSlice.forEach(function(nt) {
+            var tr = document.createElement('tr');
+            tr.innerHTML = 
+              '<td style="font-weight:700; background:#F4CCCC; text-align:center; vertical-align:middle;">會前交流</td>' +
+              '<td contenteditable="true" style="font-weight:700; color:#1155CC; background:#FFF9C4;">' + (nt.nanny || '接待組員') + '</td>' +
+              '<td contenteditable="true" style="background:#FFF9C4;">' + (nt.guest || '') + '</td>' +
+              '<td contenteditable="true" style="background:#FFF9C4;">' + (nt.company || '') + '</td>' +
+              '<td contenteditable="true" style="background:#FFF9C4;">' + (nt.target || '') + '</td>' +
+              '<td style="white-space:pre-wrap; font-size:11.5px; line-height:1.6; color:#111;">' + (nt.note || '') + '</td>';
+            tbNanny.appendChild(tr);
+          });
+        }
+        var secTearDown = document.getElementById('tableTearDown');
+        var secClose = document.getElementById('tableClosingTasks');
+        if (secTearDown) secTearDown.previousElementSibling.style.display = 'none';
+        if (secTearDown) secTearDown.style.display = 'none';
+        if (secClose) secClose.previousElementSibling.style.display = 'none';
+        if (secClose) secClose.style.display = 'none';
+      } else {
+        
+        if (tbNanny) tbNanny.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#888; background:#FAFAFA;">（保母交流名冊請參閱前頁）</td></tr>';
+        var secTearDown = document.getElementById('tableTearDown');
+        var secClose = document.getElementById('tableClosingTasks');
+        if (secTearDown) {
+          secTearDown.previousElementSibling.style.display = 'block';
+          secTearDown.style.display = 'table';
+        }
+        if (secClose) {
+          secClose.previousElementSibling.style.display = 'block';
+          secClose.style.display = 'table';
+        }
+        if (tbClose) {
+          tbClose.innerHTML = '';
+          cTasks.slice(0, 10).forEach(function(ct) {
+            var tr = document.createElement('tr');
+            tr.innerHTML = 
+              '<td style="font-weight:700; background:#D9EAD3; text-align:center; vertical-align:middle;">會後接待<br>(諮詢組)</td>' +
+              '<td contenteditable="true" style="font-weight:700; color:#1155CC; background:#FFF9C4;">' + (ct.consultant || '諮詢師') + '</td>' +
+              '<td contenteditable="true" style="background:#FFF9C4;">' + (ct.guest || '') + '</td>' +
+              '<td contenteditable="true" style="background:#FFF9C4;">' + (ct.company || '') + '</td>' +
+              '<td contenteditable="true" style="background:#FFF9C4;">' + (ct.inviter || '') + '</td>' +
+              '<td style="white-space:pre-wrap; font-size:11.5px; line-height:1.5; color:#111;">' + (ct.note || '') + '</td>';
+            tbClose.appendChild(tr);
+          });
+        }
+      }
+    }
+
+    
+
+    function syncCapacityWithRows(numRows) {
+      if (!numRows || isNaN(numRows)) numRows = 8;
+
+      var guestCap = numRows * 2;
+      var totalSeats = numRows * 6 + 7;
+
+      
+      var badge = document.getElementById('capacityBadge');
+      if (badge) {
+        badge.innerText = '(來賓容量 ' + guestCap + ' 人 ｜ 總席位 ' + totalSeats + ' 席)';
+      }
+
+      if (!appData.parsedPackage) {
+        appData.parsedPackage = {
+          guests: [],
+          signInRows: [],
+          labelCards: [],
+          seatingChart: {},
+          taskTableMain: {},
+          dateInfo: { minguoDateStr: appData.meetingDate || '115/11/05' },
+          leaderName: document.getElementById('inputLeaderName') ? document.getElementById('inputLeaderName').value : '森森'
+        };
+      }
+      var pkg = appData.parsedPackage;
+      var actualGuests = (pkg.guests || []).length;
+      var effectiveGuests = Math.max(actualGuests, guestCap);
+
+      
+      var realGuestCount = (pkg.guests || []).length;
+      var totalSignPages = Math.max(1, Math.ceil(realGuestCount / 15));
+      var targetSignRows = totalSignPages * 15;
+      if (!pkg.signInRows) pkg.signInRows = [];
+
+      while (pkg.signInRows.length < targetSignRows) {
+        pkg.signInRows.push({
+          seq: pkg.signInRows.length + 1,
+          name: '', company: '', conflict: '', introducer: '', nanny: '',
+          signed: '', card: '', feeNote: '', breakfast: ''
+        });
+      }
+      if (pkg.signInRows.length > targetSignRows) {
+        pkg.signInRows = pkg.signInRows.slice(0, targetSignRows);
+      }
+      for (var s = 0; s < pkg.signInRows.length; s++) {
+        pkg.signInRows[s].seq = s + 1;
+      }
+      if (appData.currentPageSignIn > totalSignPages) appData.currentPageSignIn = totalSignPages;
+      renderSignInTable();
+
+      
+      var realGuestCount = (pkg.guests || []).length;
+      var totalLabelPages = Math.max(1, Math.ceil(realGuestCount / 8));
+      
+      if (pkg.labelCards) {
+        pkg.labelCards = pkg.labelCards.filter(function(c) {
+          return c && c.name && c.name !== '來賓名字' && c.name.trim() !== '';
+        });
+      }
+      if (appData.currentPageLabel > totalLabelPages) appData.currentPageLabel = totalLabelPages;
+      renderLabels();
+
+      
+      var bannerEl = document.getElementById('seatChartBanner');
+      var dateDisp = (document.getElementById('inputMeetingDate') ? document.getElementById('inputMeetingDate').value : '') || appData.meetingDate || '2026/11/05';
+      dateDisp = dateDisp.replace(/-/g, '/');
+      var bannerText = dateDisp + ' 座位表 會員53人 - 來賓容量 ' + guestCap + '人 (共 ' + numRows + ' 排，總席位 ' + totalSeats + ' 席)';
+      if (bannerEl) bannerEl.innerText = bannerText;
+
+      if (!pkg.seatingChart) pkg.seatingChart = {};
+      pkg.seatingChart.title = bannerText;
+      pkg.seatingChart.numRows = numRows;
+
+      var oldGrid = pkg.seatingChart.seatGrid || [];
+      var newGrid = [];
+      for (var r = 0; r < numRows; r++) {
+        if (oldGrid[r]) {
+          newGrid.push(oldGrid[r]);
+        } else {
+          newGrid.push({
+            rowNum: r + 1,
+            left1: { name: '', color: '#FAFAFA' },
+            left2: { name: '', color: '#FAFAFA' },
+            guest1: { name: '', color: '#FFF9C4', isGuest: true },
+            guest2: { name: '', color: '#FFF9C4', isGuest: true },
+            mid1: null,
+            mid2: null,
+            right1: { name: '', color: '#FAFAFA' },
+            right2: { name: '', color: '#FAFAFA' }
+          });
+        }
+      }
+      pkg.seatingChart.seatGrid = newGrid;
+      renderSeatingChart();
+
+      
+      if (pkg.taskTableMain) {
+        var t = pkg.taskTableMain;
+        if (!t.nannyTasks) t.nannyTasks = [];
+        var stdNannyNote = '1.請提早6:15分簽到，協助來賓交流想對接的夥伴交流\n2.6:45協助來賓與三長交流';
+        for (var n = t.nannyTasks.length; n < effectiveGuests; n++) {
+          t.nannyTasks.push({
+            nanny: '接待組員',
+            guest: '來賓 ' + (n + 1) + ' (席位備用)',
+            company: '(現場登記)',
+            target: '分會夥伴',
+            note: stdNannyNote
+          });
+        }
+
+        if (!t.closingTasks) t.closingTasks = [];
+        var stdClosingNote = '1.協助引導評議表填寫\n2.評議表填寫以填寫入會申請書為目標\n3.填寫評議表時，回收來賓掛牌吊帶\n4.如來賓有入會意願，請當下填寫入會申請表，並互留聯繫方式，傳送刷卡連結務必協助做刷卡繳費。\n5.如來賓已確定刷卡或繳費，請回傳刷卡畫面及繳費通知到群組。\n6.務必協助來賓上樓用餐及交流，不要落單！';
+        for (var c = t.closingTasks.length; c < effectiveGuests; c++) {
+          t.closingTasks.push({
+            consultant: '諮詢師 (一般)',
+            guest: '來賓 ' + (c + 1) + ' (席位備用)',
+            company: '(現場登記)',
+            inviter: '邀約夥伴',
+            note: stdClosingNote
+          });
+        }
+        renderTaskTable();
+        switchTaskPage(appData.currentPageTask || 1);
+      }
+
+      showToast('【排數已聯動】：' + numRows + ' 排 ➔ 來賓容量 ' + guestCap + ' 人 ｜ 簽到表 ' + totalSignPages + ' 頁 ｜ 標籤紙 ' + totalLabelPages + ' 頁');
+    }
+
+    
+    function compileAllA4PagesData() {
+      var allPages = [];
+      var pkg = appData.parsedPackage;
+
+      
+      var origSignPage = appData.currentPageSignIn;
+      var totalSignPages = calcCurrentSignPages();
+      var signTab = document.getElementById('tabSignIn');
+      for (var p = 1; p <= totalSignPages; p++) {
+        appData.currentPageSignIn = p;
+        renderSignInTable();
+        var pEl = signTab.querySelector('.a4-page');
+        if (pEl) {
+          allPages.push({
+            category: '來賓簽到表',
+            pageTitle: '來賓簽到表 (第 ' + p + ' 頁 / 共 ' + totalSignPages + ' 頁)',
+            tabId: 'tabSignIn',
+            dom: pEl.cloneNode(true)
+          });
+        }
+      }
+      appData.currentPageSignIn = origSignPage;
+      renderSignInTable();
+
+      
+      var origLabelPage = appData.currentPageLabel;
+      var totalLabelPages = calcCurrentLabelPages();
+      var labelTab = document.getElementById('tabLabels');
+      for (var lp = 1; lp <= totalLabelPages; lp++) {
+        appData.currentPageLabel = lp;
+        renderLabels();
+        var lEl = labelTab.querySelector('.a4-page');
+        if (lEl) {
+          allPages.push({
+            category: '標籤貼紙',
+            pageTitle: '來賓名牌標籤貼紙 (第 ' + lp + ' 頁 / 共 ' + totalLabelPages + ' 頁)',
+            tabId: 'tabLabels',
+            dom: lEl.cloneNode(true)
+          });
+        }
+      }
+      appData.currentPageLabel = origLabelPage;
+      renderLabels();
+
+      
+      var seatTab = document.getElementById('tabSeats');
+      var sEl = seatTab ? seatTab.querySelector('.a4-page') : null;
+      if (sEl) {
+        allPages.push({
+          category: '座位表',
+          pageTitle: '例會座位表',
+          tabId: 'tabSeats',
+          dom: sEl.cloneNode(true)
+        });
+      }
+
+      
+      var origTaskPage = appData.currentPageTask || 1;
+      var taskPageIds = [
+        { id: 'taskPage1', title: '任務表 (頁一：行政與現場工作)' },
+        { id: 'taskPage2', title: '任務表 (頁二：專屬保母配對)' },
+        { id: 'taskPage3', title: '任務表 (頁三：撤場 ＆ 會後諮詢)' }
+      ];
+
+      taskPageIds.forEach(function(tPage, pIdx) {
+        var pageEl = document.getElementById(tPage.id);
+        if (pageEl) {
+          var clone = pageEl.cloneNode(true);
+          
+          clone.style.display = 'flex';
+          allPages.push({
+            category: '任務表',
+            pageTitle: tPage.title,
+            tabId: 'tabTasks',
+            dom: clone
+          });
+        }
+      });
+      switchTaskPage(origTaskPage);
+
+      return allPages;
+    }
+
+    
+    function toggleInlineFullPreview() {
+      var section = document.getElementById('fullPreviewSection');
+      var container = document.getElementById('fullPreviewPagesContainer');
+      if (!section || !container) return;
+
+      if (section.style.display !== 'none') {
+        section.style.display = 'none';
+        return;
+      }
+
+      var allPages = compileAllA4PagesData();
+      if (!allPages || allPages.length === 0) {
+        showToast('目前尚未生成任何 A4 報表內容！');
+        return;
+      }
+
+      container.innerHTML = '';
+
+      allPages.forEach(function(item, idx) {
+        var pageWrapper = document.createElement('div');
+        pageWrapper.style.cssText = 'margin: 0 auto; max-width: 100%; display: flex; flex-direction: column; align-items: center; width: 100%; box-sizing: border-box;';
+
+        
+        var badge = document.createElement('div');
+        badge.style.cssText = 'background: var(--text); color: #FFF; font-size: 11.5px; font-weight: 700; padding: 4px 14px; border-radius: 12px; margin-bottom: 10px; letter-spacing: 0.5px;';
+        badge.innerText = 'P.' + (idx + 1) + ' / ' + allPages.length + ' ｜ ' + item.pageTitle;
+
+        var tabContainer = document.createElement('div');
+        tabContainer.id = item.tabId;
+        tabContainer.style.cssText = 'background: #FFFFFF; box-shadow: 0 4px 18px rgba(0,0,0,0.08); overflow: hidden;';
+
+        var domClone = item.dom;
+        domClone.style.display = 'flex';
+        domClone.style.margin = '0 auto';
+        domClone.style.boxShadow = 'none';
+
+        
+        var editableEls = domClone.querySelectorAll('[contenteditable]');
+        editableEls.forEach(function(el) {
+          el.removeAttribute('contenteditable');
+          el.style.pointerEvents = 'none';
+          el.style.userSelect = 'none';
+          el.style.cursor = 'default';
+        });
+
+        tabContainer.appendChild(domClone);
+        pageWrapper.appendChild(badge);
+        pageWrapper.appendChild(tabContainer);
+        container.appendChild(pageWrapper);
+      });
+
+      section.style.display = 'block';
+
+      
+      setTimeout(function() {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+    }
+
+    
+    async function executeExportPdfToDrive() {
+      var jsPDFConstructor = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+      var h2c = window.html2canvas;
+
+      
+      if (!h2c || !jsPDFConstructor) {
+        showToast('PDF 引擎初始化中，請稍候...');
+        for (var waitCount = 0; waitCount < 10; waitCount++) {
+          await new Promise(function(resolve) { setTimeout(resolve, 250); });
+          jsPDFConstructor = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+          h2c = window.html2canvas;
+          if (h2c && jsPDFConstructor) break;
+        }
+      }
+
+      if (!h2c || !jsPDFConstructor) {
+        showToast('⚠️ PDF 引擎連線逾時，請重新整理頁面後重試！');
+        return;
+      }
+
+      
+      var fullSection = document.getElementById('fullPreviewSection');
+      if (!fullSection || fullSection.style.display === 'none') {
+        toggleInlineFullPreview();
+        await new Promise(function(resolve) { setTimeout(resolve, 150); });
+      }
+
+      
+      var previewPages = document.querySelectorAll('#fullPreviewPagesContainer .a4-page');
+      if (!previewPages || previewPages.length === 0) {
+        showToast('全預覽區未包含有效頁面，請重試！');
+        return;
+      }
+
+      var btn = document.getElementById('btnUploadFullPdfToDrive');
+      if (btn) {
+        btn.classList.add('is-loading');
+        btn.style.pointerEvents = 'none';
+      }
+
+      var dateVal = (document.getElementById('inputMeetingDate') ? document.getElementById('inputMeetingDate').value : '') || appData.meetingDate || '20261105';
+      var dateClean = dateVal.replace(/[-/]/g, '');
+      var fileName = dateClean + '鳳凰分會例會全套接待資訊表.pdf';
+      var targetFolderId = (document.getElementById('inputTargetFolderId') ? document.getElementById('inputTargetFolderId').value.trim() : '') || '1EFxS3UGZvk2c6uerM4KWS-IP4aINGpA2';
+
+      showToast('正在依畫面全預覽 1:1 產出高畫質 PDF (共 ' + previewPages.length + ' 頁)...');
+
+      try {
+        var pdf = new jsPDFConstructor({
+          orientation: 'portrait',
+          unit: 'mm',
+          format: 'a4',
+          compress: true
+        });
+
+        
+        for (var i = 0; i < previewPages.length; i++) {
+          var targetPage = previewPages[i];
+
+          
+          showToast('正在轉繪第 ' + (i + 1) + ' 頁 / 共 ' + previewPages.length + ' 頁...');
+
+          var canvas = await h2c(targetPage, {
+            scale: 2,
+            useCORS: true,
+            logging: false,
+            backgroundColor: '#FFFFFF',
+            scrollX: 0,
+            scrollY: 0
+          });
+
+          var imgData = canvas.toDataURL('image/jpeg', 0.98);
+          if (i > 0) pdf.addPage('a4', 'portrait');
+          
+          pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+        }
+
+        var dataUri = pdf.output('datauristring');
+        var pureBase64 = dataUri.indexOf(',') !== -1 ? dataUri.split(',')[1] : dataUri;
+
+        var payload = {
+          meetingDate: dateVal,
+          fileName: fileName,
+          targetFolderId: targetFolderId,
+          refSpreadsheetId: (document.getElementById('inputRefSpreadsheetId') ? document.getElementById('inputRefSpreadsheetId').value.trim() : ''),
+          pdfBase64: pureBase64
+        };
+
+        if (typeof google !== 'undefined' && google.script && google.script.run) {
+          google.script.run
+            .withSuccessHandler(function(res) {
+              if (res && res.success) {
+                var card = document.getElementById('driveExportResultCard');
+                var input = document.getElementById('inputDriveResultUrl');
+                var link = document.getElementById('linkOpenDrivePdf');
+                var nameEl = document.getElementById('driveResultFileName');
+                if (nameEl) nameEl.innerText = fileName;
+                if (input) input.value = res.fileUrl;
+                if (link) link.href = res.fileUrl;
+                if (card) card.style.display = 'block';
+                showToast('已成功寫入 Google 雲端硬碟');
+              } else {
+                showToast('雲端存檔失敗: ' + (res ? res.error : '未知錯誤'));
+              }
+            })
+            .withFailureHandler(function(err) {
+              showToast('雲端存檔失敗: ' + err.toString());
+            })
+            .savePdfToGoogleDrive(payload);
+        } else {
+          pdf.save(fileName);
+          var card = document.getElementById('driveExportResultCard');
+          var input = document.getElementById('inputDriveResultUrl');
+          var link = document.getElementById('linkOpenDrivePdf');
+          var nameEl = document.getElementById('driveResultFileName');
+          if (nameEl) nameEl.innerText = fileName;
+          if (input) input.value = 'https://drive.google.com/file/d/demo/view';
+          if (link) link.href = '#';
+          if (card) card.style.display = 'block';
+          showToast('本地模擬：已產出 PDF 並完成網址配置');
+        }
+
+      } catch (err) {
+        console.error('PDF 產出失敗:', err);
+        showToast('PDF 產出失敗: ' + err.message);
+      } finally {
+        if (exportContainer && exportContainer.parentNode) {
+          exportContainer.parentNode.removeChild(exportContainer);
+        }
+        if (btn) {
+          btn.classList.remove('is-loading');
+          btn.style.pointerEvents = 'auto';
+        }
+      }
+    }
+
+    
+    function printActiveTabA4() {
+      var activeTab = document.querySelector('.tab-content.active');
+      if (!activeTab) return;
+
+      var pagesHtml = '';
+      if (activeTab.id === 'tabSignIn') {
+        var origPage = appData.currentPageSignIn;
+        var totalSignPages = Math.max(2, Math.ceil((appData.parsedPackage && appData.parsedPackage.signInRows ? appData.parsedPackage.signInRows.length : 30) / 15));
+        for (var pNum = 1; pNum <= totalSignPages; pNum++) {
+          appData.currentPageSignIn = pNum;
+          renderSignInTable();
+          var pEl = activeTab.querySelector('.a4-page');
+          if (pEl) pagesHtml += pEl.outerHTML;
+        }
+        appData.currentPageSignIn = origPage;
+        renderSignInTable();
+      } else if (activeTab.id === 'tabTasks') {
+        var p1 = document.getElementById('taskPage1');
+        var p2 = document.getElementById('taskPage2');
+        var origDisp1 = p1.style.display;
+        var origDisp2 = p2.style.display;
+        p1.style.display = 'flex';
+        p2.style.display = 'flex';
+        pagesHtml += p1.outerHTML + p2.outerHTML;
+        p1.style.display = origDisp1;
+        p2.style.display = origDisp2;
+      } else if (activeTab.id === 'tabLabels') {
+        var total = Math.max(1, Math.ceil((appData.parsedPackage && appData.parsedPackage.labelCards ? appData.parsedPackage.labelCards.length : 8) / 8));
+        var origLPage = appData.currentPageLabel;
+        for (var lp = 1; lp <= total; lp++) {
+          appData.currentPageLabel = lp;
+          renderLabels();
+          pagesHtml += activeTab.querySelector('.a4-page').outerHTML;
+        }
+        appData.currentPageLabel = origLPage;
+        renderLabels();
+      } else {
+        pagesHtml = activeTab.querySelector('.a4-page').outerHTML;
+      }
+
+      var oldContainer = document.getElementById('print-container');
+      if (oldContainer && oldContainer.parentNode) {
+        oldContainer.parentNode.removeChild(oldContainer);
+      }
+
+      var printContainer = document.createElement('div');
+      printContainer.id = 'print-container';
+      printContainer.innerHTML = '<div id="' + activeTab.id + '" class="tab-content active" style="display:block !important; margin:0; padding:0;">' + pagesHtml + '</div>';
+      document.body.appendChild(printContainer);
+
+      document.body.classList.add('printing-active-tab');
+
+      setTimeout(function() {
+        window.print();
+        function cleanupPrint() {
+          document.body.classList.remove('printing-active-tab');
+          if (printContainer && printContainer.parentNode) {
+            printContainer.parentNode.removeChild(printContainer);
+          }
+          window.removeEventListener('afterprint', cleanupPrint);
+        }
+        window.addEventListener('afterprint', cleanupPrint);
+        setTimeout(cleanupPrint, 3500);
+      }, 150);
+    }
+
+    function exportToDriveWorkflow() {
+      if (!appData.parsedPackage?.signInRows) {
+        showToast('請先執行生成或確認表格資料！');
+        return;
+      }
+
+      const inputs = collectInputs();
+      const targetFolderId = document.getElementById('inputTargetFolderId').value.trim() || '1EFxS3UGZvk2c6uerM4KWS-IP4aINGpA2';
+      const payload = Object.assign({}, appData.parsedPackage, {
+        meetingDate: inputs.meetingDate,
+        leaderName: inputs.leaderName,
+        rawInputGuests: inputs.rawGuestsText,
+        rawInputLine: inputs.rawLineText,
+        rawInputWillingness: inputs.rawWillingnessText,
+        targetFolderId: targetFolderId,
+        refSpreadsheetId: inputs.refSpreadsheetId
+      });
+
+      const btn = document.getElementById('btnExportDrive');
+      btn.style.opacity = '0.5';
+      btn.style.pointerEvents = 'none';
+      showToast('正在匯出 Google 試算表並同步寫入歷史紀錄...');
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler((res) => {
+            btn.style.opacity = '1';
+            btn.style.pointerEvents = 'auto';
+            if (res.success) {
+              showToast(`成功建立試算表：${res.fileName}`);
+              window.open(res.fileUrl, '_blank');
+            } else {
+              showToast('匯出失敗: ' + res.error);
+            }
+          })
+          .withFailureHandler((err) => {
+            btn.style.opacity = '1';
+            btn.style.pointerEvents = 'auto';
+            showToast('匯出異常: ' + err.toString());
+          })
+          .exportToGoogleDrive(payload);
+      } else {
+        setTimeout(() => {
+          btn.style.opacity = '1';
+          btn.style.pointerEvents = 'auto';
+          showToast(`已建立試算表並寫入歷史紀錄！`);
+        }, 1000);
+      }
+    }
+  </script>
+</body>
+</html>
