@@ -1198,33 +1198,53 @@
       flex-shrink: 0;
     }
 
-    .officer-rows-control {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      max-width: 100%;
-      box-sizing: border-box;
-    }
+     
+      .officer-rows-control {
+        width: 100% !important;
+        display: flex !important;
+        flex-wrap: wrap !important;  
+        align-items: center !important;
+        gap: 6px 8px !important;
+        background: var(--surface-subtle) !important;
+        padding: 8px 10px !important;
+        border-radius: 6px !important;
+        border: 1px solid var(--border) !important;
+        box-sizing: border-box !important;
+      }
 
-    .officer-rows-control label {
-      font-size: 12px;
-      font-weight: 700;
-      color: #1155CC;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
+      .officer-rows-control label {
+        font-size: 12.5px !important;
+        font-weight: 700 !important;
+        white-space: nowrap !important;
+        color: #1155CC !important;
+      }
 
-    .officer-rows-control select {
-      padding: 6px 10px;
-      font-size: 13px;
-      font-weight: 700;
-      border: 1.5px solid #1155CC;
-      border-radius: 4px;
-      background: #FFFFFF;
-      outline: none;
-      max-width: 100%;
-      box-sizing: border-box;
-    }
+      .officer-rows-control select {
+        flex: 1 !important;
+        min-width: 140px !important;  
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        padding: 6px 10px !important;
+        border: 1.5px solid #1155CC !important;
+        border-radius: 4px !important;
+        background: #FFFFFF !important;
+      }
+
+       
+      .officer-rows-control #capacityBadge {
+        width: 100% !important;
+        display: block !important;
+        margin: 2px 0 0 0 !important;
+        text-align: center !important;
+        font-size: 11.5px !important;
+        font-weight: 700 !important;
+        color: #1155CC !important;
+        background: rgba(17, 85, 204, 0.08) !important;
+        padding: 4px 8px !important;
+        border-radius: 4px !important;
+        white-space: normal !important;
+        box-sizing: border-box !important;
+      }
 
      
     @media (max-width: 768px) {
@@ -1335,17 +1355,19 @@
       .officer-rows-control {
         width: 100% !important;
         display: flex !important;
+        flex-wrap: wrap !important;  
         align-items: center !important;
-        justify-content: space-between !important;
+        gap: 6px 8px !important;
         background: var(--surface-subtle) !important;
-        padding: 6px 10px !important;
-        border-radius: 4px !important;
+        padding: 8px 10px !important;
+        border-radius: 6px !important;
         border: 1px solid var(--border) !important;
         box-sizing: border-box !important;
       }
 
       .officer-rows-control label {
-        font-size: 12px !important;
+        font-size: 12.5px !important;
+        font-weight: 700 !important;
         white-space: nowrap !important;
         color: #1155CC !important;
       }
@@ -1353,10 +1375,28 @@
       .officer-rows-control select {
         flex: 1 !important;
         min-width: 0 !important;
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        padding: 6px 10px !important;
+        border: 1.5px solid #1155CC !important;
+        border-radius: 4px !important;
+        background: #FFFFFF !important;
+      }
+
+       
+      .officer-rows-control #capacityBadge {
         width: 100% !important;
-        font-size: 12.5px !important;
-        padding: 5px 8px !important;
-        border-color: #1155CC !important;
+        display: block !important;
+        margin: 2px 0 0 0 !important;
+        text-align: center !important;
+        font-size: 11.5px !important;
+        font-weight: 700 !important;
+        color: #1155CC !important;
+        background: rgba(17, 85, 204, 0.08) !important;
+        padding: 4px 8px !important;
+        border-radius: 4px !important;
+        white-space: normal !important;
+        box-sizing: border-box !important;
       }
 
        
@@ -1603,7 +1643,7 @@
           <option value="35">35 排 (超大商務日 - 70 位來賓)</option>
           <option value="40">40 排 (百人商務日 - 80 位來賓)</option>
         </select>
-        <span id="capacityBadge" style="font-size: 11.5px; font-weight: 700; color: #1155CC; margin-left: 6px; white-space: nowrap;">(來賓容量 16 人 ｜ 總席位 55 席)</span>
+        <span id="capacityBadge" style="font-size: 11.5px; font-weight: 700; color: #1155CC; margin-left: 6px;">(來賓容量 16 人 ｜ 總席位 55 席)</span>
       </div>
     </div>
     <div class="officer-settings-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(115px, 1fr)); gap: 8px; margin-top: 10px;">
@@ -2248,7 +2288,10 @@
               } else if (res.seatingChart) {
                 if (res.seatingChart.numRows) {
                   var selRows = document.getElementById('selectSeatRows');
-                  if (selRows) selRows.value = String(res.seatingChart.numRows);
+                  if (selRows) {
+                    selRows.value = String(res.seatingChart.numRows);
+                    syncCapacityWithRows(res.seatingChart.numRows); 
+                  }
                 }
                 var chartOfficers = extractOfficersFromChart(res.seatingChart);
                 if (chartOfficers) applyOfficersToInputs(chartOfficers);
