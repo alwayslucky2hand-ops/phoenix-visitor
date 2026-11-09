@@ -1623,7 +1623,7 @@
         <button type="button" id="btnSignInPrev" title="上一頁">
           <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
         </button>
-        <span class="pagination-info" id="signInPageIndicator">第 1 頁 / 共 2 頁 (A4 每頁 15 位)</span>
+        <span class="pagination-info" id="signInPageIndicator">1/1</span>
         <button type="button" id="btnSignInNext" title="下一頁">
           <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </button>
@@ -2869,7 +2869,7 @@
 
       const indicator = document.getElementById('signInPageIndicator');
       if (indicator) {
-        indicator.innerText = `第 ${curPage} 頁 / 共 ${totalPages} 頁 (A4 每頁 15 位 ｜ 本次共 ${validGuestCount} 位來賓)`;
+        indicator.innerText = `${curPage}/${totalPages}`;
       }
 
       pageRows.forEach(r => {
@@ -2897,7 +2897,7 @@
       }
     }
 
-    
+    // 渲染名牌貼紙 (當天幾位來賓就只印幾格，其餘空位完全不印邊框與文字，節省紙張與墨水)
     function renderLabels() {
       var pkg = appData.parsedPackage;
       var container = document.getElementById('labelsGridContainer');
@@ -2920,7 +2920,7 @@
 
       var indicator = document.getElementById('labelPageIndicator');
       if (indicator) {
-        indicator.innerText = '第 ' + curPage + ' 頁 / 共 ' + totalPages + ' 頁 (本頁列印 ' + pageLabels.length + ' 張 ｜ 全場共 ' + totalGuests + ' 位來賓)';
+        indicator.innerText = curPage + '/' + totalPages;
       }
 
       
@@ -3228,8 +3228,7 @@
       var indicator = document.getElementById('taskPageIndicator');
 
       if (indicator) {
-        var pageDesc = pageNum === 1 ? '一、行政與現場各組' : (pageNum === 2 ? '三、來賓專屬保母配對' : '四、撤場 ＆ 五、會後諮詢');
-        indicator.innerText = '第 ' + pageNum + ' 頁 / 共 ' + total + ' 頁 (' + pageDesc + ')';
+        indicator.innerText = pageNum + '/' + total;
       }
 
       if (p1) p1.style.display = (pageNum === 1) ? 'flex' : 'none';
