@@ -1441,6 +1441,30 @@
       }
 
        
+      .status-panel {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+        padding: 10px 12px !important;
+        margin-bottom: 14px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+
+      .status-info {
+        font-size: 12px !important;
+        line-height: 1.4 !important;
+        white-space: normal !important;
+        word-break: break-word !important;
+      }
+
+      .progress-bar-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 5px !important;
+      }
+
+       
       .tabs-top-actions-bar {
         justify-content: flex-start !important;
         margin-bottom: 10px !important;
@@ -1711,6 +1735,17 @@
           <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
           <span class="progress-badge" id="btnStage3Progress">0%</span>
         </button>
+      </div>
+    </div>
+
+    
+    <div class="status-panel" id="statusPanelStage23">
+      <div class="status-info">
+        <span class="dot"></span>
+        <span id="statusMessageStage23">準備就緒，點選上方按鈕開始運作</span>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="progressBarFillStage23"></div>
       </div>
     </div>
 
@@ -2103,6 +2138,20 @@
     currentPageLabel: 1
   };
 
+  
+  function getUpcomingThursdayDate() {
+    var now = new Date();
+    var dayOfWeek = now.getDay(); 
+    
+    var diffDays = (4 - dayOfWeek + 7) % 7;
+    var targetDate = new Date(now.getTime() + (diffDays * 24 * 60 * 60 * 1000));
+
+    var yyyy = targetDate.getFullYear();
+    var mm = String(targetDate.getMonth() + 1).padStart(2, '0');
+    var dd = String(targetDate.getDate()).padStart(2, '0');
+    return yyyy + '-' + mm + '-' + dd;
+  }
+
   window.addEventListener('DOMContentLoaded', function() {
     initEventHandlers();
     renderDefaultEmptyTables();
@@ -2111,12 +2160,14 @@
     
     setTimeout(function() {
       var dateEl = document.getElementById('inputMeetingDate');
-      var actualChosenDate = dateEl ? dateEl.value.trim() : '';
-      if (actualChosenDate) {
-        appData.meetingDate = actualChosenDate;
-        checkHistoryForDate(actualChosenDate);
+      var autoThursday = getUpcomingThursdayDate();
+      
+      if (dateEl) {
+        dateEl.value = autoThursday;
       }
-    }, 150);
+      appData.meetingDate = autoThursday;
+      checkHistoryForDate(autoThursday); 
+    }, 100);
   });
 
     
@@ -2196,13 +2247,19 @@
     function updateProgress(btnId, percent, message) {
       var btn = document.getElementById(btnId);
       var badge = document.getElementById(btnId + 'Progress');
-      var statusPanel = document.getElementById('statusPanel');
-      var statusMsg = document.getElementById('statusMessage');
-      var barFill = document.getElementById('progressBarFill');
 
-      if (statusPanel) statusPanel.classList.add('active');
-      if (statusMsg && message) statusMsg.innerText = message;
-      if (barFill) barFill.style.width = percent + '%';
+      var isStage1 = (btnId === 'btnStage1');
+      var targetPanel = isStage1 ? document.getElementById('statusPanel') : document.getElementById('statusPanelStage23');
+      var otherPanel  = isStage1 ? document.getElementById('statusPanelStage23') : document.getElementById('statusPanel');
+      var targetMsg   = isStage1 ? document.getElementById('statusMessage') : document.getElementById('statusMessageStage23');
+      var targetBar   = isStage1 ? document.getElementById('progressBarFill') : document.getElementById('progressBarFillStage23');
+
+      
+      if (otherPanel) otherPanel.classList.remove('active');
+
+      if (targetPanel) targetPanel.classList.add('active');
+      if (targetMsg && message) targetMsg.innerText = message;
+      if (targetBar) targetBar.style.width = percent + '%';
 
       if (percent > 0 && percent < 100) {
         if (btn) btn.classList.add('is-loading');
@@ -2716,7 +2773,8 @@
         return;
       }
 
-      updateProgress('btnStage1', 40, '【階段一】Gemini 正在讀取輸入資訊與分會名冊，分析產業衝突與早餐...');
+      
+      updateProgress('btnStage1', 50, '【階段一】正在比對會員專業、分析產業衝突與外帶早餐...');
 
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         google.script.run
@@ -2749,7 +2807,8 @@
 
       var params = collectInputs();
       params.guests = appData.parsedPackage.guests;
-      updateProgress('btnStage2', 50, '【階段二】Gemini 正在參照 30 秒產業鏈、會員年資與來賓意願最佳化座位表...');
+      
+      updateProgress('btnStage2', 50, '【階段二】正在依「30秒順序」Q 欄位與來賓意願排定座位表...');
 
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         google.script.run
@@ -2786,7 +2845,7 @@
       }
 
       
-      updateProgress('btnStage3', 15, '【階段三 1/4】調用 API Key 分析人力會期，排定行政與現場各組任務 (15%)...');
+      updateProgress('btnStage3', 25, '【階段三 1/4】智能排定行政與現場 6 大工作任務 (25%)...');
 
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         
@@ -2798,7 +2857,7 @@
             renderTaskTable();
 
             
-            updateProgress('btnStage3', 45, '【階段三 2/4】現場各組完成！調用下一組 API Key 比對專業，媒合專屬保母 (45%)...');
+            updateProgress('btnStage3', 50, '【階段三 2/4】現場各組完成！比對產業需求，媒合專屬保母 (50%)...');
             google.script.run
               .withSuccessHandler(function(res2) {
                 if (!res2 || !res2.success) throw new Error(res2 ? res2.error : '步驟 2 失敗');
@@ -2806,7 +2865,7 @@
                 renderTaskTable();
 
                 
-                updateProgress('btnStage3', 70, '【階段三 3/4】保母配對完成！調用下一組 API Key 分配撤場任務 (70%)...');
+                updateProgress('btnStage3', 75, '【階段三 3/4】保母配對完成！執行名單防衝突，排定撤場任務 (75%)...');
                 google.script.run
                   .withSuccessHandler(function(res3) {
                     if (!res3 || !res3.success) throw new Error(res3 ? res3.error : '步驟 3 失敗');
@@ -2814,14 +2873,14 @@
                     renderTaskTable();
 
                     
-                    updateProgress('btnStage3', 88, '【階段三 4/4】撤場組排定完成！調用下一組 API Key 執行會後締結意願分級 (88%)...');
+                    updateProgress('btnStage3', 90, '【階段三 4/4】撤場組完成！比對資深會齡，精準導引諮詢締結 (90%)...');
                     google.script.run
                       .withSuccessHandler(function(res4) {
                         if (!res4 || !res4.success) throw new Error(res4 ? res4.error : '步驟 4 失敗');
                         appData.parsedPackage.taskTableMain.closingTasks = res4.closingTasks;
                         renderTaskTable();
 
-                        updateProgress('btnStage3', 100, '【階段三完成】任務表_主全體配置完畢！(100%)');
+                        updateProgress('btnStage3', 100, '【階段三完成】全體工作任務配置完畢！(100%)');
                         showToast('階段三全部區塊完成，已自動更新至歷史紀錄');
                         autoSyncHistorySilent();
                       })
@@ -2851,18 +2910,18 @@
       } else {
         
         setTimeout(function() {
-          updateProgress('btnStage3', 35, '【本地模擬 1/4】現場各組任務排定 (35%)...');
+          updateProgress('btnStage3', 25, '【本地模擬 1/4】現場各組任務排定 (25%)...');
           setTimeout(function() {
-            updateProgress('btnStage3', 65, '【本地模擬 2/4】專屬保母配對完成 (65%)...');
+            updateProgress('btnStage3', 50, '【本地模擬 2/4】專屬保母配對完成 (50%)...');
             setTimeout(function() {
-              updateProgress('btnStage3', 85, '【本地模擬 3/4】撤場組分配完畢 (85%)...');
+              updateProgress('btnStage3', 75, '【本地模擬 3/4】撤場組分配完畢 (75%)...');
               setTimeout(function() {
                 updateProgress('btnStage3', 100, '【階段三完成】任務表_主配置完畢！(100%)');
                 showToast('本地環境模擬完成');
-              }, 400);
-            }, 400);
-          }, 400);
-        }, 400);
+              }, 200);
+            }, 200);
+          }, 200);
+        }, 200);
       }
     }
 
