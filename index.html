@@ -604,16 +604,20 @@
       color: var(--text);
       font-weight: 700;
       text-align: center;
-      padding: 7px 6px;
-      font-size: 12px;
+      padding: 6px 6px;
+      font-size: 14px !important;
       letter-spacing: 0.5px;
     }
 
     table.data-table.task-table td {
-      padding: 7px 8px;
-      font-size: 12px;
+      padding: 6px 8px;
+      font-size: 14px !important;
       word-break: break-word !important;
-      line-height: 1.5;
+      line-height: 1.45;
+    }
+
+    #tabTasks h4 {
+      font-size: 15px !important;
     }
 
      
@@ -1003,10 +1007,10 @@
     }
 
     .seat-grid-table td.guest-seat {
-      background: var(--color-seat-guest) !important;
-      border: 2px solid #E0B400;
+      background: #FFEBEE !important;
+      border: 2px solid #D32F2F;
       font-weight: 800;
-      color: #B78103;
+      color: #D32F2F !important;
     }
 
     .seat-grid-table td.empty-seat {
@@ -1680,6 +1684,24 @@
       <div><label style="font-size: 11px; color:#1155CC; font-weight:700; display:block;">資訊協調員 (Row 7)</label><input type="text" id="off_specialQ7" value="" placeholder="載入前次紀錄..." oninput="syncOfficerColor(this); saveOfficersLocal();" style="width:100%; padding:4px 6px;"></div>
       <div><label style="font-size: 11px; color:#B78103; font-weight:700; display:block;">導師協調員 (排1左)</label><input type="text" id="off_topLeft" value="" placeholder="載入前次紀錄..." oninput="syncOfficerColor(this); saveOfficersLocal();" style="width:100%; padding:4px 6px;"></div>
       <div><label style="font-size: 11px; color:#B78103; font-weight:700; display:block;">來賓接待長 (排1右)</label><input type="text" id="off_topRight" value="" placeholder="載入前次紀錄..." oninput="syncOfficerColor(this); saveOfficersLocal();" style="width:100%; padding:4px 6px;"></div>
+      <div><label style="font-size: 11px; color:#D32F2F; font-weight:700; display:block;">執行董事 (簽到末2)</label><input type="text" id="off_execDirector" value="徐佩娟" placeholder="預設 徐佩娟" oninput="saveOfficersLocal();" style="width:100%; padding:4px 6px;"></div>
+      <div><label style="font-size: 11px; color:#D32F2F; font-weight:700; display:block;">董事顧問 (簽到末1)</label><input type="text" id="off_directorAdvisor" value="" placeholder="可空白或填姓名" oninput="saveOfficersLocal();" style="width:100%; padding:4px 6px;"></div>
+    </div>
+
+    <div style="border-top: 1px dashed var(--border); margin-top: 14px; padding-top: 12px;">
+      <div style="font-size: 12.5px; font-weight: 700; color: var(--text); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+        <span style="display: inline-block; width: 6px; height: 6px; background: var(--primary-red); border-radius: 50%;"></span>
+        任務人力數設定（預設：佈置 3、迎賓 2、其餘 1、撤場 3）
+      </div>
+      <div class="officer-settings-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px;">
+        <div><label style="font-size: 11px; color:#666; display:block;">佈置組 (人)</label><input type="number" id="quota_layout" min="1" max="10" value="3" oninput="saveQuotasLocal()" style="width:100%; padding:4px 6px; text-align:center; font-weight:700;"></div>
+        <div><label style="font-size: 11px; color:#666; display:block;">迎賓櫃檯 (人)</label><input type="number" id="quota_welcome" min="1" max="10" value="2" oninput="saveQuotasLocal()" style="width:100%; padding:4px 6px; text-align:center; font-weight:700;"></div>
+        <div><label style="font-size: 11px; color:#666; display:block;">響鈴手 (人)</label><input type="number" id="quota_bell" min="1" max="10" value="1" oninput="saveQuotasLocal()" style="width:100%; padding:4px 6px; text-align:center; font-weight:700;"></div>
+        <div><label style="font-size: 11px; color:#666; display:block;">麥克風手 (人)</label><input type="number" id="quota_mic" min="1" max="10" value="1" oninput="saveQuotasLocal()" style="width:100%; padding:4px 6px; text-align:center; font-weight:700;"></div>
+        <div><label style="font-size: 11px; color:#666; display:block;">拍照手 (人)</label><input type="number" id="quota_photo" min="1" max="10" value="1" oninput="saveQuotasLocal()" style="width:100%; padding:4px 6px; text-align:center; font-weight:700;"></div>
+        <div><label style="font-size: 11px; color:#666; display:block;">餐卷停車券 (人)</label><input type="number" id="quota_ticket" min="1" max="10" value="1" oninput="saveQuotasLocal()" style="width:100%; padding:4px 6px; text-align:center; font-weight:700;"></div>
+        <div><label style="font-size: 11px; color:#137333; font-weight:700; display:block;">撤場組 (人)</label><input type="number" id="quota_teardown" min="1" max="10" value="3" oninput="saveQuotasLocal()" style="width:100%; padding:4px 6px; text-align:center; font-weight:700;"></div>
+      </div>
     </div>
   </div>
 
@@ -1775,7 +1797,10 @@
         <div class="a4-page">
         <div class="a4-page-header">
           <h2 id="signInTitle">鳳凰分會例會來賓簽到表</h2>
-          <div class="subtitle" id="signInSubtitle">例會日期：民國 115/11/05 ｜ 列印專用 A4 格式</div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; gap: 8px; flex-wrap: wrap;">
+            <div class="subtitle" id="signInSubtitle" style="margin-top: 0;">例會日期：民國 115/11/05 ｜ 列印專用 A4 格式</div>
+            <div style="font-size: 11px; color: var(--text-muted);">※ 來賓入席費用 700 元。表格內容支援點擊直接線上編輯與修改。</div>
+          </div>
         </div>
 
         <table class="data-table signin-table" id="tableSignIn">
@@ -1795,9 +1820,6 @@
           </thead>
           <tbody id="signInTbody"></tbody>
         </table>
-        <div style="font-size: 11px; color: var(--text-muted); margin-top: 10px;">
-          ※ 來賓入席費用 700 元。表格內容支援點擊直接線上編輯與修改。
-        </div>
         </div>
       </div>
     </div>
@@ -2156,6 +2178,7 @@
     initEventHandlers();
     renderDefaultEmptyTables();
     loadLatestOfficersFromHistory();
+    loadQuotasLocal();
 
     
     setTimeout(function() {
@@ -2192,20 +2215,43 @@
       }
     }
 
+    function applyQuotasToInputs(q) {
+      if (!q) return;
+      var map = {
+        'quota_layout': q['佈置組'] || q.layout,
+        'quota_welcome': q['迎賓櫃檯'] || q.welcome,
+        'quota_bell': q['響鈴手'] || q.bell,
+        'quota_mic': q['麥克風手'] || q.mic,
+        'quota_photo': q['拍照手'] || q.photo,
+        'quota_ticket': q['餐卷停車券'] || q.ticket,
+        'quota_teardown': q['撤場組'] || q.teardown
+      };
+      for (var id in map) {
+        var el = document.getElementById(id);
+        if (el && map[id]) el.value = map[id];
+      }
+      saveQuotasLocal();
+    }
+
     function applyOfficersToInputs(off) {
       if (!off) return;
       var map = {
         'off_headC': off.headC, 'off_headE': off.headE, 'off_headG': off.headG,
         'off_headO': off.headO, 'off_headQ': off.headQ, 'off_headS': off.headS,
-        'off_specialQ7': off.specialQ7, 'off_topLeft': off.topLeft, 'off_topRight': off.topRight
+        'off_specialQ7': off.specialQ7, 'off_topLeft': off.topLeft, 'off_topRight': off.topRight,
+        'off_execDirector': off.execDirector || '徐佩娟',
+        'off_directorAdvisor': off.directorAdvisor !== undefined ? off.directorAdvisor : ''
       };
       for (var id in map) {
         var el = document.getElementById(id);
-        if (el && map[id]) {
-          el.value = map[id];
-          syncOfficerColor(el);
+        if (el && map[id] !== undefined) {
+          if (id === 'off_directorAdvisor' || map[id]) {
+            el.value = map[id];
+            if (id !== 'off_execDirector' && id !== 'off_directorAdvisor') syncOfficerColor(el);
+          }
         }
       }
+      if (off.taskQuotas) applyQuotasToInputs(off.taskQuotas);
     }
 
     function saveOfficersLocal() {
@@ -2218,7 +2264,9 @@
         headS: (document.getElementById('off_headS') || {}).value || '',
         specialQ7: (document.getElementById('off_specialQ7') || {}).value || '',
         topLeft: (document.getElementById('off_topLeft') || {}).value || '',
-        topRight: (document.getElementById('off_topRight') || {}).value || ''
+        topRight: (document.getElementById('off_topRight') || {}).value || '',
+        execDirector: (document.getElementById('off_execDirector') || {}).value || '徐佩娟',
+        directorAdvisor: (document.getElementById('off_directorAdvisor') || {}).value || ''
       };
       try { localStorage.setItem('phoenix_officers', JSON.stringify(off)); } catch(e){}
     }
@@ -2689,6 +2737,35 @@
       renderImagePreviews();
     }
 
+    function saveQuotasLocal() {
+      var q = {
+        layout: (document.getElementById('quota_layout') || {}).value || '3',
+        welcome: (document.getElementById('quota_welcome') || {}).value || '2',
+        bell: (document.getElementById('quota_bell') || {}).value || '1',
+        mic: (document.getElementById('quota_mic') || {}).value || '1',
+        photo: (document.getElementById('quota_photo') || {}).value || '1',
+        ticket: (document.getElementById('quota_ticket') || {}).value || '1',
+        teardown: (document.getElementById('quota_teardown') || {}).value || '3'
+      };
+      try { localStorage.setItem('phoenix_task_quotas', JSON.stringify(q)); } catch(e) {}
+    }
+
+    function loadQuotasLocal() {
+      try {
+        var raw = localStorage.getItem('phoenix_task_quotas');
+        if (!raw) return;
+        var q = JSON.parse(raw);
+        var map = {
+          'quota_layout': q.layout, 'quota_welcome': q.welcome, 'quota_bell': q.bell,
+          'quota_mic': q.mic, 'quota_photo': q.photo, 'quota_ticket': q.ticket, 'quota_teardown': q.teardown
+        };
+        for (var id in map) {
+          var el = document.getElementById(id);
+          if (el && map[id]) el.value = map[id];
+        }
+      } catch(e) {}
+    }
+
     
     function saveOfficersLocal() {
       var off = {
@@ -2720,6 +2797,15 @@
           return { mimeType: img.mimeType, base64: img.base64, name: img.name };
         }),
         refSpreadsheetId: CONFIG_FRONTEND.DEFAULT_REF_SPREADSHEET_ID,
+        taskQuotas: {
+          '佈置組': parseInt((document.getElementById('quota_layout') || {}).value, 10) || 3,
+          '迎賓櫃檯': parseInt((document.getElementById('quota_welcome') || {}).value, 10) || 2,
+          '響鈴手': parseInt((document.getElementById('quota_bell') || {}).value, 10) || 1,
+          '麥克風手': parseInt((document.getElementById('quota_mic') || {}).value, 10) || 1,
+          '拍照手': parseInt((document.getElementById('quota_photo') || {}).value, 10) || 1,
+          '餐卷停車券': parseInt((document.getElementById('quota_ticket') || {}).value, 10) || 1,
+          '撤場組': parseInt((document.getElementById('quota_teardown') || {}).value, 10) || 3
+        },
         officers: {
           headC: document.getElementById('off_headC') ? document.getElementById('off_headC').value.trim() : '',
           headE: document.getElementById('off_headE') ? document.getElementById('off_headE').value.trim() : '',
@@ -2729,7 +2815,18 @@
           headS: document.getElementById('off_headS') ? document.getElementById('off_headS').value.trim() : '',
           specialQ7: document.getElementById('off_specialQ7') ? document.getElementById('off_specialQ7').value.trim() : '',
           topLeft: document.getElementById('off_topLeft') ? document.getElementById('off_topLeft').value.trim() : '',
-          topRight: document.getElementById('off_topRight') ? document.getElementById('off_topRight').value.trim() : ''
+          topRight: document.getElementById('off_topRight') ? document.getElementById('off_topRight').value.trim() : '',
+          execDirector: document.getElementById('off_execDirector') ? document.getElementById('off_execDirector').value.trim() : '徐佩娟',
+          directorAdvisor: document.getElementById('off_directorAdvisor') ? document.getElementById('off_directorAdvisor').value.trim() : '',
+          taskQuotas: {
+            '佈置組': parseInt((document.getElementById('quota_layout') || {}).value, 10) || 3,
+            '迎賓櫃檯': parseInt((document.getElementById('quota_welcome') || {}).value, 10) || 2,
+            '響鈴手': parseInt((document.getElementById('quota_bell') || {}).value, 10) || 1,
+            '麥克風手': parseInt((document.getElementById('quota_mic') || {}).value, 10) || 1,
+            '拍照手': parseInt((document.getElementById('quota_photo') || {}).value, 10) || 1,
+            '餐卷停車券': parseInt((document.getElementById('quota_ticket') || {}).value, 10) || 1,
+            '撤場組': parseInt((document.getElementById('quota_teardown') || {}).value, 10) || 3
+          }
         }
       };
     }
@@ -2951,11 +3048,11 @@
         lGrid.innerHTML += `
           <div class="label-sticker-card">
             <div class="label-sticker-header">
-              <div class="label-sticker-industry">[產業名稱]</div>
+              <div class="label-sticker-industry" contenteditable="true"></div>
             </div>
             <div class="label-sticker-body">
-              <div class="label-sticker-name">來賓名字</div>
-              <div class="label-sticker-company">(公司名)</div>
+              <div class="label-sticker-name" contenteditable="true"></div>
+              <div class="label-sticker-company" contenteditable="true"></div>
             </div>
           </div>
         `;
@@ -3024,11 +3121,11 @@
       tbody.innerHTML = '';
 
       
-      const validGuestCount = (pkg.guests && pkg.guests.length > 0) 
-        ? pkg.guests.length 
-        : (pkg.signInRows ? pkg.signInRows.filter(r => r.name && r.name.trim() !== '').length : 0);
+      const filledRowCount = (pkg.signInRows && pkg.signInRows.length > 0)
+        ? pkg.signInRows.filter(r => r && ((r.name && r.name.trim() !== '') || (r.company && r.company.trim() !== ''))).length
+        : (pkg.guests ? pkg.guests.length : 0);
 
-      const totalPages = Math.max(1, Math.ceil(validGuestCount / 15));
+      const totalPages = Math.max(1, Math.ceil(filledRowCount / 15));
       const targetRowCount = totalPages * 15;
 
       
@@ -3110,22 +3207,27 @@
       for (var i = 0; i < 8; i++) {
         var lbl = pageLabels[i];
         var card = document.createElement('div');
+        card.className = 'label-sticker-card';
 
         if (lbl) {
-          card.className = 'label-sticker-card';
+          var cleanCompany = String(lbl.company || '').replace(/^[(\（]+|[)\）]+$/g, '').trim();
           card.innerHTML = 
             '<div class="label-sticker-header">' +
-              '<div class="label-sticker-industry" contenteditable="true" onblur="updateLabelField(' + (startIndex + i) + ', \'industry\', this.innerText)">' + lbl.industry + '</div>' +
+              '<div class="label-sticker-industry" contenteditable="true" onblur="updateLabelField(' + (startIndex + i) + ', \'company\', this.innerText)">' + cleanCompany + '</div>' +
             '</div>' +
             '<div class="label-sticker-body">' +
               '<div class="label-sticker-name" contenteditable="true" onblur="updateLabelField(' + (startIndex + i) + ', \'name\', this.innerText)">' + lbl.name + '</div>' +
-              '<div class="label-sticker-company" contenteditable="true" onblur="updateLabelField(' + (startIndex + i) + ', \'company\', this.innerText)">' + lbl.company + '</div>' +
+              '<div class="label-sticker-company" contenteditable="true" onblur="updateLabelField(' + (startIndex + i) + ', \'industry\', this.innerText)">' + lbl.industry + '</div>' +
             '</div>';
         } else {
-          
-          card.className = 'label-sticker-card empty-slot';
-          card.style.cssText = 'border: none !important; background: transparent !important; visibility: hidden !important;';
-          card.innerHTML = '';
+          card.innerHTML = 
+            '<div class="label-sticker-header">' +
+              '<div class="label-sticker-industry" contenteditable="true"></div>' +
+            '</div>' +
+            '<div class="label-sticker-body">' +
+              '<div class="label-sticker-name" contenteditable="true"></div>' +
+              '<div class="label-sticker-company" contenteditable="true"></div>' +
+            '</div>';
         }
         container.appendChild(card);
       }
@@ -3227,21 +3329,25 @@
 
         const left1Name = row.left1 ? row.left1.name : '';
         const left1Color = row.left1 ? row.left1.color : '#FAFAFA';
+        const left1Cls = (row.left1 && row.left1.isGuest) ? 'class="guest-seat"' : '';
         const left2Name = row.left2 ? row.left2.name : '';
         const left2Color = row.left2 ? row.left2.color : '#FAFAFA';
+        const left2Cls = (row.left2 && row.left2.isGuest) ? 'class="guest-seat"' : '';
         const right1Name = row.right1 ? row.right1.name : '';
         const right1Color = row.right1 ? row.right1.color : '#FAFAFA';
+        const right1Cls = (row.right1 && row.right1.isGuest) ? 'class="guest-seat"' : '';
         const right2Name = row.right2 ? row.right2.name : '';
         const right2Color = row.right2 ? row.right2.color : '#FAFAFA';
+        const right2Cls = (row.right2 && row.right2.isGuest) ? 'class="guest-seat"' : '';
 
         tr.innerHTML = `
           <td style="font-weight:700; background:#FAFAFA;">第 ${row.rowNum} 排</td>
-          <td style="background:${left1Color}; ${rIdx === 0 ? 'border: 2px solid #D32F2F; font-weight:700;' : ''}" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'left1', this.innerText)">${left1Name}</td>
-          <td style="background:${left2Color};" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'left2', this.innerText)">${left2Name}</td>
+          <td ${left1Cls} style="background:${left1Color}; ${rIdx === 0 ? 'border: 2px solid #D32F2F; font-weight:700;' : ''}" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'left1', this.innerText)">${left1Name}</td>
+          <td ${left2Cls} style="background:${left2Color};" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'left2', this.innerText)">${left2Name}</td>
           ${midCell1}
           ${midCell2}
-          <td style="background:${right1Color};" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'right1', this.innerText)">${right1Name}</td>
-          <td style="background:${right2Color}; ${rIdx === 0 ? 'border: 2px solid #D32F2F; font-weight:700;' : ''}" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'right2', this.innerText)">${right2Name}</td>
+          <td ${right1Cls} style="background:${right1Color};" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'right1', this.innerText)">${right1Name}</td>
+          <td ${right2Cls} style="background:${right2Color}; ${rIdx === 0 ? 'border: 2px solid #D32F2F; font-weight:700;' : ''}" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'right2', this.innerText)">${right2Name}</td>
         `;
         tbody.appendChild(tr);
       });
@@ -3287,20 +3393,43 @@
         tbField.appendChild(tr);
       });
 
+      document.querySelectorAll('.dynamic-task-page').forEach(function(el) { el.remove(); });
+      const taskWrapper = document.querySelector('#tabTasks .preview-scroll-wrapper');
+      const nannyList = t.nannyTasks || [];
+      const closingList = t.closingTasks || [];
+      const NANNY_PER_PAGE = 5;
+      const CLOSING_FIRST_PAGE = 2;
+      const CLOSING_PER_PAGE = 4;
+
       const tbNanny = document.getElementById('tbodyNannyTasks');
       tbNanny.innerHTML = '';
-      (t.nannyTasks || []).forEach((nt, idx) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
+      function buildNannyRowHtml(nt) {
+        return `
           <td style="font-weight: 700; background: #F4CCCC; text-align: center; vertical-align: middle;">會前交流</td>
           <td contenteditable="true" style="font-weight: 700; color: #1155CC; background: #FFF9C4;">${nt.nanny}</td>
           <td contenteditable="true" style="background: #FFF9C4;">${nt.guest}</td>
           <td contenteditable="true" style="background: #FFF9C4;">${nt.company}</td>
           <td contenteditable="true" style="background: #FFF9C4;">${nt.target}</td>
-          <td style="white-space: pre-wrap; font-size: 11.5px; line-height: 1.6; color: #111;">${nt.note}</td>
+          <td style="white-space: pre-wrap; font-size: 14px; line-height: 1.45; color: #111;">${nt.note}</td>
         `;
+      }
+      nannyList.slice(0, NANNY_PER_PAGE).forEach(nt => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = buildNannyRowHtml(nt);
         tbNanny.appendChild(tr);
       });
+      for (let i = NANNY_PER_PAGE; i < nannyList.length; i += NANNY_PER_PAGE) {
+        const extraDiv = document.createElement('div');
+        extraDiv.className = 'a4-page dynamic-task-page';
+        extraDiv.style.display = 'none';
+        const rowsHtml = nannyList.slice(i, i + NANNY_PER_PAGE).map(nt => `<tr>${buildNannyRowHtml(nt)}</tr>`).join('');
+        extraDiv.innerHTML = `
+          <div style="height: 4px; background: var(--color-task-top); margin-bottom: 12px;"></div>
+          <div class="a4-page-header"><h2>任務表_主 (來賓交流任務 - 續頁)</h2><div class="subtitle">三、來賓交流任務 (專屬保母配對) ｜ 列印專用 A4 格式</div></div>
+          <table class="data-table task-table"><thead><tr><th style="width:11%;">交流任務</th><th style="width:13%;">保母</th><th style="width:13%;">來賓姓名</th><th style="width:20%;">公司名稱</th><th style="width:19%;">想對接產業代表</th><th style="width:24%;">注意事項</th></tr></thead><tbody>${rowsHtml}</tbody></table>
+        `;
+        taskWrapper.insertBefore(extraDiv, document.getElementById('taskPage3'));
+      }
 
       const tbTD = document.getElementById('tbodyTearDown');
       tbTD.innerHTML = '';
@@ -3314,20 +3443,36 @@
       `;
       tbTD.appendChild(trTD);
 
-      const tbClose = document.getElementById('tbodyClosingTasks');
-      tbClose.innerHTML = '';
-      (t.closingTasks || []).forEach(ct => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
+      function buildClosingRowHtml(ct) {
+        return `
           <td style="font-weight: 700; background: #D9EAD3; text-align: center; vertical-align: middle;">會後接待<br>(諮詢組)</td>
           <td contenteditable="true" style="font-weight: 700; color: #1155CC; background: #FFF9C4;">${ct.consultant}</td>
           <td contenteditable="true" style="background: #FFF9C4;">${ct.guest}</td>
           <td contenteditable="true" style="background: #FFF9C4;">${ct.company}</td>
           <td contenteditable="true" style="background: #FFF9C4;">${ct.inviter}</td>
-          <td style="white-space: pre-wrap; font-size: 11.5px; line-height: 1.5; color: #111;">${ct.note}</td>
+          <td style="white-space: pre-wrap; font-size: 14px; line-height: 1.45; color: #111;">${ct.note}</td>
         `;
+      }
+      const tbClose = document.getElementById('tbodyClosingTasks');
+      tbClose.innerHTML = '';
+      closingList.slice(0, CLOSING_FIRST_PAGE).forEach(ct => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = buildClosingRowHtml(ct);
         tbClose.appendChild(tr);
       });
+      for (let j = CLOSING_FIRST_PAGE; j < closingList.length; j += CLOSING_PER_PAGE) {
+        const extraCloseDiv = document.createElement('div');
+        extraCloseDiv.className = 'a4-page dynamic-task-page';
+        extraCloseDiv.style.display = 'none';
+        const cRowsHtml = closingList.slice(j, j + CLOSING_PER_PAGE).map(ct => `<tr>${buildClosingRowHtml(ct)}</tr>`).join('');
+        extraCloseDiv.innerHTML = `
+          <div style="height: 4px; background: var(--color-task-top); margin-bottom: 12px;"></div>
+          <div class="a4-page-header"><h2>任務表_主 (會後諮詢締結組 - 續頁)</h2><div class="subtitle">五、會後接待 (諮詢締結組) ｜ 列印專用 A4 格式</div></div>
+          <table class="data-table task-table"><thead><tr><th style="width:13%;">工作事項</th><th style="width:14%;">諮詢師 (締結)</th><th style="width:12%;">來賓姓名</th><th style="width:20%;">公司名稱</th><th style="width:15%;">邀約人</th><th style="width:26%;">注意事項</th></tr></thead><tbody>${cRowsHtml}</tbody></table>
+        `;
+        taskWrapper.appendChild(extraCloseDiv);
+      }
+      switchTaskPage(appData.currentPageTask || 1);
     }
 
     function saveCurrentToHistory() {
@@ -3367,16 +3512,15 @@
       }
     }
 
-    
     function calcCurrentSignPages() {
       var pkg = appData.parsedPackage;
       var count = 0;
-      if (pkg && pkg.guests && pkg.guests.length > 0) {
-        count = pkg.guests.length;
-      } else if (pkg && pkg.signInRows) {
+      if (pkg && pkg.signInRows && pkg.signInRows.length > 0) {
         count = pkg.signInRows.filter(function(r) {
-          return r && r.name && r.name.trim() !== '';
+          return r && ((r.name && r.name.trim() !== '') || (r.company && r.company.trim() !== ''));
         }).length;
+      } else if (pkg && pkg.guests) {
+        count = pkg.guests.length;
       }
       return Math.max(1, Math.ceil(count / 15));
     }
@@ -3395,28 +3539,21 @@
       return Math.max(1, Math.ceil(count / 8));
     }
 
-    
     function calcTotalTaskPages() {
-      return 3;
+      var pages = document.querySelectorAll('#tabTasks .preview-scroll-wrapper .a4-page');
+      return Math.max(3, pages.length);
     }
 
-    
     function switchTaskPage(pageNum) {
-      var total = 3;
+      var pages = document.querySelectorAll('#tabTasks .preview-scroll-wrapper .a4-page');
+      var total = pages.length || 3;
       pageNum = Math.max(1, Math.min(pageNum, total));
       appData.currentPageTask = pageNum;
-      var p1 = document.getElementById('taskPage1');
-      var p2 = document.getElementById('taskPage2');
-      var p3 = document.getElementById('taskPage3');
       var indicator = document.getElementById('taskPageIndicator');
-
-      if (indicator) {
-        indicator.innerText = pageNum + '/' + total;
-      }
-
-      if (p1) p1.style.display = (pageNum === 1) ? 'flex' : 'none';
-      if (p2) p2.style.display = (pageNum === 2) ? 'flex' : 'none';
-      if (p3) p3.style.display = (pageNum === 3) ? 'flex' : 'none';
+      if (indicator) indicator.innerText = '第 ' + pageNum + ' 頁 / 共 ' + total + ' 頁 (A4 任務表)';
+      pages.forEach(function(p, idx) {
+        p.style.display = (idx + 1 === pageNum) ? 'flex' : 'none';
+      });
     }
 
     
@@ -3682,25 +3819,16 @@
 
       
       var origTaskPage = appData.currentPageTask || 1;
-      var taskPageIds = [
-        { id: 'taskPage1', title: '任務表 (頁一：行政與現場工作)' },
-        { id: 'taskPage2', title: '任務表 (頁二：專屬保母配對)' },
-        { id: 'taskPage3', title: '任務表 (頁三：撤場 ＆ 會後諮詢)' }
-      ];
-
-      taskPageIds.forEach(function(tPage, pIdx) {
-        var pageEl = document.getElementById(tPage.id);
-        if (pageEl) {
-          var clone = pageEl.cloneNode(true);
-          
-          clone.style.display = 'flex';
-          allPages.push({
-            category: '任務表',
-            pageTitle: tPage.title,
-            tabId: 'tabTasks',
-            dom: clone
-          });
-        }
+      var allTaskPages = document.querySelectorAll('#tabTasks .preview-scroll-wrapper .a4-page');
+      allTaskPages.forEach(function(pageEl, pIdx) {
+        var clone = pageEl.cloneNode(true);
+        clone.style.display = 'flex';
+        allPages.push({
+          category: '任務表',
+          pageTitle: '任務表 (第 ' + (pIdx + 1) + ' 頁 / 共 ' + allTaskPages.length + ' 頁)',
+          tabId: 'tabTasks',
+          dom: clone
+        });
       });
       switchTaskPage(origTaskPage);
 
@@ -4133,15 +4261,13 @@
         appData.currentPageSignIn = origPage;
         renderSignInTable();
       } else if (activeTab.id === 'tabTasks') {
-        var p1 = document.getElementById('taskPage1');
-        var p2 = document.getElementById('taskPage2');
-        var origDisp1 = p1.style.display;
-        var origDisp2 = p2.style.display;
-        p1.style.display = 'flex';
-        p2.style.display = 'flex';
-        pagesHtml += p1.outerHTML + p2.outerHTML;
-        p1.style.display = origDisp1;
-        p2.style.display = origDisp2;
+        var taskPages = document.querySelectorAll('#tabTasks .preview-scroll-wrapper .a4-page');
+        taskPages.forEach(function(tp) {
+          var origD = tp.style.display;
+          tp.style.display = 'flex';
+          pagesHtml += tp.outerHTML;
+          tp.style.display = origD;
+        });
       } else if (activeTab.id === 'tabLabels') {
         var total = Math.max(1, Math.ceil((appData.parsedPackage && appData.parsedPackage.labelCards ? appData.parsedPackage.labelCards.length : 8) / 8));
         var origLPage = appData.currentPageLabel;
