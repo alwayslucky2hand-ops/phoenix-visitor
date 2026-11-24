@@ -905,6 +905,8 @@
       align-items: center;
       justify-content: center;
       text-align: center;
+      padding: 0 3mm;
+      overflow: hidden;
       box-sizing: border-box;
     }
 
@@ -913,6 +915,10 @@
       font-weight: 700;
       color: #1155CC;
       letter-spacing: 1px;
+      line-height: 1.1;
+      white-space: nowrap;
+      display: inline-block;
+      max-width: 100%;
     }
 
     .label-sticker-body {
@@ -923,8 +929,18 @@
       justify-content: center;
       align-items: center;
       text-align: center;
+      padding: 0 3mm;
+      overflow: hidden;
       box-sizing: border-box;
-      gap: 3px;
+    }
+
+    .label-sticker-body-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      gap: 4px;
     }
 
     .label-sticker-name {
@@ -932,13 +948,116 @@
       font-weight: 800;
       color: #1155CC;
       letter-spacing: 2px;
-      line-height: 1.2;
+      line-height: 1.1;
+      white-space: nowrap;
     }
 
     .label-sticker-company {
       font-size: 16px;
       font-weight: 700;
       color: #1155CC;
+      line-height: 1.15;
+      white-space: nowrap;
+    }
+
+     
+    .seat-mode-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      margin-bottom: 12px;
+    }
+
+    .seat-mode-segmented {
+      display: inline-flex;
+      background: #EAEAEA;
+      padding: 3px;
+      border-radius: 6px;
+      gap: 4px;
+    }
+
+    .seat-mode-btn {
+      width: auto !important;
+      height: 34px !important;
+      padding: 0 12px !important;
+      border: none !important;
+      border-radius: 4px !important;
+      background: transparent !important;
+      color: var(--text-muted) !important;
+      font-size: 12.5px !important;
+      font-weight: 700 !important;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .seat-mode-btn svg {
+      width: 15px !important;
+      height: 15px !important;
+    }
+
+    .seat-mode-btn.active {
+      background: #FFFFFF !important;
+      color: var(--primary-red) !important;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+    }
+
+    .seat-mode-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+     
+    .seat-drag-mode .seat-draggable {
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      position: relative;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, outline 0.12s ease;
+    }
+
+    .seat-drag-mode .seat-draggable:active {
+      cursor: grabbing;
+    }
+
+    .seat-dragging-source {
+      opacity: 0.35 !important;
+      outline: 2px dashed var(--primary-red) !important;
+    }
+
+    .seat-drop-target {
+      outline: 2.5px solid #1155CC !important;
+      box-shadow: 0 0 10px rgba(17, 85, 204, 0.3) !important;
+      transform: scale(1.03);
+      z-index: 5;
+    }
+
+    .seat-tap-selected {
+      outline: 2.5px solid var(--primary-red) !important;
+      box-shadow: 0 0 12px rgba(211, 47, 47, 0.35) !important;
+      transform: scale(1.03);
+      z-index: 5;
+    }
+
+    .seat-drag-ghost {
+      position: fixed;
+      pointer-events: none;
+      z-index: 99999;
+      padding: 8px 14px;
+      border: 2px solid var(--primary-red);
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+      transform: translate(-50%, -50%) scale(1.06);
+      white-space: nowrap;
+      opacity: 0.94;
     }
 
      
@@ -1851,9 +1970,23 @@
 
     
     <div class="tab-content" id="tabSeats">
+      <div class="seat-mode-bar">
+        <div class="seat-mode-segmented">
+          <button type="button" class="seat-mode-btn active" id="btnSeatModeDrag" onclick="setSeatInteractionMode('drag')" title="拖曳或點選兩格互換位置">
+            <svg viewBox="0 0 24 24"><polyline points="5 9 2 12 5 15"></polyline><polyline points="9 5 12 2 15 5"></polyline><polyline points="15 19 12 22 9 19"></polyline><polyline points="19 9 22 12 19 15"></polyline><line x1="2" y1="12" x2="22" y2="12"></line><line x1="12" y1="2" x2="12" y2="22"></line></svg>
+            <span>拖曳換位</span>
+          </button>
+          <button type="button" class="seat-mode-btn" id="btnSeatModeEdit" onclick="setSeatInteractionMode('edit')" title="點擊格子直接修改文字">
+            <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            <span>編輯文字</span>
+          </button>
+        </div>
+        <span class="seat-mode-hint" id="seatModeHint">按住拖曳互換，或輕點兩格對調</span>
+      </div>
+
       <div class="mobile-scroll-hint">
         <svg viewBox="0 0 24 24"><path d="M7 16l-4-4 4-4m10 8l4-4-4-4M3 12h18"></path></svg>
-        <span>左右滑動檢視全景 ｜ 點擊任一席位直接編輯</span>
+        <span>左右滑動檢視全景 ｜ 拖曳或輕點兩格互換座位</span>
       </div>
 
       <div class="preview-scroll-wrapper">
@@ -2255,6 +2388,8 @@
     }
 
     function saveOfficersLocal() {
+      var execEl = document.getElementById('off_execDirector');
+      var advEl = document.getElementById('off_directorAdvisor');
       var off = {
         headC: (document.getElementById('off_headC') || {}).value || '',
         headE: (document.getElementById('off_headE') || {}).value || '',
@@ -2265,9 +2400,10 @@
         specialQ7: (document.getElementById('off_specialQ7') || {}).value || '',
         topLeft: (document.getElementById('off_topLeft') || {}).value || '',
         topRight: (document.getElementById('off_topRight') || {}).value || '',
-        execDirector: (document.getElementById('off_execDirector') || {}).value || '徐佩娟',
-        directorAdvisor: (document.getElementById('off_directorAdvisor') || {}).value || ''
+        execDirector: execEl ? execEl.value.trim() : '徐佩娟',
+        directorAdvisor: advEl ? advEl.value.trim() : ''
       };
+      if (typeof appData !== 'undefined') appData.savedOfficers = off;
       try { localStorage.setItem('phoenix_officers', JSON.stringify(off)); } catch(e){}
     }
 
@@ -2496,6 +2632,9 @@
           btn.classList.add('active');
           var target = document.getElementById(btn.dataset.tab);
           if (target) target.classList.add('active');
+          if (btn.dataset.tab === 'tabLabels') {
+            requestAnimationFrame(function() { fitLabelStickers(); });
+          }
         });
       });
 
@@ -2767,20 +2906,6 @@
     }
 
     
-    function saveOfficersLocal() {
-      var off = {
-        headC: document.getElementById('off_headC') ? document.getElementById('off_headC').value.trim() : '',
-        headE: document.getElementById('off_headE') ? document.getElementById('off_headE').value.trim() : '',
-        headG: document.getElementById('off_headG') ? document.getElementById('off_headG').value.trim() : '',
-        headO: document.getElementById('off_headO') ? document.getElementById('off_headO').value.trim() : '',
-        headQ: document.getElementById('off_headQ') ? document.getElementById('off_headQ').value.trim() : '',
-        headS: document.getElementById('off_headS') ? document.getElementById('off_headS').value.trim() : '',
-        specialQ7: document.getElementById('off_specialQ7') ? document.getElementById('off_specialQ7').value.trim() : '',
-        topLeft: document.getElementById('off_topLeft') ? document.getElementById('off_topLeft').value.trim() : '',
-        topRight: document.getElementById('off_topRight') ? document.getElementById('off_topRight').value.trim() : ''
-      };
-      if (typeof appData !== 'undefined') appData.savedOfficers = off;
-    }
 
     function collectInputs() {
       var rowSelect = document.getElementById('selectSeatRows');
@@ -2816,7 +2941,7 @@
           specialQ7: document.getElementById('off_specialQ7') ? document.getElementById('off_specialQ7').value.trim() : '',
           topLeft: document.getElementById('off_topLeft') ? document.getElementById('off_topLeft').value.trim() : '',
           topRight: document.getElementById('off_topRight') ? document.getElementById('off_topRight').value.trim() : '',
-          execDirector: document.getElementById('off_execDirector') ? document.getElementById('off_execDirector').value.trim() : '徐佩娟',
+          execDirector: document.getElementById('off_execDirector') ? document.getElementById('off_execDirector').value.trim() : '',
           directorAdvisor: document.getElementById('off_directorAdvisor') ? document.getElementById('off_directorAdvisor').value.trim() : '',
           taskQuotas: {
             '佈置組': parseInt((document.getElementById('quota_layout') || {}).value, 10) || 3,
@@ -2901,6 +3026,22 @@
         showToast('請先完成【階段一】，系統需依據階段一產出之來賓名單與意願分層進行排位！');
         return;
       }
+
+      
+      seatTapSelectedTarget = null;
+      if (appData.parsedPackage) appData.parsedPackage.seatingChart = null;
+      var oldSeatTbody = document.getElementById('seatGridTbody');
+      var oldHeadRow = document.getElementById('seatHeadRowContainer');
+      var oldSpecialEl = document.querySelector('.seat-badge-special');
+      var oldBannerEl = document.getElementById('seatChartBanner');
+      if (oldSeatTbody) oldSeatTbody.innerHTML = '';
+      if (oldHeadRow) oldHeadRow.innerHTML = '';
+      if (oldSpecialEl) {
+        oldSpecialEl.style.background = '#FAFAFA';
+        oldSpecialEl.style.border = '1.5px dashed #999';
+        oldSpecialEl.innerHTML = '<span style="font-size: 10px; color: #888; display: block;">資訊協調員</span><strong>(空)</strong>';
+      }
+      if (oldBannerEl) oldBannerEl.innerText = '正在重新排定座位表...';
 
       var params = collectInputs();
       params.guests = appData.parsedPackage.guests;
@@ -3121,11 +3262,61 @@
       tbody.innerHTML = '';
 
       
-      const filledRowCount = (pkg.signInRows && pkg.signInRows.length > 0)
-        ? pkg.signInRows.filter(r => r && ((r.name && r.name.trim() !== '') || (r.company && r.company.trim() !== ''))).length
-        : (pkg.guests ? pkg.guests.length : 0);
+      if (pkg.signInRows && pkg.signInRows.length > 0) {
+        const guestRows = [];
+        const specialRows = [];
+        pkg.signInRows.forEach(r => {
+          if (!r) return;
+          const comp = (r.company || '').trim();
+          const nm = (r.name || '').trim();
+          if (comp === '執行董事' || comp === '董事顧問') {
+            if (nm !== '') specialRows.push({ name: nm, company: comp });
+          } else if (nm !== '' || comp !== '') {
+            guestRows.push(r);
+          }
+        });
+        const normPages = Math.max(1, Math.ceil((guestRows.length + specialRows.length) / 15));
+        const normCap = normPages * 15;
+        const normRows = [];
+        for (let i = 0; i < normCap; i++) {
+          normRows.push({
+            seq: i + 1,
+            name: '', company: '', conflict: '', introducer: '', nanny: '',
+            signed: '', card: '', feeNote: '', breakfast: ''
+          });
+        }
+        guestRows.forEach((gr, idx) => {
+          normRows[idx].name = gr.name || '';
+          normRows[idx].company = gr.company || '';
+          normRows[idx].conflict = gr.conflict || '';
+          normRows[idx].introducer = gr.introducer || '';
+          normRows[idx].nanny = gr.nanny || '';
+          normRows[idx].signed = gr.signed || '';
+          normRows[idx].card = gr.card || '';
+          normRows[idx].feeNote = gr.feeNote || '';
+          normRows[idx].breakfast = gr.breakfast || '';
+        });
+        const spStart = normCap - specialRows.length;
+        specialRows.forEach((sr, sIdx) => {
+          normRows[spStart + sIdx].name = sr.name;
+          normRows[spStart + sIdx].company = sr.company;
+        });
+        pkg.signInRows = normRows;
+      }
 
-      const totalPages = Math.max(1, Math.ceil(filledRowCount / 15));
+      
+      let lastFilledIdx = -1;
+      if (pkg.signInRows && pkg.signInRows.length > 0) {
+        for (let idx = pkg.signInRows.length - 1; idx >= 0; idx--) {
+          const r = pkg.signInRows[idx];
+          if (r && ((r.name && r.name.trim() !== '') || (r.company && r.company.trim() !== ''))) {
+            lastFilledIdx = idx;
+            break;
+          }
+        }
+      }
+      const effectiveRowCount = lastFilledIdx >= 0 ? (lastFilledIdx + 1) : (pkg.guests ? pkg.guests.length : 0);
+      const totalPages = Math.max(1, Math.ceil(effectiveRowCount / 15));
       const targetRowCount = totalPages * 15;
 
       
@@ -3213,11 +3404,13 @@
           var cleanCompany = String(lbl.company || '').replace(/^[(\（]+|[)\）]+$/g, '').trim();
           card.innerHTML = 
             '<div class="label-sticker-header">' +
-              '<div class="label-sticker-industry" contenteditable="true" onblur="updateLabelField(' + (startIndex + i) + ', \'company\', this.innerText)">' + cleanCompany + '</div>' +
+              '<div class="label-sticker-industry" contenteditable="true" onblur="updateLabelField(' + (startIndex + i) + ', \'company\', this.innerText); fitLabelStickers();">' + cleanCompany + '</div>' +
             '</div>' +
             '<div class="label-sticker-body">' +
-              '<div class="label-sticker-name" contenteditable="true" onblur="updateLabelField(' + (startIndex + i) + ', \'name\', this.innerText)">' + lbl.name + '</div>' +
-              '<div class="label-sticker-company" contenteditable="true" onblur="updateLabelField(' + (startIndex + i) + ', \'industry\', this.innerText)">' + lbl.industry + '</div>' +
+              '<div class="label-sticker-body-inner">' +
+                '<div class="label-sticker-name" contenteditable="true" onblur="updateLabelField(' + (startIndex + i) + ', \'name\', this.innerText); fitLabelStickers();">' + lbl.name + '</div>' +
+                '<div class="label-sticker-company" contenteditable="true" onblur="updateLabelField(' + (startIndex + i) + ', \'industry\', this.innerText); fitLabelStickers();">' + lbl.industry + '</div>' +
+              '</div>' +
             '</div>';
         } else {
           card.innerHTML = 
@@ -3225,12 +3418,77 @@
               '<div class="label-sticker-industry" contenteditable="true"></div>' +
             '</div>' +
             '<div class="label-sticker-body">' +
-              '<div class="label-sticker-name" contenteditable="true"></div>' +
-              '<div class="label-sticker-company" contenteditable="true"></div>' +
+              '<div class="label-sticker-body-inner">' +
+                '<div class="label-sticker-name" contenteditable="true"></div>' +
+                '<div class="label-sticker-company" contenteditable="true"></div>' +
+              '</div>' +
             '</div>';
         }
         container.appendChild(card);
       }
+
+      requestAnimationFrame(function() {
+        fitLabelStickers(container);
+      });
+    }
+
+    
+    function fitLabelStickers(rootEl) {
+      var scope = rootEl || document.getElementById('labelsGridContainer');
+      if (!scope) return;
+
+      var cards = scope.querySelectorAll('.label-sticker-card');
+      cards.forEach(function(card) {
+        
+        var header = card.querySelector('.label-sticker-header');
+        var compEl = card.querySelector('.label-sticker-industry');
+        if (header && compEl && compEl.innerText.trim() !== '') {
+          var hRect = header.getBoundingClientRect();
+          var hH = header.clientHeight || hRect.height || 71;
+          var hW = (header.clientWidth || hRect.width || 330) - 20;
+          if (hH > 10 && hW > 20) {
+            var targetFontH = Math.floor(hH * 0.72); 
+            compEl.style.fontSize = targetFontH + 'px';
+            if (compEl.scrollWidth > hW) {
+              var ratio = hW / compEl.scrollWidth;
+              var adjusted = Math.max(12, Math.floor(targetFontH * ratio * 0.96));
+              compEl.style.fontSize = adjusted + 'px';
+            }
+          }
+        }
+
+        
+        var body = card.querySelector('.label-sticker-body');
+        var inner = card.querySelector('.label-sticker-body-inner');
+        var nameEl = card.querySelector('.label-sticker-name');
+        var indEl = card.querySelector('.label-sticker-company');
+        if (body && inner && nameEl && nameEl.innerText.trim() !== '') {
+          var bRect = body.getBoundingClientRect();
+          var bH = body.clientHeight || bRect.height || 190;
+          var bW = (body.clientWidth || bRect.width || 330) - 20;
+          if (bH > 20 && bW > 20) {
+            var hasInd = indEl && indEl.innerText.trim() !== '';
+            
+            var baseNameSize = hasInd ? Math.floor(bH * 0.47) : Math.floor(bH * 0.72);
+            var applyBodyScale = function(s) {
+              nameEl.style.fontSize = s + 'px';
+              if (indEl) indEl.style.fontSize = Math.max(12, Math.round(s * 0.42)) + 'px';
+              inner.style.gap = Math.max(4, Math.round(s * 0.08)) + 'px';
+            };
+            applyBodyScale(baseNameSize);
+
+            var maxTextW = Math.max(nameEl.scrollWidth, hasInd ? indEl.scrollWidth : 0);
+            var wRatio = maxTextW > bW ? (bW / maxTextW) * 0.96 : 1;
+            var actualH = inner.scrollHeight || inner.offsetHeight;
+            var targetH = bH * 0.80;
+            var hRatio = actualH > targetH ? (targetH / actualH) : 1;
+            var finalRatio = Math.min(wRatio, hRatio);
+            if (finalRatio < 1) {
+              applyBodyScale(Math.max(16, Math.floor(baseNameSize * finalRatio)));
+            }
+          }
+        }
+      });
     }
 
     function updateLabelField(index, field, val) {
@@ -3254,18 +3512,331 @@
       }
     }
 
+    var seatInteractionMode = 'drag'; 
+    var seatTapSelectedTarget = null;
+
+    function setSeatInteractionMode(mode) {
+      seatInteractionMode = (mode === 'edit') ? 'edit' : 'drag';
+      seatTapSelectedTarget = null;
+      var btnDrag = document.getElementById('btnSeatModeDrag');
+      var btnEdit = document.getElementById('btnSeatModeEdit');
+      var hint = document.getElementById('seatModeHint');
+      if (btnDrag) btnDrag.classList.toggle('active', seatInteractionMode === 'drag');
+      if (btnEdit) btnEdit.classList.toggle('active', seatInteractionMode === 'edit');
+      if (hint) {
+        hint.innerText = seatInteractionMode === 'drag'
+          ? '按住拖曳互換，或輕點兩格對調'
+          : '點擊任一席位即可直接修改文字';
+      }
+      renderSeatingChart();
+    }
+
+    function swapSeatPositions(src, dst) {
+      var sc = appData.parsedPackage && appData.parsedPackage.seatingChart;
+      if (!sc || !src || !dst) return;
+      if (src.zone === dst.zone && src.row === dst.row && src.key === dst.key && src.idx === dst.idx) return;
+
+      if (src.zone === 'head' && dst.zone === 'head') {
+        var hA = sc.headTable[src.idx];
+        var hB = sc.headTable[dst.idx];
+        if (!hA || !hB) return;
+        var tmpName = hA.name;
+        var tmpColor = hA.color;
+        hA.name = hB.name;
+        hA.color = hB.color;
+        hB.name = tmpName;
+        hB.color = tmpColor;
+        showToast('主席台席位已互換');
+      } else if (src.zone === 'grid' && dst.zone === 'grid') {
+        var rA = sc.seatGrid[src.row];
+        var rB = sc.seatGrid[dst.row];
+        if (!rA || !rB) return;
+
+        function resolveGridKey(rowObj, slotCol) {
+          if (slotCol === 'midCol1') return rowObj.guest1 ? 'guest1' : 'mid1';
+          if (slotCol === 'midCol2') return rowObj.guest2 ? 'guest2' : 'mid2';
+          return slotCol;
+        }
+        var kA = resolveGridKey(rA, src.key);
+        var kB = resolveGridKey(rB, dst.key);
+        var cellA = rA[kA] ? Object.assign({}, rA[kA]) : null;
+        var cellB = rB[kB] ? Object.assign({}, rB[kB]) : null;
+
+        
+        function assignGridCell(rowObj, slotCol, valObj) {
+          if (slotCol === 'midCol1') {
+            if (valObj && valObj.isGuest) {
+              rowObj.guest1 = valObj;
+              rowObj.mid1 = null;
+            } else {
+              rowObj.guest1 = null;
+              rowObj.mid1 = valObj;
+            }
+          } else if (slotCol === 'midCol2') {
+            if (valObj && valObj.isGuest) {
+              rowObj.guest2 = valObj;
+              rowObj.mid2 = null;
+            } else {
+              rowObj.guest2 = null;
+              rowObj.mid2 = valObj;
+            }
+          } else {
+            rowObj[slotCol] = valObj;
+          }
+        }
+        
+        var isSameColorGroup = false;
+        if (cellA && cellB && cellA.name && cellB.name &&
+            !cellA.isGuest && !cellB.isGuest && !cellA.isOfficer && !cellB.isOfficer) {
+          var famA = getFrontendColorFamilyAndLum(cellA.color).family;
+          var famB = getFrontendColorFamilyAndLum(cellB.color).family;
+          if (famA === famB) isSameColorGroup = true;
+        }
+
+        if (isSameColorGroup) {
+          
+          var tempName = cellA.name;
+          cellA.name = cellB.name;
+          cellB.name = tempName;
+          assignGridCell(rA, src.key, cellA);
+          assignGridCell(rB, dst.key, cellB);
+        } else {
+          
+          assignGridCell(rA, src.key, cellB);
+          assignGridCell(rB, dst.key, cellA);
+        }
+        showToast('座位已交換（第 ' + (src.row + 1) + ' 排 ⇄ 第 ' + (dst.row + 1) + ' 排）');
+      } else {
+        showToast('請於主席台內部或會員席內部進行對調');
+        return;
+      }
+
+      renderSeatingChart();
+      autoSyncHistorySilent();
+    }
+
+    function getFrontendColorFamilyAndLum(hex) {
+      var h = String(hex || '#FCE5CD').replace('#', '').trim();
+      if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+      if (!/^[0-9a-fA-F]{6}$/.test(h)) return { family: 'orange', lum: 220 };
+      var r = parseInt(h.substr(0, 2), 16) / 255;
+      var g = parseInt(h.substr(2, 2), 16) / 255;
+      var b = parseInt(h.substr(4, 2), 16) / 255;
+      var max = Math.max(r, g, b), min = Math.min(r, g, b);
+      var d = max - min;
+      var s = max === 0 ? 0 : d / max;
+      var lum = 0.299 * (r * 255) + 0.587 * (g * 255) + 0.114 * (b * 255);
+      if (s < 0.12) return { family: 'gray', lum: lum };
+      var hue = 0;
+      if (d !== 0) {
+        if (max === r) hue = ((g - b) / d + (g < b ? 6 : 0)) * 60;
+        else if (max === g) hue = ((b - r) / d + 2) * 60;
+        else hue = ((r - g) / d + 4) * 60;
+      }
+      var family = 'orange';
+      if (hue >= 330 || hue < 18) family = 'red';
+      else if (hue >= 18 && hue < 42) family = 'orange';
+      else if (hue >= 42 && hue < 75) family = 'yellow';
+      else if (hue >= 75 && hue < 165) family = 'green';
+      else if (hue >= 165 && hue < 250) family = 'blue';
+      else if (hue >= 250 && hue < 330) family = 'purple';
+      return { family: family, lum: lum };
+    }
+
+    
+    function recolorSeatGroupsBySnakeOrder(sc) {
+      if (!sc || !sc.seatGrid) return;
+      var grid = sc.seatGrid;
+      var palette = sc.groupPalette || {};
+      var numRows = grid.length;
+      var snakeSlots = [];
+
+      var fallbackDarkColors = {
+        purple: '#B4A7D6',
+        green:  '#93C47D',
+        yellow: '#FFD966',
+        blue:   '#6D9EEB',
+        red:    '#EA9999',
+        orange: '#F6B26B',
+        gray:   '#B7B7B7'
+      };
+
+      for (var r = 1; r < numRows; r++) snakeSlots.push({ r: r, key: 'left1' });
+      for (var r = numRows - 1; r >= 0; r--) snakeSlots.push({ r: r, key: 'left2' });
+      for (var r = 0; r < numRows; r++) {
+        if (!grid[r].guest1) snakeSlots.push({ r: r, key: 'mid1' });
+      }
+      for (var r = numRows - 1; r >= 0; r--) {
+        if (!grid[r].guest2) snakeSlots.push({ r: r, key: 'mid2' });
+      }
+      for (var r = 0; r < numRows; r++) snakeSlots.push({ r: r, key: 'right1' });
+      for (var r = numRows - 1; r >= 1; r--) snakeSlots.push({ r: r, key: 'right2' });
+
+      
+      var validCells = [];
+      for (var i = 0; i < snakeSlots.length; i++) {
+        var sl = snakeSlots[i];
+        var cell = grid[sl.r] ? grid[sl.r][sl.key] : null;
+        if (!cell || !cell.name || cell.isGuest || cell.isOfficer) continue;
+        var cInfo = getFrontendColorFamilyAndLum(cell.color);
+        var gid = cell.groupId || ('fam_' + cInfo.family);
+        cell._autoGroupId = gid;
+        cell._autoFamily = cInfo.family;
+
+        if (!palette[gid]) {
+          palette[gid] = {
+            darkColor: cell.color, darkLum: cInfo.lum,
+            lightColor: cell.color, lightLum: cInfo.lum
+          };
+        } else {
+          if (cInfo.lum < palette[gid].darkLum) {
+            palette[gid].darkLum = cInfo.lum;
+            palette[gid].darkColor = cell.color;
+          }
+          if (cInfo.lum > palette[gid].lightLum) {
+            palette[gid].lightLum = cInfo.lum;
+            palette[gid].lightColor = cell.color;
+          }
+        }
+        validCells.push(cell);
+      }
+
+      
+      var seenFirst = {};
+      for (var j = 0; j < validCells.length; j++) {
+        var vc = validCells[j];
+        var gId = vc._autoGroupId;
+        var fam = vc._autoFamily;
+        delete vc._autoGroupId;
+        delete vc._autoFamily;
+
+        if (gId && palette[gId]) {
+          if (!seenFirst[gId]) {
+            var dCol = palette[gId].darkColor;
+            if (Math.abs((palette[gId].lightLum || 0) - (palette[gId].darkLum || 0)) < 8 && fallbackDarkColors[fam]) {
+              dCol = fallbackDarkColors[fam];
+            }
+            vc.color = dCol;
+            seenFirst[gId] = true;
+          } else {
+            vc.color = palette[gId].lightColor;
+          }
+        }
+      }
+    }
+
+    function bindSeatDragAndTapHandlers(container) {
+      if (!container || seatInteractionMode !== 'drag') return;
+      var items = container.querySelectorAll('.seat-draggable');
+
+      items.forEach(function(el) {
+        el.addEventListener('pointerdown', function(e) {
+          if (e.button && e.button !== 0) return;
+          e.preventDefault();
+
+          var startX = e.clientX;
+          var startY = e.clientY;
+          var hasMoved = false;
+          var ghost = null;
+          var currentHover = null;
+          var srcMeta = {
+            zone: el.dataset.zone,
+            row: parseInt(el.dataset.row, 10),
+            key: el.dataset.key,
+            idx: parseInt(el.dataset.idx, 10)
+          };
+
+          function onMove(ev) {
+            var dx = ev.clientX - startX;
+            var dy = ev.clientY - startY;
+            if (!hasMoved && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) {
+              hasMoved = true;
+              el.classList.add('seat-dragging-source');
+              ghost = document.createElement('div');
+              ghost.className = 'seat-drag-ghost';
+              ghost.style.background = el.style.backgroundColor || '#FFFFFF';
+              ghost.style.color = el.classList.contains('guest-seat') ? '#D32F2F' : '#111111';
+              ghost.innerText = el.innerText.trim() || '(空席)';
+              document.body.appendChild(ghost);
+            }
+            if (hasMoved && ghost) {
+              ghost.style.left = ev.clientX + 'px';
+              ghost.style.top = ev.clientY + 'px';
+              var under = document.elementFromPoint(ev.clientX, ev.clientY);
+              var targetEl = under ? under.closest('.seat-draggable') : null;
+              if (currentHover && currentHover !== targetEl) {
+                currentHover.classList.remove('seat-drop-target');
+              }
+              if (targetEl && targetEl !== el && targetEl.dataset.zone === srcMeta.zone) {
+                targetEl.classList.add('seat-drop-target');
+                currentHover = targetEl;
+              } else {
+                currentHover = null;
+              }
+            }
+          }
+
+          function onUp(ev) {
+            document.removeEventListener('pointermove', onMove);
+            document.removeEventListener('pointerup', onUp);
+            document.removeEventListener('pointercancel', onUp);
+            el.classList.remove('seat-dragging-source');
+            if (ghost && ghost.parentNode) ghost.parentNode.removeChild(ghost);
+
+            if (hasMoved) {
+              if (currentHover) {
+                currentHover.classList.remove('seat-drop-target');
+                var dstMeta = {
+                  zone: currentHover.dataset.zone,
+                  row: parseInt(currentHover.dataset.row, 10),
+                  key: currentHover.dataset.key,
+                  idx: parseInt(currentHover.dataset.idx, 10)
+                };
+                seatTapSelectedTarget = null;
+                swapSeatPositions(srcMeta, dstMeta);
+              }
+            } else {
+              
+              if (!seatTapSelectedTarget) {
+                seatTapSelectedTarget = { meta: srcMeta, el: el };
+                el.classList.add('seat-tap-selected');
+              } else {
+                var prevEl = seatTapSelectedTarget.el;
+                var prevMeta = seatTapSelectedTarget.meta;
+                if (prevEl) prevEl.classList.remove('seat-tap-selected');
+                seatTapSelectedTarget = null;
+                if (prevEl !== el) {
+                  swapSeatPositions(prevMeta, srcMeta);
+                }
+              }
+            }
+          }
+
+          document.addEventListener('pointermove', onMove);
+          document.addEventListener('pointerup', onUp);
+          document.addEventListener('pointercancel', onUp);
+        });
+      });
+    }
+
     
     function renderSeatingChart() {
       const pkg = appData.parsedPackage;
       if (!pkg || !pkg.seatingChart) return;
       const sc = pkg.seatingChart;
+      const isDrag = (seatInteractionMode === 'drag');
+
+      const tabSeats = document.getElementById('tabSeats');
+      if (tabSeats) {
+        tabSeats.classList.toggle('seat-drag-mode', isDrag);
+      }
 
       document.getElementById('seatChartBanner').innerText = sc.title || '';
 
       
       const specialEl = document.querySelector('.seat-badge-special');
       if (specialEl && sc.specialMember) {
-        specialEl.setAttribute('contenteditable', 'true');
+        specialEl.setAttribute('contenteditable', isDrag ? 'false' : 'true');
         const sName = (sc.specialMember.name || '').trim();
         specialEl.style.background = sc.specialMember.color || '#FAFAFA';
         specialEl.style.border = sName ? '1px solid #777' : '1.5px dashed #999';
@@ -3284,14 +3855,17 @@
       headContainer.innerHTML = '';
       (sc.headTable || []).forEach((ht, hIdx) => {
         const box = document.createElement('div');
-        box.className = 'seat-box';
+        box.className = 'seat-box' + (isDrag ? ' seat-draggable' : '');
+        box.dataset.zone = 'head';
+        box.dataset.idx = String(hIdx);
         const hName = (ht.name || '').trim();
         box.style.background = ht.color || '#FAFAFA';
         box.style.border = hName ? '1px solid #777' : '1.5px dashed #999';
         box.style.flexDirection = 'column';
         box.innerHTML = `<span style="font-size: 10px; color: #777;">${ht.role || ''}</span><strong>${hName || '(空)'}</strong>`;
-        box.setAttribute('contenteditable', 'true');
+        box.setAttribute('contenteditable', isDrag ? 'false' : 'true');
         box.onblur = function() {
+          if (isDrag) return;
           const val = this.innerText.replace(ht.role || '', '').replace('(空)', '').trim();
           sc.headTable[hIdx].name = val;
           const cMap = (appData.parsedPackage && appData.parsedPackage.memberColorMap) ? appData.parsedPackage.memberColorMap : {};
@@ -3304,53 +3878,57 @@
       
       const tbody = document.getElementById('seatGridTbody');
       tbody.innerHTML = '';
+      const editableAttr = isDrag ? 'false' : 'true';
+      const dragCls = isDrag ? 'seat-draggable' : '';
 
       (sc.seatGrid || []).forEach((row, rIdx) => {
         const tr = document.createElement('tr');
-        
         let midCell1 = '';
         let midCell2 = '';
 
         if (row.guest1) {
-          midCell1 = `<td class="guest-seat" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'guest1', this.innerText)">${row.guest1.name || ''}</td>`;
+          midCell1 = `<td class="guest-seat ${dragCls}" data-zone="grid" data-row="${rIdx}" data-key="midCol1" contenteditable="${editableAttr}" onblur="updateSeatGridCell(${rIdx}, 'guest1', this.innerText)">${row.guest1.name || ''}</td>`;
         } else if (row.mid1 && row.mid1.name) {
-          midCell1 = `<td style="background:${row.mid1.color};" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'mid1', this.innerText)">${row.mid1.name}</td>`;
+          midCell1 = `<td class="${dragCls}" data-zone="grid" data-row="${rIdx}" data-key="midCol1" style="background:${row.mid1.color};" contenteditable="${editableAttr}" onblur="updateSeatGridCell(${rIdx}, 'mid1', this.innerText)">${row.mid1.name}</td>`;
         } else {
-          midCell1 = `<td class="empty-seat" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'mid1', this.innerText)"></td>`;
+          midCell1 = `<td class="empty-seat ${dragCls}" data-zone="grid" data-row="${rIdx}" data-key="midCol1" contenteditable="${editableAttr}" onblur="updateSeatGridCell(${rIdx}, 'mid1', this.innerText)"></td>`;
         }
 
         if (row.guest2) {
-          midCell2 = `<td class="guest-seat" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'guest2', this.innerText)">${row.guest2.name || ''}</td>`;
+          midCell2 = `<td class="guest-seat ${dragCls}" data-zone="grid" data-row="${rIdx}" data-key="midCol2" contenteditable="${editableAttr}" onblur="updateSeatGridCell(${rIdx}, 'guest2', this.innerText)">${row.guest2.name || ''}</td>`;
         } else if (row.mid2 && row.mid2.name) {
-          midCell2 = `<td style="background:${row.mid2.color};" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'mid2', this.innerText)">${row.mid2.name}</td>`;
+          midCell2 = `<td class="${dragCls}" data-zone="grid" data-row="${rIdx}" data-key="midCol2" style="background:${row.mid2.color};" contenteditable="${editableAttr}" onblur="updateSeatGridCell(${rIdx}, 'mid2', this.innerText)">${row.mid2.name}</td>`;
         } else {
-          midCell2 = `<td class="empty-seat" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'mid2', this.innerText)"></td>`;
+          midCell2 = `<td class="empty-seat ${dragCls}" data-zone="grid" data-row="${rIdx}" data-key="midCol2" contenteditable="${editableAttr}" onblur="updateSeatGridCell(${rIdx}, 'mid2', this.innerText)"></td>`;
         }
 
         const left1Name = row.left1 ? row.left1.name : '';
         const left1Color = row.left1 ? row.left1.color : '#FAFAFA';
-        const left1Cls = (row.left1 && row.left1.isGuest) ? 'class="guest-seat"' : '';
+        const left1Cls = ((row.left1 && row.left1.isGuest) ? 'guest-seat ' : '') + dragCls;
         const left2Name = row.left2 ? row.left2.name : '';
         const left2Color = row.left2 ? row.left2.color : '#FAFAFA';
-        const left2Cls = (row.left2 && row.left2.isGuest) ? 'class="guest-seat"' : '';
+        const left2Cls = ((row.left2 && row.left2.isGuest) ? 'guest-seat ' : '') + dragCls;
         const right1Name = row.right1 ? row.right1.name : '';
         const right1Color = row.right1 ? row.right1.color : '#FAFAFA';
-        const right1Cls = (row.right1 && row.right1.isGuest) ? 'class="guest-seat"' : '';
+        const right1Cls = ((row.right1 && row.right1.isGuest) ? 'guest-seat ' : '') + dragCls;
         const right2Name = row.right2 ? row.right2.name : '';
         const right2Color = row.right2 ? row.right2.color : '#FAFAFA';
-        const right2Cls = (row.right2 && row.right2.isGuest) ? 'class="guest-seat"' : '';
+        const right2Cls = ((row.right2 && row.right2.isGuest) ? 'guest-seat ' : '') + dragCls;
 
         tr.innerHTML = `
           <td style="font-weight:700; background:#FAFAFA;">第 ${row.rowNum} 排</td>
-          <td ${left1Cls} style="background:${left1Color}; ${rIdx === 0 ? 'border: 2px solid #D32F2F; font-weight:700;' : ''}" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'left1', this.innerText)">${left1Name}</td>
-          <td ${left2Cls} style="background:${left2Color};" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'left2', this.innerText)">${left2Name}</td>
+          <td class="${left1Cls.trim()}" data-zone="grid" data-row="${rIdx}" data-key="left1" style="background:${left1Color}; ${rIdx === 0 ? 'border: 2px solid #D32F2F; font-weight:700;' : ''}" contenteditable="${editableAttr}" onblur="updateSeatGridCell(${rIdx}, 'left1', this.innerText)">${left1Name}</td>
+          <td class="${left2Cls.trim()}" data-zone="grid" data-row="${rIdx}" data-key="left2" style="background:${left2Color};" contenteditable="${editableAttr}" onblur="updateSeatGridCell(${rIdx}, 'left2', this.innerText)">${left2Name}</td>
           ${midCell1}
           ${midCell2}
-          <td ${right1Cls} style="background:${right1Color};" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'right1', this.innerText)">${right1Name}</td>
-          <td ${right2Cls} style="background:${right2Color}; ${rIdx === 0 ? 'border: 2px solid #D32F2F; font-weight:700;' : ''}" contenteditable="true" onblur="updateSeatGridCell(${rIdx}, 'right2', this.innerText)">${right2Name}</td>
+          <td class="${right1Cls.trim()}" data-zone="grid" data-row="${rIdx}" data-key="right1" style="background:${right1Color};" contenteditable="${editableAttr}" onblur="updateSeatGridCell(${rIdx}, 'right1', this.innerText)">${right1Name}</td>
+          <td class="${right2Cls.trim()}" data-zone="grid" data-row="${rIdx}" data-key="right2" style="background:${right2Color}; ${rIdx === 0 ? 'border: 2px solid #D32F2F; font-weight:700;' : ''}" contenteditable="${editableAttr}" onblur="updateSeatGridCell(${rIdx}, 'right2', this.innerText)">${right2Name}</td>
         `;
         tbody.appendChild(tr);
       });
+
+      bindSeatDragAndTapHandlers(headContainer);
+      bindSeatDragAndTapHandlers(tbody);
     }
 
     function updateSeatGridCell(rowIdx, colKey, val) {
@@ -3516,9 +4094,13 @@
       var pkg = appData.parsedPackage;
       var count = 0;
       if (pkg && pkg.signInRows && pkg.signInRows.length > 0) {
-        count = pkg.signInRows.filter(function(r) {
-          return r && ((r.name && r.name.trim() !== '') || (r.company && r.company.trim() !== ''));
-        }).length;
+        for (var idx = pkg.signInRows.length - 1; idx >= 0; idx--) {
+          var r = pkg.signInRows[idx];
+          if (r && ((r.name && r.name.trim() !== '') || (r.company && r.company.trim() !== ''))) {
+            count = idx + 1;
+            break;
+          }
+        }
       } else if (pkg && pkg.guests) {
         count = pkg.guests.length;
       }
@@ -3964,6 +4546,7 @@
       
       section.style.display = 'block';
       setTimeout(function() {
+        fitLabelStickers(container);
         applyFullPreviewZoom(fullPreviewZoomState.baseFitScale, false);
         section.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 50);
