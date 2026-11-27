@@ -3132,9 +3132,12 @@
 
       contentEl.innerHTML = logs.map(function(blk) {
         var itemsHtml = (blk.details || []).map(function(line) {
+          var isLocked = line.indexOf('鎖定') !== -1 && line.indexOf('無勾選鎖定') === -1 && line.indexOf('排除全域鎖定人員：無') === -1;
           var isResult = line.indexOf('決策結果') !== -1 || line.indexOf('最終入選') !== -1;
           var isExclude = line.indexOf('剔除') !== -1 || line.indexOf('不挑') !== -1 || line.indexOf('排除') !== -1;
-          var colorStyle = isResult ? 'color:#137333; font-weight:700;' : (isExclude ? 'color:#C5221F;' : 'color:#222;');
+          var colorStyle = isLocked
+            ? 'color:#1155CC; font-weight:700;'
+            : (isResult ? 'color:#137333; font-weight:700;' : (isExclude ? 'color:#C5221F;' : 'color:#222;'));
           return '<li style="margin-bottom:3px; ' + colorStyle + '">' + line + '</li>';
         }).join('');
         return (
