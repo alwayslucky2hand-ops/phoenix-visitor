@@ -603,21 +603,68 @@
       background: var(--color-task-header);
       color: var(--text);
       font-weight: 700;
-      text-align: center;
-      padding: 6px 6px;
-      font-size: 14px !important;
+      text-align: center !important;
+      vertical-align: middle !important;
+      padding: 4px 4px;
+      font-size: 16px !important;
       letter-spacing: 0.5px;
     }
 
     table.data-table.task-table td {
-      padding: 6px 8px;
-      font-size: 14px !important;
+      padding: 4px 6px;
+      font-size: 16px !important;
+      font-weight: 600;
+      text-align: center !important;
+      vertical-align: middle !important;
       word-break: break-word !important;
-      line-height: 1.45;
+      line-height: 1.3;
+    }
+
+     
+    #tableAdminTasks td:nth-child(4),
+    #tableFieldTasks td:nth-child(4),
+    #tableTearDown td:nth-child(4),
+    table.data-table.task-table td:last-child {
+      text-align: left !important;
+      vertical-align: middle !important;
+      padding: 6px 8px !important;
+      line-height: 1.45 !important;
+      font-weight: 500;
+    }
+
+     
+    #tableNannyTasks td:nth-child(6),
+    #tabTasks .dynamic-task-page table.task-table td:nth-child(6) {
+      text-align: left !important;
+      vertical-align: middle !important;
+      padding: 5px 7px !important;
+      line-height: 1.35 !important;
     }
 
     #tabTasks h4 {
       font-size: 15px !important;
+    }
+
+    .task-lock-checkbox {
+      -webkit-appearance: checkbox !important;
+      -moz-appearance: checkbox !important;
+      appearance: checkbox !important;
+      width: 18px !important;
+      height: 18px !important;
+      cursor: pointer !important;
+      accent-color: var(--primary-red);
+      margin: 0 auto;
+      display: block;
+    }
+
+    tr.task-row-locked {
+      background-color: #FFFDF5 !important;
+    }
+
+     
+    #fullPreviewPagesContainer .col-task-lock,
+    #print-container .col-task-lock {
+      display: none !important;
     }
 
      
@@ -799,12 +846,12 @@
       background: var(--color-signin-header);
       color: #FFFFFF;
       font-weight: 700;
-      font-size: 13px;
-      text-align: center;
-      vertical-align: middle;
+      font-size: 15px !important;
+      text-align: center !important;
+      vertical-align: middle !important;
       padding: 2px 2px;
       height: 12mm;
-      line-height: 1.25;
+      line-height: 1.15;
       box-sizing: border-box;
     }
 
@@ -814,12 +861,21 @@
 
     #tabSignIn table.signin-table td {
       border: 1px solid var(--border);
-      padding: 4px 6px;
-      text-align: left;
-      vertical-align: middle;
-      font-size: 12px;
+      padding: 2px 3px;
+      text-align: center !important;
+      vertical-align: middle !important;
+      font-size: 17px !important;
+      font-weight: 600;
+      line-height: 1.15;
       height: calc((246mm - 12mm) / 15);
       box-sizing: border-box;
+    }
+
+     
+    #tabSignIn table.signin-table td:last-child {
+      text-align: left !important;
+      vertical-align: middle !important;
+      padding: 2px 5px !important;
     }
 
     #tabSignIn table.signin-table td.center {
@@ -1099,10 +1155,10 @@
 
     .seat-box {
       border: 1px solid #777777;
-      padding: 6px 12px;
-      font-size: 13px;
-      font-weight: 600;
-      text-align: center;
+      padding: 6px 8px;
+      font-size: 17px !important;
+      font-weight: 700;
+      text-align: center !important;
       min-width: 90px;
       display: flex;
       align-items: center;
@@ -1112,16 +1168,25 @@
     .seat-grid-table {
       width: 100%;
       border-collapse: separate;
-      border-spacing: 8px;
+      border-spacing: 6px;
       margin-bottom: 20px;
+    }
+
+    .seat-grid-table th {
+      text-align: center !important;
+      vertical-align: middle !important;
+      font-size: 14px !important;
+      padding: 6px 4px;
     }
 
     .seat-grid-table td {
       border: 1px solid #777777;
-      text-align: center;
-      padding: 10px 4px;
-      font-size: 13px;
-      font-weight: 600;
+      text-align: center !important;
+      vertical-align: middle !important;
+      padding: 8px 4px;
+      font-size: 18px !important;
+      font-weight: 700;
+      line-height: 1.15;
       min-width: 80px;
     }
 
@@ -1827,8 +1892,7 @@
   
   <div class="stage-controls-bar">
     <div class="stage-buttons-group">
-      
-      <button type="button" id="btnStage1" title="【階段一】產出來賓簽到表與名牌標籤貼紙">
+      <button type="button" id="btnStage1" title="【步驟一】輸出本週來賓訊息與標籤貼紙">
         <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line></svg>
         <span class="progress-badge" id="btnStage1Progress">0%</span>
       </button>
@@ -1839,7 +1903,7 @@
   <div class="status-panel" id="statusPanel">
     <div class="status-info">
       <span class="dot"></span>
-      <span id="statusMessage">系統就緒，請點選上方階段按鈕分別運作</span>
+      <span id="statusMessage">請先點選上方按鈕產出本週來賓訊息與標籤貼紙</span>
     </div>
     <div class="progress-bar-container">
       <div class="progress-bar-fill" id="progressBarFill"></div>
@@ -1857,24 +1921,51 @@
         <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
       </button>
     </div>
-    <div class="bullet-content" id="bulletContent">請點擊「階段一」按鈕開始運作...</div>
+    <div class="bullet-content" id="bulletContent">請點選上方按鈕開始運作...</div>
+  </div>
+
+  
+  <div id="algoTracePanel" style="display: none; border: 1.5px solid #1155CC; background: #F8FAFF; padding: 16px 18px; margin-bottom: 20px; border-radius: 4px; box-sizing: border-box; width: 100%;">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #D2E3FC; padding-bottom: 8px; margin-bottom: 12px;">
+      <div style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: #1155CC;">
+        <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; stroke: #1155CC; fill: none; stroke-width: 2;"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+        <span id="algoTraceTitle">演算法運行軌跡與決策邏輯明細</span>
+      </div>
+      <button type="button" id="btnCloseAlgoTrace" title="收合追蹤面板" style="width: 30px; height: 30px; border-color: #D2E3FC; color: #1155CC;">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <div id="algoTraceContent" style="display: flex; flex-direction: column; gap: 12px; font-size: 12.5px; line-height: 1.6; color: #222; word-break: break-word;">
+      <div style="color: #666;">尚未執行排程，請點擊下方步驟按鈕（任務表 / 簽到表 / 座位表）後即可檢視完整判斷過程。</div>
+    </div>
   </div>
 
   
   <div id="outputTabsContainer">
     
-    <div class="tabs-top-actions-bar">
+    <div class="tabs-top-actions-bar" style="padding: 10px 14px; background: var(--surface-subtle); border: 1px solid var(--border); margin-bottom: 14px;">
       <div class="tabs-top-buttons-group">
         
-        <button type="button" id="btnStage2" title="【階段二】座位表智慧排位">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-          <span class="progress-badge" id="btnStage2Progress">0%</span>
+        <button type="button" id="btnStageTask" title="【步驟二】依本週來賓訊息輸出任務表">
+          <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+          <span class="progress-badge" id="btnStageTaskProgress">0%</span>
         </button>
 
         
-        <button type="button" id="btnStage3" title="【階段三】任務表_主全體工作分配">
-          <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
-          <span class="progress-badge" id="btnStage3Progress">0%</span>
+        <button type="button" id="btnStageSignIn" title="【步驟三】依任務表與來賓內容輸出簽到表">
+          <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+          <span class="progress-badge" id="btnStageSignInProgress">0%</span>
+        </button>
+
+        
+        <button type="button" id="btnStageSeat" title="【步驟四】輸出座位表">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span class="progress-badge" id="btnStageSeatProgress">0%</span>
+        </button>
+
+        
+        <button type="button" id="btnToggleAlgoTrace" title="檢視演算法判斷過程與最終決策明細" style="border-color: #1155CC; color: #1155CC;">
+          <svg viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
         </button>
       </div>
     </div>
@@ -1883,7 +1974,7 @@
     <div class="status-panel" id="statusPanelStage23">
       <div class="status-info">
         <span class="dot"></span>
-        <span id="statusMessageStage23">準備就緒，點選上方按鈕開始運作</span>
+        <span id="statusMessageStage23">準備就緒，點選上方按鈕依序生成報表</span>
       </div>
       <div class="progress-bar-container">
         <div class="progress-bar-fill" id="progressBarFillStage23"></div>
@@ -1893,15 +1984,15 @@
     
     <div class="tabs-header-bar" style="display: flex; justify-content: flex-start; align-items: center; border-bottom: 2px solid var(--border-dark); margin-bottom: 16px;">
       <div class="tabs-header" style="display: flex; gap: 2px; border-bottom: none; margin-bottom: 0;">
-        <div class="tab-btn active" data-tab="tabSignIn">簽到表</div>
-        <div class="tab-btn" data-tab="tabLabels">標籤貼紙</div>
-        <div class="tab-btn" data-tab="tabSeats">座位表</div>
+        <div class="tab-btn active" data-tab="tabLabels">標籤貼紙</div>
         <div class="tab-btn" data-tab="tabTasks">任務表</div>
+        <div class="tab-btn" data-tab="tabSignIn">簽到表</div>
+        <div class="tab-btn" data-tab="tabSeats">座位表</div>
       </div>
     </div>
 
     
-    <div class="tab-content active" id="tabSignIn">
+    <div class="tab-content" id="tabSignIn">
       <div class="pagination-bar">
         <button type="button" id="btnSignInPrev" title="上一頁">
           <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -1944,7 +2035,7 @@
     </div>
 
     
-    <div class="tab-content" id="tabLabels">
+    <div class="tab-content active" id="tabLabels">
       <div class="pagination-bar">
         <button type="button" id="btnLabelPrev" title="上一頁">
           <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -2064,7 +2155,8 @@
           <table class="data-table task-table" id="tableAdminTasks">
             <thead>
               <tr>
-                <th style="width: 140px;">工作任務</th>
+                <th class="col-task-lock" style="width: 48px;">鎖定</th>
+                <th style="width: 130px;">工作任務</th>
                 <th style="width: 100px;">負責人</th>
                 <th>固定備註 (嚴禁修改)</th>
               </tr>
@@ -2076,10 +2168,11 @@
           <table class="data-table task-table" id="tableFieldTasks">
             <thead>
               <tr>
-                <th style="width: 130px;">工作任務</th>
-                <th style="width: 160px;">負責人 (含實習)</th>
+                <th class="col-task-lock" style="width: 48px;">鎖定</th>
+                <th style="width: 120px;">工作任務</th>
+                <th style="width: 150px;">負責人 (含實習)</th>
                 <th>工作標準備註 (嚴禁修改)</th>
-                <th style="width: 170px;">注意事項</th>
+                <th style="width: 165px;">注意事項</th>
               </tr>
             </thead>
             <tbody id="tbodyFieldTasks"></tbody>
@@ -2098,12 +2191,13 @@
           <table class="data-table task-table" id="tableNannyTasks">
             <thead>
               <tr>
-                <th style="width: 11%;">交流任務</th>
+                <th class="col-task-lock" style="width: 46px;">鎖定</th>
+                <th style="width: 10%;">交流任務</th>
                 <th style="width: 13%;">保母</th>
-                <th style="width: 13%;">來賓姓名</th>
-                <th style="width: 20%;">公司名稱</th>
-                <th style="width: 19%;">想對接產業代表</th>
-                <th style="width: 24%;">注意事項</th>
+                <th style="width: 12%;">來賓姓名</th>
+                <th style="width: 18%;">公司名稱</th>
+                <th style="width: 18%;">想對接產業代表</th>
+                <th style="width: 23%;">注意事項</th>
               </tr>
             </thead>
             <tbody id="tbodyNannyTasks"></tbody>
@@ -2122,10 +2216,11 @@
           <table class="data-table task-table" id="tableTearDown">
             <thead>
               <tr>
-                <th style="width: 14%;">工作事項</th>
-                <th style="width: 22%;">負責人</th>
-                <th style="width: 38%;">工作標準備註</th>
-                <th style="width: 26%;">注意事項</th>
+                <th class="col-task-lock" style="width: 46px;">鎖定</th>
+                <th style="width: 13%;">工作事項</th>
+                <th style="width: 20%;">負責人</th>
+                <th style="width: 36%;">工作標準備註</th>
+                <th style="width: 25%;">注意事項</th>
               </tr>
             </thead>
             <tbody id="tbodyTearDown"></tbody>
@@ -2135,12 +2230,13 @@
           <table class="data-table task-table" id="tableClosingTasks">
             <thead>
               <tr>
-                <th style="width: 13%;">工作事項</th>
-                <th style="width: 14%;">諮詢師 (締結)</th>
+                <th class="col-task-lock" style="width: 46px;">鎖定</th>
+                <th style="width: 12%;">工作事項</th>
+                <th style="width: 13%;">諮詢師</th>
                 <th style="width: 12%;">來賓姓名</th>
-                <th style="width: 20%;">公司名稱</th>
-                <th style="width: 15%;">邀約人</th>
-                <th style="width: 26%;">注意事項</th>
+                <th style="width: 19%;">公司名稱</th>
+                <th style="width: 14%;">邀約人</th>
+                <th style="width: 24%;">注意事項</th>
               </tr>
             </thead>
             <tbody id="tbodyClosingTasks"></tbody>
@@ -2484,9 +2580,10 @@
     function checkHistoryForDate(dateStr) {
       if (!dateStr) return;
       var refId = CONFIG_FRONTEND.DEFAULT_REF_SPREADSHEET_ID;
-      showToast('正在檢索 ' + dateStr + ' 的歷史存檔...');
+      showToast('正在檢索 ' + dateStr + ' 的歷史存檔並更新分組次數參照...');
 
       if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run.updateReceptionGroupCountsOnSheet(refId, dateStr);
         google.script.run
           .withSuccessHandler(function(res) {
             if (res && res.found) {
@@ -2518,6 +2615,7 @@
               appData.parsedPackage.guests = res.guests || [];
               appData.parsedPackage.signInRows = res.signInRows || [];
               appData.parsedPackage.labelCards = res.labelCards || [];
+              appData.parsedPackage.memberColorMap = res.memberColorMap || appData.parsedPackage.memberColorMap || {};
               appData.parsedPackage.seatingChart = res.seatingChart || {};
               appData.parsedPackage.taskTableMain = res.taskTableMain || {};
               appData.parsedPackage.dateInfo = { minguoDateStr: res.minguoDate || dateStr };
@@ -2634,6 +2732,8 @@
           if (target) target.classList.add('active');
           if (btn.dataset.tab === 'tabLabels') {
             requestAnimationFrame(function() { fitLabelStickers(); });
+          } else if (btn.dataset.tab === 'tabSignIn' || btn.dataset.tab === 'tabTasks') {
+            requestAnimationFrame(function() { fitTableCellsTo90Percent(document.getElementById(btn.dataset.tab)); });
           }
         });
       });
@@ -2720,8 +2820,24 @@
 
       
       document.getElementById('btnStage1').addEventListener('click', runStage1);
-      document.getElementById('btnStage2').addEventListener('click', runStage2);
-      document.getElementById('btnStage3').addEventListener('click', runStage3);
+      document.getElementById('btnStageTask').addEventListener('click', runStageTask);
+      document.getElementById('btnStageSignIn').addEventListener('click', runStageSignIn);
+      document.getElementById('btnStageSeat').addEventListener('click', runStageSeat);
+
+      var btnToggleTrace = document.getElementById('btnToggleAlgoTrace');
+      if (btnToggleTrace) {
+        btnToggleTrace.addEventListener('click', function() {
+          var panel = document.getElementById('algoTracePanel');
+          if (panel) panel.style.display = (panel.style.display === 'none') ? 'block' : 'none';
+        });
+      }
+      var btnCloseTrace = document.getElementById('btnCloseAlgoTrace');
+      if (btnCloseTrace) {
+        btnCloseTrace.addEventListener('click', function() {
+          var panel = document.getElementById('algoTracePanel');
+          if (panel) panel.style.display = 'none';
+        });
+      }
 
       document.getElementById('btnSaveToHistory').addEventListener('click', saveCurrentToHistory);
       var btnExport = document.getElementById('btnExportDrive');
@@ -2987,16 +3103,62 @@
       }
     }
 
+    function activateOutputTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(function(b) {
+        b.classList.toggle('active', b.dataset.tab === tabId);
+      });
+      document.querySelectorAll('.tab-content').forEach(function(c) {
+        c.classList.toggle('active', c.id === tabId);
+      });
+      if (tabId === 'tabLabels') {
+        requestAnimationFrame(function() { fitLabelStickers(); });
+      } else if (tabId === 'tabSignIn' || tabId === 'tabTasks') {
+        requestAnimationFrame(function() { fitTableCellsTo90Percent(document.getElementById(tabId)); });
+      }
+    }
+
+    
+    function renderAlgorithmTrace(stepLabel, logs, autoOpen) {
+      var titleEl = document.getElementById('algoTraceTitle');
+      var contentEl = document.getElementById('algoTraceContent');
+      var panelEl = document.getElementById('algoTracePanel');
+      if (!contentEl) return;
+
+      if (titleEl) titleEl.innerText = '演算法運行軌跡：' + stepLabel;
+      if (!logs || logs.length === 0) {
+        contentEl.innerHTML = '<div style="color:#666;">無詳細追蹤紀錄</div>';
+        return;
+      }
+
+      contentEl.innerHTML = logs.map(function(blk) {
+        var itemsHtml = (blk.details || []).map(function(line) {
+          var isResult = line.indexOf('決策結果') !== -1 || line.indexOf('最終入選') !== -1;
+          var isExclude = line.indexOf('剔除') !== -1 || line.indexOf('不挑') !== -1 || line.indexOf('排除') !== -1;
+          var colorStyle = isResult ? 'color:#137333; font-weight:700;' : (isExclude ? 'color:#C5221F;' : 'color:#222;');
+          return '<li style="margin-bottom:3px; ' + colorStyle + '">' + line + '</li>';
+        }).join('');
+        return (
+          '<div style="background:#FFFFFF; border:1px solid #D2E3FC; padding:10px 14px; border-radius:4px;">' +
+            '<div style="font-weight:700; color:#1155CC; margin-bottom:4px;">' + (blk.stage || '') + ' ｜ ' + (blk.title || '') + '</div>' +
+            '<ul style="margin:0; padding-left:18px;">' + itemsHtml + '</ul>' +
+          '</div>'
+        );
+      }).join('');
+
+      if (autoOpen && panelEl) {
+        panelEl.style.display = 'block';
+      }
+    }
+
     
     function runStage1() {
       var params = collectInputs();
       if (!params.rawGuestsText || !params.rawGuestsText.trim()) {
-        showToast('請先貼入【1. 來賓報名表文字資訊】！');
+        showToast('請先貼入【1. 來賓報名表文字資訊】');
         return;
       }
 
-      
-      updateProgress('btnStage1', 50, '【階段一】正在比對會員專業、分析產業衝突與外帶早餐...');
+      updateProgress('btnStage1', 50, '正在整理本週來賓訊息與標籤貼紙...');
 
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         google.script.run
@@ -3004,15 +3166,30 @@
             if (!appData.parsedPackage) appData.parsedPackage = {};
             Object.assign(appData.parsedPackage, res);
             document.getElementById('bulletContent').innerText = res.guestBulletText || '';
-            renderSignInTable();
             renderLabels();
-            updateProgress('btnStage1', 100, '【階段一完成】簽到表與標籤貼紙已產出！');
-            showToast('階段一完成，已自動更新至歷史紀錄');
+            activateOutputTab('tabLabels');
+
+            var stage1Logs = [
+              {
+                stage: '階段 1：資料解析與專業別衝突比對',
+                title: '讀取「會員會期報告」L 欄專業別與群組通知',
+                details: [
+                  '解析有效來賓：共 ' + (res.guests || []).length + ' 位',
+                  '產業衝突與早餐判定：' + ((res.guests || []).map(function(g) {
+                    return g.name + '（' + (g.hasConflict ? g.conflictReason : '無衝突') + '｜' + (g.breakfastType || '內用') + '｜意願：' + (g.willingness || '未提供') + '）';
+                  }).join('；') || '無')
+                ]
+              }
+            ];
+            renderAlgorithmTrace('步驟一（來賓訊息與標籤貼紙）', stage1Logs, true);
+
+            updateProgress('btnStage1', 100, '本週來賓訊息與標籤貼紙已產出');
+            showToast('本週來賓訊息與標籤貼紙已產出');
             autoSyncHistorySilent();
           })
           .withFailureHandler(function(err) {
-            showToast('階段一失敗: ' + err.toString());
-            updateProgress('btnStage1', 100, '階段一執行異常');
+            showToast('執行失敗: ' + err.toString());
+            updateProgress('btnStage1', 100, '執行異常');
           })
           .executeStage1(params);
       } else {
@@ -3021,13 +3198,288 @@
     }
 
     
-    function runStage2() {
+    function collectLockedTaskData() {
+      var lockedData = {
+        adminTasks: {},
+        fieldTasks: {},
+        nannyTasks: {},
+        tearDownTasks: null,
+        closingTasks: {}
+      };
+      var t = (appData.parsedPackage && appData.parsedPackage.taskTableMain) ? appData.parsedPackage.taskTableMain : {};
+
+      
+      document.querySelectorAll('#tbodyAdminTasks tr').forEach(function(tr, idx) {
+        var chk = tr.querySelector('.task-lock-checkbox');
+        var tds = tr.querySelectorAll('td');
+        if (tds.length >= 4) {
+          var taskName = tds[1].innerText.trim();
+          var ownerVal = tds[2].innerText.trim();
+          if (t.adminTasks && t.adminTasks[idx]) {
+            t.adminTasks[idx].owner = ownerVal;
+            t.adminTasks[idx].locked = !!(chk && chk.checked);
+          }
+          if (chk && chk.checked && taskName) {
+            lockedData.adminTasks[taskName] = { owner: ownerVal };
+          }
+        }
+      });
+
+      
+      document.querySelectorAll('#tbodyFieldTasks tr').forEach(function(tr, idx) {
+        var chk = tr.querySelector('.task-lock-checkbox');
+        var tds = tr.querySelectorAll('td');
+        if (tds.length >= 5) {
+          var taskName = tds[1].innerText.trim();
+          var ownersArr = tds[2].innerText.split(/[、,，]/).map(function(s) { return s.trim(); }).filter(Boolean);
+          var noteVal = tds[4].innerText.trim();
+          if (t.fieldTasks && t.fieldTasks[idx]) {
+            t.fieldTasks[idx].owners = ownersArr;
+            t.fieldTasks[idx].note = noteVal;
+            t.fieldTasks[idx].locked = !!(chk && chk.checked);
+          }
+          if (chk && chk.checked && taskName) {
+            lockedData.fieldTasks[taskName] = { owners: ownersArr, note: noteVal };
+          }
+        }
+      });
+
+      
+      var nIdx = 0;
+      document.querySelectorAll('#tabTasks tbody tr').forEach(function(tr) {
+        var tds = tr.querySelectorAll('td');
+        if (tds.length === 7 && tds[1].innerText.trim() === '會前交流') {
+          var chk = tr.querySelector('.task-lock-checkbox');
+          var nannyVal = tds[2].innerText.trim();
+          var guestVal = tds[3].innerText.trim();
+          var compVal = tds[4].innerText.trim();
+          var targetVal = tds[5].innerText.trim();
+          var noteVal = tds[6].innerText.trim();
+          if (t.nannyTasks && t.nannyTasks[nIdx]) {
+            t.nannyTasks[nIdx].nanny = nannyVal;
+            t.nannyTasks[nIdx].guest = guestVal;
+            t.nannyTasks[nIdx].company = compVal;
+            t.nannyTasks[nIdx].target = targetVal;
+            t.nannyTasks[nIdx].locked = !!(chk && chk.checked);
+          }
+          if (chk && chk.checked && guestVal) {
+            lockedData.nannyTasks[guestVal] = {
+              nanny: nannyVal,
+              company: compVal,
+              target: targetVal,
+              note: noteVal
+            };
+          }
+          nIdx++;
+        }
+      });
+
+      
+      var tdTr = document.querySelector('#tbodyTearDown tr');
+      if (tdTr) {
+        var tdChk = tdTr.querySelector('.task-lock-checkbox');
+        var tdTds = tdTr.querySelectorAll('td');
+        if (tdTds.length >= 5) {
+          var tdOwners = tdTds[2].innerText.split(/[、,，]/).map(function(s) { return s.trim(); }).filter(Boolean);
+          var tdNote = tdTds[4].innerText.trim();
+          if (t.tearDownTasks) {
+            t.tearDownTasks.owners = tdOwners;
+            t.tearDownTasks.note = tdNote;
+            t.tearDownTasks.locked = !!(tdChk && tdChk.checked);
+          }
+          if (tdChk && tdChk.checked) {
+            lockedData.tearDownTasks = { owners: tdOwners, note: tdNote };
+          }
+        }
+      }
+
+      
+      var cIdx = 0;
+      document.querySelectorAll('#tabTasks tbody tr').forEach(function(tr) {
+        var tds = tr.querySelectorAll('td');
+        if (tds.length === 7 && tds[1].innerText.trim().indexOf('會後接待') !== -1) {
+          var chk = tr.querySelector('.task-lock-checkbox');
+          var consVal = tds[2].innerText.trim();
+          var guestVal = tds[3].innerText.trim();
+          var compVal = tds[4].innerText.trim();
+          var invVal = tds[5].innerText.trim();
+          var noteVal = tds[6].innerText.trim();
+          if (t.closingTasks && t.closingTasks[cIdx]) {
+            t.closingTasks[cIdx].consultant = consVal;
+            t.closingTasks[cIdx].guest = guestVal;
+            t.closingTasks[cIdx].company = compVal;
+            t.closingTasks[cIdx].inviter = invVal;
+            t.closingTasks[cIdx].locked = !!(chk && chk.checked);
+          }
+          if (chk && chk.checked && guestVal) {
+            lockedData.closingTasks[guestVal] = {
+              consultant: consVal,
+              company: compVal,
+              inviter: invVal,
+              note: noteVal
+            };
+          }
+          cIdx++;
+        }
+      });
+
+      return lockedData;
+    }
+
+    
+    function runStageTask() {
       if (!appData.parsedPackage || !appData.parsedPackage.guests || appData.parsedPackage.guests.length === 0) {
-        showToast('請先完成【階段一】，系統需依據階段一產出之來賓名單與意願分層進行排位！');
+        showToast('請先產出本週來賓訊息與標籤貼紙');
+        return;
+      }
+
+      var lockedData = collectLockedTaskData();
+      var params = collectInputs();
+      params.guests = appData.parsedPackage.guests;
+      params.guestBulletText = document.getElementById('bulletContent').innerText || '';
+      params.lockedData = lockedData;
+
+      if (!appData.parsedPackage.taskTableMain) {
+        appData.parsedPackage.taskTableMain = {};
+      }
+
+      updateProgress('btnStageTask', 40, '正在依產業關聯媒合保母組、排定締結組與各組在席人員...');
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(function(res) {
+            if (!res || !res.success) {
+              showToast('後端未回傳有效任務資料，請確認 Code.gs 已儲存並重新部署為新版本');
+              updateProgress('btnStageTask', 100, '請確認後端已發布新版本');
+              return;
+            }
+            if (Array.isArray(res.adminTasks) && res.adminTasks.length > 0) {
+              appData.parsedPackage.taskTableMain.adminTasks = res.adminTasks;
+            }
+            if (Array.isArray(res.fieldTasks) && res.fieldTasks.length > 0) {
+              appData.parsedPackage.taskTableMain.fieldTasks = res.fieldTasks;
+            }
+            if (Array.isArray(res.nannyTasks)) {
+              appData.parsedPackage.taskTableMain.nannyTasks = res.nannyTasks;
+            }
+            if (res.tearDownTasks) {
+              appData.parsedPackage.taskTableMain.tearDownTasks = res.tearDownTasks;
+            }
+            if (Array.isArray(res.closingTasks)) {
+              appData.parsedPackage.taskTableMain.closingTasks = res.closingTasks;
+            }
+
+            renderTaskTable();
+            activateOutputTab('tabTasks');
+            if (res.decisionLogs) {
+              renderAlgorithmTrace('步驟二（任務表排程邏輯與挑選明細）', res.decisionLogs, true);
+            }
+
+            updateProgress('btnStageTask', 100, '任務表全體工作分配已完成（已打勾鎖定列已完整保留）');
+            showToast('任務表已完成，請接著輸出簽到表');
+            autoSyncHistorySilent();
+          })
+          .withFailureHandler(function(err) {
+            showToast('任務表排程失敗（請確認 Code.gs 已建立新版本部署）: ' + err.toString());
+            updateProgress('btnStageTask', 100, '任務表執行異常');
+          })
+          .executeAllTasksSchedule(params);
+      } else {
+        updateProgress('btnStageTask', 100, '非 GAS 環境，請於 Google 試算表 Web App 執行');
+      }
+    }
+
+    
+    function runStageSignIn() {
+      if (!appData.parsedPackage || !appData.parsedPackage.guests || appData.parsedPackage.guests.length === 0) {
+        showToast('請先產出本週來賓訊息');
+        return;
+      }
+      var nannyTasks = (appData.parsedPackage.taskTableMain && appData.parsedPackage.taskTableMain.nannyTasks) || [];
+      if (nannyTasks.length === 0) {
+        showToast('請先輸出任務表，確保保母配對資料完整後再輸出簽到表');
         return;
       }
 
       
+      var liveNannyTasks = [];
+      var liveGuestUpdates = {};
+      var nannyRows = document.querySelectorAll('#tabTasks tbody tr');
+      nannyRows.forEach(function(tr) {
+        var tds = tr.querySelectorAll('td');
+        if (tds.length === 7 && tds[1].innerText.trim() === '會前交流') {
+          var gName = tds[3].innerText.trim();
+          var nName = tds[2].innerText.trim();
+          var cName = tds[4].innerText.trim();
+          if (gName) {
+            liveNannyTasks.push({
+              nanny: nName,
+              guest: gName,
+              company: cName
+            });
+            liveGuestUpdates[gName] = { nanny: nName, company: cName };
+          }
+        }
+      });
+
+      var syncedGuests = (appData.parsedPackage.guests || []).map(function(g) {
+        var copy = Object.assign({}, g);
+        if (liveGuestUpdates[copy.name]) {
+          copy.assignedNanny = liveGuestUpdates[copy.name].nanny;
+          if (liveGuestUpdates[copy.name].company) {
+            copy.company = liveGuestUpdates[copy.name].company;
+          }
+        }
+        return copy;
+      });
+
+      var params = collectInputs();
+      params.guests = syncedGuests;
+      params.nannyTasks = liveNannyTasks.length > 0 ? liveNannyTasks : nannyTasks;
+
+      updateProgress('btnStageSignIn', 50, '正在整合任務表保母與來賓資訊生成簽到表...');
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(function(res) {
+            if (!res || !res.success) throw new Error(res ? res.error : '簽到表生成失敗');
+            appData.parsedPackage.guests = res.guests || appData.parsedPackage.guests;
+            appData.parsedPackage.signInRows = res.signInRows || [];
+            renderSignInTable();
+            activateOutputTab('tabSignIn');
+
+            var signLogs = [
+              {
+                stage: '階段 1：同步任務表保母與來賓明細',
+                title: '自動去除保母括號次數，並將執行董事／董事顧問錨定於末列',
+                details: (res.guests || []).map(function(g, i) {
+                  return '第 ' + (i + 1) + ' 列：來賓「' + g.name + '」 ｜ 專屬保母「' + (g.assignedNanny || '無') + '」 ｜ 衝突「' + (g.hasConflict ? '衝突' : '無') + '」';
+                })
+              }
+            ];
+            renderAlgorithmTrace('步驟三（來賓簽到表生成明細）', signLogs, true);
+
+            updateProgress('btnStageSignIn', 100, '來賓簽到表已同步輸出完成');
+            showToast('簽到表已完成，請接著輸出座位表');
+            autoSyncHistorySilent();
+          })
+          .withFailureHandler(function(err) {
+            showToast('簽到表輸出失敗: ' + err.toString());
+            updateProgress('btnStageSignIn', 100, '簽到表輸出異常');
+          })
+          .executeGenerateSignIn(params);
+      } else {
+        updateProgress('btnStageSignIn', 100, '非 GAS 環境，請於 Google 試算表 Web App 執行');
+      }
+    }
+
+    
+    function runStageSeat() {
+      if (!appData.parsedPackage || !appData.parsedPackage.guests || appData.parsedPackage.guests.length === 0) {
+        showToast('請先產出本週來賓訊息');
+        return;
+      }
+
       seatTapSelectedTarget = null;
       if (appData.parsedPackage) appData.parsedPackage.seatingChart = null;
       var oldSeatTbody = document.getElementById('seatGridTbody');
@@ -3041,125 +3493,34 @@
         oldSpecialEl.style.border = '1.5px dashed #999';
         oldSpecialEl.innerHTML = '<span style="font-size: 10px; color: #888; display: block;">資訊協調員</span><strong>(空)</strong>';
       }
-      if (oldBannerEl) oldBannerEl.innerText = '正在重新排定座位表...';
+      if (oldBannerEl) oldBannerEl.innerText = '正在排定座位表...';
 
       var params = collectInputs();
       params.guests = appData.parsedPackage.guests;
-      
-      updateProgress('btnStage2', 50, '【階段二】正在依「30秒順序」Q 欄位與來賓意願排定座位表...');
+      updateProgress('btnStageSeat', 50, '正在依 30 秒順序與來賓意願排定座位表...');
 
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         google.script.run
           .withSuccessHandler(function(res) {
             if (!appData.parsedPackage) appData.parsedPackage = {};
+            if (res.memberColorMap) appData.parsedPackage.memberColorMap = res.memberColorMap;
             appData.parsedPackage.seatingChart = res.seatingChart;
             renderSeatingChart();
-            updateProgress('btnStage2', 100, '【階段二完成】座位表配置完畢！');
-            showToast('階段二完成，已自動更新至歷史紀錄');
+            activateOutputTab('tabSeats');
+            if (res.decisionLogs) {
+              renderAlgorithmTrace('步驟四（座位表排程邏輯與分層明細）', res.decisionLogs, true);
+            }
+            updateProgress('btnStageSeat', 100, '座位表配置完畢');
+            showToast('全套報表皆已完成');
             autoSyncHistorySilent();
           })
           .withFailureHandler(function(err) {
-            showToast('階段二失敗: ' + err.toString());
-            updateProgress('btnStage2', 100, '階段二執行異常');
+            showToast('座位表排程失敗: ' + err.toString());
+            updateProgress('btnStageSeat', 100, '座位表執行異常');
           })
           .executeStage2(params);
       } else {
-        updateProgress('btnStage2', 100, '非 GAS 環境，請於 Google 試算表 Web App 執行');
-      }
-    }
-
-    
-    function runStage3() {
-      if (!appData.parsedPackage || !appData.parsedPackage.guests || appData.parsedPackage.guests.length === 0) {
-        showToast('請先完成【階段一】，系統需依據來賓對接產業進行保母配對與締結指派！');
-        return;
-      }
-
-      var params = collectInputs();
-      params.guests = appData.parsedPackage.guests;
-
-      if (!appData.parsedPackage.taskTableMain) {
-        appData.parsedPackage.taskTableMain = {};
-      }
-
-      
-      updateProgress('btnStage3', 25, '【階段三 1/4】智能排定行政與現場 6 大工作任務 (25%)...');
-
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        
-        google.script.run
-          .withSuccessHandler(function(res1) {
-            if (!res1 || !res1.success) throw new Error(res1 ? res1.error : '步驟 1 失敗');
-            appData.parsedPackage.taskTableMain.adminTasks = res1.adminTasks;
-            appData.parsedPackage.taskTableMain.fieldTasks = res1.fieldTasks;
-            renderTaskTable();
-
-            
-            updateProgress('btnStage3', 50, '【階段三 2/4】現場各組完成！比對產業需求，媒合專屬保母 (50%)...');
-            google.script.run
-              .withSuccessHandler(function(res2) {
-                if (!res2 || !res2.success) throw new Error(res2 ? res2.error : '步驟 2 失敗');
-                appData.parsedPackage.taskTableMain.nannyTasks = res2.nannyTasks;
-                renderTaskTable();
-
-                
-                updateProgress('btnStage3', 75, '【階段三 3/4】保母配對完成！執行名單防衝突，排定撤場任務 (75%)...');
-                google.script.run
-                  .withSuccessHandler(function(res3) {
-                    if (!res3 || !res3.success) throw new Error(res3 ? res3.error : '步驟 3 失敗');
-                    appData.parsedPackage.taskTableMain.tearDownTasks = res3.tearDownTasks;
-                    renderTaskTable();
-
-                    
-                    updateProgress('btnStage3', 90, '【階段三 4/4】撤場組完成！比對資深會齡，精準導引諮詢締結 (90%)...');
-                    google.script.run
-                      .withSuccessHandler(function(res4) {
-                        if (!res4 || !res4.success) throw new Error(res4 ? res4.error : '步驟 4 失敗');
-                        appData.parsedPackage.taskTableMain.closingTasks = res4.closingTasks;
-                        renderTaskTable();
-
-                        updateProgress('btnStage3', 100, '【階段三完成】全體工作任務配置完畢！(100%)');
-                        showToast('階段三全部區塊完成，已自動更新至歷史紀錄');
-                        autoSyncHistorySilent();
-                      })
-                      .withFailureHandler(function(err) {
-                        showToast('步驟 4 (會後接待) 失敗: ' + err.toString());
-                        updateProgress('btnStage3', 100, '階段三部分執行異常');
-                      })
-                      .executeStage3Step(4, params);
-                  })
-                  .withFailureHandler(function(err) {
-                    showToast('步驟 3 (撤場組) 失敗: ' + err.toString());
-                    updateProgress('btnStage3', 100, '階段三部分執行異常');
-                  })
-                  .executeStage3Step(3, params);
-              })
-              .withFailureHandler(function(err) {
-                showToast('步驟 2 (保母配對) 失敗: ' + err.toString());
-                updateProgress('btnStage3', 100, '階段三部分執行異常');
-              })
-              .executeStage3Step(2, params);
-          })
-          .withFailureHandler(function(err) {
-            showToast('步驟 1 (現場工作) 失敗: ' + err.toString());
-            updateProgress('btnStage3', 100, '階段三執行異常');
-          })
-          .executeStage3Step(1, params);
-      } else {
-        
-        setTimeout(function() {
-          updateProgress('btnStage3', 25, '【本地模擬 1/4】現場各組任務排定 (25%)...');
-          setTimeout(function() {
-            updateProgress('btnStage3', 50, '【本地模擬 2/4】專屬保母配對完成 (50%)...');
-            setTimeout(function() {
-              updateProgress('btnStage3', 75, '【本地模擬 3/4】撤場組分配完畢 (75%)...');
-              setTimeout(function() {
-                updateProgress('btnStage3', 100, '【階段三完成】任務表_主配置完畢！(100%)');
-                showToast('本地環境模擬完成');
-              }, 200);
-            }, 200);
-          }, 200);
-        }, 200);
+        updateProgress('btnStageSeat', 100, '非 GAS 環境，請於 Google 試算表 Web App 執行');
       }
     }
 
@@ -3201,33 +3562,33 @@
 
       const tbAdmin = document.getElementById('tbodyAdminTasks');
       tbAdmin.innerHTML = `
-        <tr><td style="font-weight:700;">印製來賓名牌</td><td contenteditable="true"></td><td style="color:var(--text-muted);">協助印製，隔天帶到例會現場</td></tr>
-        <tr><td style="font-weight:700;">印製簽到表</td><td contenteditable="true"></td><td style="color:var(--text-muted);">協助印製，隔天帶到例會現場</td></tr>
-        <tr><td style="font-weight:700;">座位安排</td><td contenteditable="true"></td><td style="color:var(--text-muted);">週三製作完成，傳到大群及來賓接待群組</td></tr>
-        <tr><td style="font-weight:700;">例會行前通知</td><td contenteditable="true"></td><td style="color:var(--text-muted);">請負責人通知分會夥伴，將來賓加入群組，並確認出席狀況</td></tr>
+        <tr><td class="col-task-lock center"><input type="checkbox" class="task-lock-checkbox"></td><td style="font-weight:700;">印製來賓名牌</td><td contenteditable="true"></td><td style="color:var(--text-muted);">協助印製，隔天帶到例會現場</td></tr>
+        <tr><td class="col-task-lock center"><input type="checkbox" class="task-lock-checkbox"></td><td style="font-weight:700;">印製簽到表</td><td contenteditable="true"></td><td style="color:var(--text-muted);">協助印製，隔天帶到例會現場</td></tr>
+        <tr><td class="col-task-lock center"><input type="checkbox" class="task-lock-checkbox"></td><td style="font-weight:700;">座位安排</td><td contenteditable="true"></td><td style="color:var(--text-muted);">週三製作完成，傳到大群及來賓接待群組</td></tr>
+        <tr><td class="col-task-lock center"><input type="checkbox" class="task-lock-checkbox"></td><td style="font-weight:700;">例會行前通知</td><td contenteditable="true"></td><td style="color:var(--text-muted);">請負責人通知分會夥伴，將來賓加入群組，並確認出席狀況</td></tr>
       `;
 
       const tbField = document.getElementById('tbodyFieldTasks');
       tbField.innerHTML = `
-        <tr><td style="font-weight:700; background:var(--color-task-group);">佈置組</td><td contenteditable="true" style="color:var(--text-muted); font-style:italic;">(執行階段三由AI依分組排定)</td><td style="white-space:pre-wrap; color:var(--text-muted);">06:15前完成\n舞台－旗幟*3、易拉展、立牌\n座位區－桌牌、獎牌、響鈴、麥克風*4、旗子\n會後接待區－評議表、入會申請書</td><td contenteditable="true">請來賓接待組所有組員，6:10前到場</td></tr>
-        <tr><td style="font-weight:700; background:var(--color-task-group);">迎賓櫃檯</td><td contenteditable="true" style="color:var(--text-muted); font-style:italic;">(執行階段三由AI依分組排定)</td><td style="white-space:pre-wrap; color:var(--text-muted);">請提早6:15完成接待桌佈置:桌布、文具、名片盒\n準備來賓名牌，向來賓蒐集一張名片交給主席\n檢查會員服裝儀容(正式服裝、Pin章、名牌)\n協助收場地費，清點後交給秘財\n裁切餐券、點好數量交給秉量</td><td contenteditable="true"></td></tr>
-        <tr><td style="font-weight:700; background:var(--color-task-group);">響鈴手</td><td contenteditable="true" style="color:var(--text-muted); font-style:italic;">(執行階段三由AI依分組排定)</td><td style="white-space:pre-wrap; color:var(--text-muted);">負責五段議程的響鈴提醒\n1.三分鐘培訓 2.會員30秒 3.來賓自我介紹 4.主題短講 5.會員引薦</td><td contenteditable="true"></td></tr>
-        <tr><td style="font-weight:700; background:var(--color-task-group);">麥克風手</td><td contenteditable="true" style="color:var(--text-muted); font-style:italic;">(執行階段三由AI依分組排定)</td><td style="white-space:pre-wrap; color:var(--text-muted);">會議前須測試麥克風四支(2、1、1支)\n四個議程中傳遞 1.會員30秒 2.來賓自我介紹 3.引薦分享 4.引薦查核</td><td contenteditable="true"></td></tr>
-        <tr><td style="font-weight:700; background:var(--color-task-group);">拍照手</td><td contenteditable="true" style="color:var(--text-muted); font-style:italic;">(執行階段三由AI依分組排定)</td><td style="white-space:pre-wrap; color:var(--text-muted);">四個議程中協助拍照、錄影\n1.頒獎 2.會員30秒 3.短講 4.抽獎</td><td contenteditable="true"></td></tr>
-        <tr><td style="font-weight:700; background:var(--color-task-group);">餐卷停車券</td><td contenteditable="true" style="color:var(--text-muted); font-style:italic;">(執行階段三由AI依分組排定)</td><td style="white-space:pre-wrap; color:var(--text-muted);">引薦環節發放、餐卷一人一張不補發</td><td contenteditable="true"></td></tr>
+        <tr><td class="col-task-lock center"><input type="checkbox" class="task-lock-checkbox"></td><td style="font-weight:700; background:var(--color-task-group);">佈置組</td><td contenteditable="true" style="color:var(--text-muted); font-style:italic;">(待步驟二排定)</td><td style="white-space:pre-wrap; color:var(--text-muted);">06:15前完成\n舞台－旗幟*3、易拉展、立牌\n座位區－桌牌、獎牌、響鈴、麥克風*4、旗子\n會後接待區－評議表、入會申請書</td><td contenteditable="true">請來賓接待組所有組員，6:10前到場</td></tr>
+        <tr><td class="col-task-lock center"><input type="checkbox" class="task-lock-checkbox"></td><td style="font-weight:700; background:var(--color-task-group);">迎賓櫃檯</td><td contenteditable="true" style="color:var(--text-muted); font-style:italic;">(待步驟二排定)</td><td style="white-space:pre-wrap; color:var(--text-muted);">請提早6:15完成接待桌佈置:桌布、文具、名片盒\n準備來賓名牌，向來賓蒐集一張名片交給主席\n檢查會員服裝儀容(正式服裝、Pin章、名牌)\n協助收場地費，清點後交給秘財\n裁切餐券、點好數量交給秉量</td><td contenteditable="true"></td></tr>
+        <tr><td class="col-task-lock center"><input type="checkbox" class="task-lock-checkbox"></td><td style="font-weight:700; background:var(--color-task-group);">響鈴手</td><td contenteditable="true" style="color:var(--text-muted); font-style:italic;">(待步驟二排定)</td><td style="white-space:pre-wrap; color:var(--text-muted);">負責五段議程的響鈴提醒\n1.三分鐘培訓 2.會員30秒 3.來賓自我介紹 4.主題短講 5.會員引薦</td><td contenteditable="true"></td></tr>
+        <tr><td class="col-task-lock center"><input type="checkbox" class="task-lock-checkbox"></td><td style="font-weight:700; background:var(--color-task-group);">麥克風手</td><td contenteditable="true" style="color:var(--text-muted); font-style:italic;">(待步驟二排定)</td><td style="white-space:pre-wrap; color:var(--text-muted);">會議前須測試麥克風四支(2、1、1支)\n四個議程中傳遞 1.會員30秒 2.來賓自我介紹 3.引薦分享 4.引薦查核</td><td contenteditable="true"></td></tr>
+        <tr><td class="col-task-lock center"><input type="checkbox" class="task-lock-checkbox"></td><td style="font-weight:700; background:var(--color-task-group);">拍照手</td><td contenteditable="true" style="color:var(--text-muted); font-style:italic;">(待步驟二排定)</td><td style="white-space:pre-wrap; color:var(--text-muted);">四個議程中協助拍照、錄影\n1.頒獎 2.會員30秒 3.短講 4.抽獎</td><td contenteditable="true"></td></tr>
+        <tr><td class="col-task-lock center"><input type="checkbox" class="task-lock-checkbox"></td><td style="font-weight:700; background:var(--color-task-group);">餐卷停車券</td><td contenteditable="true" style="color:var(--text-muted); font-style:italic;">(待步驟二排定)</td><td style="white-space:pre-wrap; color:var(--text-muted);">引薦環節發放、餐卷一人一張不補發</td><td contenteditable="true"></td></tr>
       `;
 
       const tbTD = document.getElementById('tbodyTearDown');
       tbTD.innerHTML = `
-        <tr><td style="font-weight:700; background:var(--color-task-group);">撤場組</td><td contenteditable="true" style="color:var(--text-muted); font-style:italic;">(執行階段三由AI依分組排定)</td><td style="white-space:pre-wrap; color:var(--text-muted);">旗幟、易拉展收到旁邊角落，桌牌、獎牌、響鈴、名片、桌巾等收妥入黑箱\n檢查所有座位及物品</td><td contenteditable="true" style="white-space:pre-wrap;">將桌牌收成，九長一疊\n其餘會員由前到後收成6疊\n記得收鈴鐺和名片盒</td></tr>
+        <tr><td class="col-task-lock center"><input type="checkbox" class="task-lock-checkbox"></td><td style="font-weight:700; background:var(--color-task-group);">撤場組</td><td contenteditable="true" style="color:var(--text-muted); font-style:italic;">(待步驟二排定)</td><td style="white-space:pre-wrap; color:var(--text-muted);">旗幟、易拉展收到旁邊角落，桌牌、獎牌、響鈴、名片、桌巾等收妥入黑箱\n檢查所有座位及物品</td><td contenteditable="true" style="white-space:pre-wrap;">將桌牌收成，九長一疊\n其餘會員由前到後收成6疊\n記得收鈴鐺和名片盒</td></tr>
       `;
 
-      // 三、來賓交流任務 (會前交流) 預設標準呈現
       const tbNanny = document.getElementById('tbodyNannyTasks');
       tbNanny.innerHTML = `
         <tr>
+          <td class="col-task-lock center"><input type="checkbox" class="task-lock-checkbox"></td>
           <td style="font-weight: 700; background: #F4CCCC; text-align: center; vertical-align: middle;">會前交流</td>
-          <td contenteditable="true" style="background: #FFF9C4; color: var(--text-muted); font-style: italic;">(待階段三排定)</td>
+          <td contenteditable="true" style="background: #FFF9C4; color: var(--text-muted); font-style: italic;">(待步驟二排定)</td>
           <td contenteditable="true" style="background: #FFF9C4;"></td>
           <td contenteditable="true" style="background: #FFF9C4;"></td>
           <td contenteditable="true" style="background: #FFF9C4;"></td>
@@ -3235,12 +3596,12 @@
         </tr>
       `;
 
-      // 五、會後接待 (諮詢組) 預設標準呈現
       const tbClose = document.getElementById('tbodyClosingTasks');
       tbClose.innerHTML = `
         <tr>
+          <td class="col-task-lock center"><input type="checkbox" class="task-lock-checkbox"></td>
           <td style="font-weight: 700; background: #D9EAD3; text-align: center; vertical-align: middle;">會後接待<br>(諮詢組)</td>
-          <td contenteditable="true" style="background: #FFF9C4; color: var(--text-muted); font-style: italic;">(待階段三排定)</td>
+          <td contenteditable="true" style="background: #FFF9C4; color: var(--text-muted); font-style: italic;">(待步驟二排定)</td>
           <td contenteditable="true" style="background: #FFF9C4;"></td>
           <td contenteditable="true" style="background: #FFF9C4;"></td>
           <td contenteditable="true" style="background: #FFF9C4;"></td>
@@ -3261,7 +3622,7 @@
       const tbody = document.getElementById('signInTbody');
       tbody.innerHTML = '';
 
-      
+      // ★ 強制將執行董事 / 董事顧問重新錨定至最後一頁的編號 14/15 或 29/30 列（有填姓名才寫入）
       if (pkg.signInRows && pkg.signInRows.length > 0) {
         const guestRows = [];
         const specialRows = [];
@@ -3344,20 +3705,44 @@
       }
 
       pageRows.forEach(r => {
+        const isSpecialOfficer = (r.company === '執行董事' || r.company === '董事顧問');
+        const hasGuestName = !!(r.name && r.name.trim() !== '');
+        let conflictDisplay = r.conflict || '';
+        if (hasGuestName && !isSpecialOfficer && !conflictDisplay) {
+          conflictDisplay = '否';
+          r.conflict = '否';
+        }
+        const isConflictYes = (conflictDisplay === '衝突' || conflictDisplay === '是');
+
+        let breakfastDisplay = (r.breakfast || '').trim();
+        if (hasGuestName && !isSpecialOfficer) {
+          if (breakfastDisplay.indexOf('外帶') !== -1 || breakfastDisplay.indexOf('餐盒') !== -1 || breakfastDisplay.indexOf('便當') !== -1) {
+            if (breakfastDisplay.indexOf('素') !== -1) breakfastDisplay = '外帶（素）';
+            else breakfastDisplay = '外帶（葷）';
+          } else {
+            breakfastDisplay = '飯店自助式';
+          }
+          r.breakfast = breakfastDisplay;
+        }
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td class="center" style="font-weight: 700;">${r.seq}</td>
           <td contenteditable="true" onblur="updateRowData(${r.seq - 1}, 'name', this.innerText)">${r.name}</td>
           <td contenteditable="true" onblur="updateRowData(${r.seq - 1}, 'company', this.innerText)">${r.company}</td>
-          <td class="center" contenteditable="true" style="color: ${r.conflict ? 'var(--primary-red)' : 'inherit'}; font-weight: ${r.conflict ? '700' : 'normal'};" onblur="updateRowData(${r.seq - 1}, 'conflict', this.innerText)">${r.conflict}</td>
+          <td class="center" contenteditable="true" style="color: ${isConflictYes ? 'var(--primary-red)' : 'inherit'}; font-weight: ${isConflictYes ? '700' : 'normal'};" onblur="updateRowData(${r.seq - 1}, 'conflict', this.innerText)">${conflictDisplay}</td>
           <td contenteditable="true" onblur="updateRowData(${r.seq - 1}, 'introducer', this.innerText)">${r.introducer}</td>
           <td contenteditable="true" onblur="updateRowData(${r.seq - 1}, 'nanny', this.innerText)">${r.nanny}</td>
           <td class="center" contenteditable="true">${r.signed}</td>
           <td class="center" contenteditable="true">${r.card}</td>
           <td class="center" contenteditable="true">${r.feeNote}</td>
-          <td class="center" contenteditable="true" onblur="updateRowData(${r.seq - 1}, 'breakfast', this.innerText)">${r.breakfast}</td>
+          <td contenteditable="true" style="text-align:left; vertical-align:middle;" onblur="updateRowData(${r.seq - 1}, 'breakfast', this.innerText)">${breakfastDisplay}</td>
         `;
         tbody.appendChild(tr);
+      });
+
+      requestAnimationFrame(function() {
+        fitTableCellsTo90Percent(document.getElementById('tabSignIn'));
       });
     }
 
@@ -3585,26 +3970,14 @@
           }
         }
         
-        var isSameColorGroup = false;
-        if (cellA && cellB && cellA.name && cellB.name &&
-            !cellA.isGuest && !cellB.isGuest && !cellA.isOfficer && !cellB.isOfficer) {
-          var famA = getFrontendColorFamilyAndLum(cellA.color).family;
-          var famB = getFrontendColorFamilyAndLum(cellB.color).family;
-          if (famA === famB) isSameColorGroup = true;
+        if (cellA && cellA.name && !cellA.isGuest) {
+          cellA.color = resolveMemberQColor(cellA.name, cellA.color);
         }
-
-        if (isSameColorGroup) {
-          
-          var tempName = cellA.name;
-          cellA.name = cellB.name;
-          cellB.name = tempName;
-          assignGridCell(rA, src.key, cellA);
-          assignGridCell(rB, dst.key, cellB);
-        } else {
-          
-          assignGridCell(rA, src.key, cellB);
-          assignGridCell(rB, dst.key, cellA);
+        if (cellB && cellB.name && !cellB.isGuest) {
+          cellB.color = resolveMemberQColor(cellB.name, cellB.color);
         }
+        assignGridCell(rA, src.key, cellB);
+        assignGridCell(rB, dst.key, cellA);
         showToast('座位已交換（第 ' + (src.row + 1) + ' 排 ⇄ 第 ' + (dst.row + 1) + ' 排）');
       } else {
         showToast('請於主席台內部或會員席內部進行對調');
@@ -3841,12 +4214,16 @@
         specialEl.style.background = sc.specialMember.color || '#FAFAFA';
         specialEl.style.border = sName ? '1px solid #777' : '1.5px dashed #999';
         specialEl.innerHTML = `<span style="font-size: 10px; color: #888; display: block;">${sc.specialMember.role || '資訊協調員'}</span><strong>${sName || '(點擊填寫)'}</strong>`;
+        const sColor = sName ? resolveMemberQColor(sName, sc.specialMember.color) : '#FAFAFA';
+        sc.specialMember.color = sColor;
+        specialEl.style.background = sColor;
         specialEl.onblur = function() {
           const val = this.innerText.replace(sc.specialMember.role || '', '').replace('(點擊填寫)', '').trim();
           sc.specialMember.name = val;
-          const cMap = (appData.parsedPackage && appData.parsedPackage.memberColorMap) ? appData.parsedPackage.memberColorMap : {};
-          if (cMap[val]) this.style.background = cMap[val];
-          showToast('資訊協調員席已更新');
+          sc.specialMember.color = val ? resolveMemberQColor(val, '#FAFAFA') : '#FAFAFA';
+          renderSeatingChart();
+          autoSyncHistorySilent();
+          showToast('資訊協調員席與底色已更新');
         };
       }
 
@@ -3859,7 +4236,9 @@
         box.dataset.zone = 'head';
         box.dataset.idx = String(hIdx);
         const hName = (ht.name || '').trim();
-        box.style.background = ht.color || '#FAFAFA';
+        const hColor = hName ? resolveMemberQColor(hName, ht.color) : '#FAFAFA';
+        ht.color = hColor;
+        box.style.background = hColor;
         box.style.border = hName ? '1px solid #777' : '1.5px dashed #999';
         box.style.flexDirection = 'column';
         box.innerHTML = `<span style="font-size: 10px; color: #777;">${ht.role || ''}</span><strong>${hName || '(空)'}</strong>`;
@@ -3868,9 +4247,10 @@
           if (isDrag) return;
           const val = this.innerText.replace(ht.role || '', '').replace('(空)', '').trim();
           sc.headTable[hIdx].name = val;
-          const cMap = (appData.parsedPackage && appData.parsedPackage.memberColorMap) ? appData.parsedPackage.memberColorMap : {};
-          if (cMap[val]) this.style.background = cMap[val];
-          showToast(`幹部席 [${ht.role}] 已更新`);
+          sc.headTable[hIdx].color = val ? resolveMemberQColor(val, '#FAFAFA') : '#FAFAFA';
+          renderSeatingChart();
+          autoSyncHistorySilent();
+          showToast(`幹部席 [${ht.role}] 與底色已更新`);
         };
         headContainer.appendChild(box);
       });
@@ -3902,17 +4282,31 @@
           midCell2 = `<td class="empty-seat ${dragCls}" data-zone="grid" data-row="${rIdx}" data-key="midCol2" contenteditable="${editableAttr}" onblur="updateSeatGridCell(${rIdx}, 'mid2', this.innerText)"></td>`;
         }
 
+        if (row.mid1 && row.mid1.name && !row.mid1.isGuest) {
+          row.mid1.color = resolveMemberQColor(row.mid1.name, row.mid1.color);
+        }
+        if (row.mid2 && row.mid2.name && !row.mid2.isGuest) {
+          row.mid2.color = resolveMemberQColor(row.mid2.name, row.mid2.color);
+        }
+
         const left1Name = row.left1 ? row.left1.name : '';
-        const left1Color = row.left1 ? row.left1.color : '#FAFAFA';
+        const left1Color = (row.left1 && left1Name) ? (row.left1.isGuest ? '#FFEBEE' : resolveMemberQColor(left1Name, row.left1.color)) : '#FAFAFA';
+        if (row.left1 && left1Name && !row.left1.isGuest) row.left1.color = left1Color;
         const left1Cls = ((row.left1 && row.left1.isGuest) ? 'guest-seat ' : '') + dragCls;
+
         const left2Name = row.left2 ? row.left2.name : '';
-        const left2Color = row.left2 ? row.left2.color : '#FAFAFA';
+        const left2Color = (row.left2 && left2Name) ? (row.left2.isGuest ? '#FFEBEE' : resolveMemberQColor(left2Name, row.left2.color)) : '#FAFAFA';
+        if (row.left2 && left2Name && !row.left2.isGuest) row.left2.color = left2Color;
         const left2Cls = ((row.left2 && row.left2.isGuest) ? 'guest-seat ' : '') + dragCls;
+
         const right1Name = row.right1 ? row.right1.name : '';
-        const right1Color = row.right1 ? row.right1.color : '#FAFAFA';
+        const right1Color = (row.right1 && right1Name) ? (row.right1.isGuest ? '#FFEBEE' : resolveMemberQColor(right1Name, row.right1.color)) : '#FAFAFA';
+        if (row.right1 && right1Name && !row.right1.isGuest) row.right1.color = right1Color;
         const right1Cls = ((row.right1 && row.right1.isGuest) ? 'guest-seat ' : '') + dragCls;
+
         const right2Name = row.right2 ? row.right2.name : '';
-        const right2Color = row.right2 ? row.right2.color : '#FAFAFA';
+        const right2Color = (row.right2 && right2Name) ? (row.right2.isGuest ? '#FFEBEE' : resolveMemberQColor(right2Name, row.right2.color)) : '#FAFAFA';
+        if (row.right2 && right2Name && !row.right2.isGuest) row.right2.color = right2Color;
         const right2Cls = ((row.right2 && row.right2.isGuest) ? 'guest-seat ' : '') + dragCls;
 
         tr.innerHTML = `
@@ -3931,28 +4325,104 @@
       bindSeatDragAndTapHandlers(tbody);
     }
 
+    // ★ 嚴格從「30秒順序」Q 欄位底色字典查詢該會員姓名對應的真實底色
+    function resolveMemberQColor(rawName, fallbackColor) {
+      var clean = String(rawName || '')
+        .split('\n')[0]
+        .split('(')[0]
+        .split('（')[0]
+        .replace(/實習[：:]?\s*/g, '')
+        .trim();
+      if (!clean) return '#FAFAFA';
+      var cMap = (appData.parsedPackage && appData.parsedPackage.memberColorMap) ? appData.parsedPackage.memberColorMap : {};
+      if (cMap[clean]) return cMap[clean];
+      return fallbackColor || '#FCE5CD';
+    }
+
     function updateSeatGridCell(rowIdx, colKey, val) {
-      if (appData.parsedPackage?.seatingChart?.seatGrid?.[rowIdx]) {
-        const row = appData.parsedPackage.seatingChart.seatGrid[rowIdx];
-        if (row[colKey]) {
-          row[colKey].name = val.trim();
-          showToast('座位表第 ' + (rowIdx + 1) + ' 排席位已更新');
+      if (!appData.parsedPackage || !appData.parsedPackage.seatingChart || !appData.parsedPackage.seatingChart.seatGrid) return;
+      const row = appData.parsedPackage.seatingChart.seatGrid[rowIdx];
+      if (!row) return;
+
+      const cleanVal = String(val || '').trim();
+      const guestList = appData.parsedPackage.guests || [];
+      const isKnownGuest = guestList.some(function(g) { return g && g.name && g.name.trim() === cleanVal; });
+
+      
+      if (!row[colKey]) {
+        if (!cleanVal) return;
+        row[colKey] = {
+          name: cleanVal,
+          color: isKnownGuest ? '#FFEBEE' : resolveMemberQColor(cleanVal, '#FCE5CD'),
+          isGuest: isKnownGuest
+        };
+      } else {
+        row[colKey].name = cleanVal;
+        if (!cleanVal) {
+          row[colKey].color = '#FAFAFA';
+          row[colKey].isGuest = false;
+        } else if (isKnownGuest || row[colKey].isGuest) {
+          
+          if (isKnownGuest) {
+            row[colKey].isGuest = true;
+            row[colKey].color = '#FFEBEE';
+          } else {
+            row[colKey].isGuest = false;
+            row[colKey].color = resolveMemberQColor(cleanVal, '#FCE5CD');
+          }
+        } else {
+          
+          row[colKey].color = resolveMemberQColor(cleanVal, '#FCE5CD');
         }
       }
+
+      renderSeatingChart();
+      autoSyncHistorySilent();
+      showToast('座位表第 ' + (rowIdx + 1) + ' 排席位與底色已同步更新');
+    }
+
+    function onTaskCellEdited(tdEl) {
+      collectLockedTaskData();
+      autoSyncHistorySilent();
+    }
+
+    function toggleTaskRowLock(checkboxEl) {
+      var tr = checkboxEl ? checkboxEl.closest('tr') : null;
+      if (tr) {
+        tr.classList.toggle('task-row-locked', checkboxEl.checked);
+      }
+      collectLockedTaskData();
+      autoSyncHistorySilent();
     }
 
     function renderTaskTable() {
       const pkg = appData.parsedPackage;
-      if (!pkg || !pkg.taskTableMain) return;
+      if (!pkg || !pkg.taskTableMain) {
+        renderDefaultEmptyTables();
+        return;
+      }
       const t = pkg.taskTableMain;
+      const hasAnyTaskData =
+        (Array.isArray(t.adminTasks) && t.adminTasks.length > 0) ||
+        (Array.isArray(t.fieldTasks) && t.fieldTasks.length > 0) ||
+        (Array.isArray(t.nannyTasks) && t.nannyTasks.length > 0) ||
+        (t.tearDownTasks && Array.isArray(t.tearDownTasks.owners) && t.tearDownTasks.owners.length > 0) ||
+        (Array.isArray(t.closingTasks) && t.closingTasks.length > 0);
+
+      if (!hasAnyTaskData) {
+        renderDefaultEmptyTables();
+        return;
+      }
 
       const tbAdmin = document.getElementById('tbodyAdminTasks');
       tbAdmin.innerHTML = '';
       (t.adminTasks || []).forEach(at => {
         const tr = document.createElement('tr');
+        if (at.locked) tr.className = 'task-row-locked';
         tr.innerHTML = `
+          <td class="col-task-lock center"><input type="checkbox" class="task-lock-checkbox" ${at.locked ? 'checked' : ''} onchange="toggleTaskRowLock(this)"></td>
           <td style="font-weight: 700;">${at.task}</td>
-          <td contenteditable="true">${at.owner}</td>
+          <td contenteditable="true" onblur="collectLockedTaskData()">${at.owner}</td>
           <td style="color: var(--text-muted); background: var(--surface-subtle);">${at.remark}</td>
         `;
         tbAdmin.appendChild(tr);
@@ -3962,11 +4432,13 @@
       tbField.innerHTML = '';
       (t.fieldTasks || []).forEach(ft => {
         const tr = document.createElement('tr');
+        if (ft.locked) tr.className = 'task-row-locked';
         tr.innerHTML = `
+          <td class="col-task-lock center"><input type="checkbox" class="task-lock-checkbox" ${ft.locked ? 'checked' : ''} onchange="toggleTaskRowLock(this)"></td>
           <td style="font-weight: 700; background: var(--color-task-group);">${ft.task}</td>
-          <td contenteditable="true" style="font-weight: 600; color: var(--primary-red);">${ft.owners.join('、')}</td>
+          <td contenteditable="true" onblur="collectLockedTaskData()" style="font-weight: 600; color: var(--primary-red);">${(ft.owners || []).join('、')}</td>
           <td style="white-space: pre-wrap; color: var(--text-muted); background: var(--surface-subtle);">${ft.remark}</td>
-          <td contenteditable="true">${ft.note || ''}</td>
+          <td contenteditable="true" onblur="collectLockedTaskData()">${ft.note || ''}</td>
         `;
         tbField.appendChild(tr);
       });
@@ -3983,16 +4455,18 @@
       tbNanny.innerHTML = '';
       function buildNannyRowHtml(nt) {
         return `
+          <td class="col-task-lock center"><input type="checkbox" class="task-lock-checkbox" ${nt.locked ? 'checked' : ''} onchange="toggleTaskRowLock(this)"></td>
           <td style="font-weight: 700; background: #F4CCCC; text-align: center; vertical-align: middle;">會前交流</td>
-          <td contenteditable="true" style="font-weight: 700; color: #1155CC; background: #FFF9C4;">${nt.nanny}</td>
-          <td contenteditable="true" style="background: #FFF9C4;">${nt.guest}</td>
-          <td contenteditable="true" style="background: #FFF9C4;">${nt.company}</td>
-          <td contenteditable="true" style="background: #FFF9C4;">${nt.target}</td>
+          <td contenteditable="true" onblur="collectLockedTaskData()" style="font-weight: 700; color: #1155CC; background: #FFF9C4;">${nt.nanny}</td>
+          <td contenteditable="true" onblur="collectLockedTaskData()" style="background: #FFF9C4;">${nt.guest}</td>
+          <td contenteditable="true" onblur="collectLockedTaskData()" style="background: #FFF9C4;">${nt.company}</td>
+          <td contenteditable="true" onblur="collectLockedTaskData()" style="background: #FFF9C4;">${nt.target}</td>
           <td style="white-space: pre-wrap; font-size: 14px; line-height: 1.45; color: #111;">${nt.note}</td>
         `;
       }
       nannyList.slice(0, NANNY_PER_PAGE).forEach(nt => {
         const tr = document.createElement('tr');
+        if (nt.locked) tr.className = 'task-row-locked';
         tr.innerHTML = buildNannyRowHtml(nt);
         tbNanny.appendChild(tr);
       });
@@ -4000,11 +4474,11 @@
         const extraDiv = document.createElement('div');
         extraDiv.className = 'a4-page dynamic-task-page';
         extraDiv.style.display = 'none';
-        const rowsHtml = nannyList.slice(i, i + NANNY_PER_PAGE).map(nt => `<tr>${buildNannyRowHtml(nt)}</tr>`).join('');
+        const rowsHtml = nannyList.slice(i, i + NANNY_PER_PAGE).map(nt => `<tr class="${nt.locked ? 'task-row-locked' : ''}">${buildNannyRowHtml(nt)}</tr>`).join('');
         extraDiv.innerHTML = `
           <div style="height: 4px; background: var(--color-task-top); margin-bottom: 12px;"></div>
           <div class="a4-page-header"><h2>任務表_主 (來賓交流任務 - 續頁)</h2><div class="subtitle">三、來賓交流任務 (專屬保母配對) ｜ 列印專用 A4 格式</div></div>
-          <table class="data-table task-table"><thead><tr><th style="width:11%;">交流任務</th><th style="width:13%;">保母</th><th style="width:13%;">來賓姓名</th><th style="width:20%;">公司名稱</th><th style="width:19%;">想對接產業代表</th><th style="width:24%;">注意事項</th></tr></thead><tbody>${rowsHtml}</tbody></table>
+          <table class="data-table task-table"><thead><tr><th class="col-task-lock" style="width:46px;">鎖定</th><th style="width:10%;">交流任務</th><th style="width:13%;">保母</th><th style="width:12%;">來賓姓名</th><th style="width:18%;">公司名稱</th><th style="width:18%;">想對接產業代表</th><th style="width:23%;">注意事項</th></tr></thead><tbody>${rowsHtml}</tbody></table>
         `;
         taskWrapper.insertBefore(extraDiv, document.getElementById('taskPage3'));
       }
@@ -4013,21 +4487,24 @@
       tbTD.innerHTML = '';
       const td = t.tearDownTasks || {};
       const trTD = document.createElement('tr');
+      if (td.locked) trTD.className = 'task-row-locked';
       trTD.innerHTML = `
+        <td class="col-task-lock center"><input type="checkbox" class="task-lock-checkbox" ${td.locked ? 'checked' : ''} onchange="toggleTaskRowLock(this)"></td>
         <td style="font-weight: 700; background: var(--color-task-group);">${td.task || '撤場組'}</td>
-        <td contenteditable="true" style="font-weight: 600; color: var(--primary-red);">${(td.owners || []).join('、')}</td>
+        <td contenteditable="true" onblur="collectLockedTaskData()" style="font-weight: 600; color: var(--primary-red);">${(td.owners || []).join('、')}</td>
         <td style="white-space: pre-wrap; color: var(--text-muted); background: var(--surface-subtle);">${td.remark || ''}</td>
-        <td contenteditable="true" style="white-space: pre-wrap;">${td.note || ''}</td>
+        <td contenteditable="true" onblur="collectLockedTaskData()" style="white-space: pre-wrap;">${td.note || ''}</td>
       `;
       tbTD.appendChild(trTD);
 
       function buildClosingRowHtml(ct) {
         return `
+          <td class="col-task-lock center"><input type="checkbox" class="task-lock-checkbox" ${ct.locked ? 'checked' : ''} onchange="toggleTaskRowLock(this)"></td>
           <td style="font-weight: 700; background: #D9EAD3; text-align: center; vertical-align: middle;">會後接待<br>(諮詢組)</td>
-          <td contenteditable="true" style="font-weight: 700; color: #1155CC; background: #FFF9C4;">${ct.consultant}</td>
-          <td contenteditable="true" style="background: #FFF9C4;">${ct.guest}</td>
-          <td contenteditable="true" style="background: #FFF9C4;">${ct.company}</td>
-          <td contenteditable="true" style="background: #FFF9C4;">${ct.inviter}</td>
+          <td contenteditable="true" onblur="collectLockedTaskData()" style="font-weight: 700; color: #1155CC; background: #FFF9C4;">${ct.consultant}</td>
+          <td contenteditable="true" onblur="collectLockedTaskData()" style="background: #FFF9C4;">${ct.guest}</td>
+          <td contenteditable="true" onblur="collectLockedTaskData()" style="background: #FFF9C4;">${ct.company}</td>
+          <td contenteditable="true" onblur="collectLockedTaskData()" style="background: #FFF9C4;">${ct.inviter}</td>
           <td style="white-space: pre-wrap; font-size: 14px; line-height: 1.45; color: #111;">${ct.note}</td>
         `;
       }
@@ -4035,6 +4512,7 @@
       tbClose.innerHTML = '';
       closingList.slice(0, CLOSING_FIRST_PAGE).forEach(ct => {
         const tr = document.createElement('tr');
+        if (ct.locked) tr.className = 'task-row-locked';
         tr.innerHTML = buildClosingRowHtml(ct);
         tbClose.appendChild(tr);
       });
@@ -4042,11 +4520,11 @@
         const extraCloseDiv = document.createElement('div');
         extraCloseDiv.className = 'a4-page dynamic-task-page';
         extraCloseDiv.style.display = 'none';
-        const cRowsHtml = closingList.slice(j, j + CLOSING_PER_PAGE).map(ct => `<tr>${buildClosingRowHtml(ct)}</tr>`).join('');
+        const cRowsHtml = closingList.slice(j, j + CLOSING_PER_PAGE).map(ct => `<tr class="${ct.locked ? 'task-row-locked' : ''}">${buildClosingRowHtml(ct)}</tr>`).join('');
         extraCloseDiv.innerHTML = `
           <div style="height: 4px; background: var(--color-task-top); margin-bottom: 12px;"></div>
           <div class="a4-page-header"><h2>任務表_主 (會後諮詢締結組 - 續頁)</h2><div class="subtitle">五、會後接待 (諮詢締結組) ｜ 列印專用 A4 格式</div></div>
-          <table class="data-table task-table"><thead><tr><th style="width:13%;">工作事項</th><th style="width:14%;">諮詢師 (締結)</th><th style="width:12%;">來賓姓名</th><th style="width:20%;">公司名稱</th><th style="width:15%;">邀約人</th><th style="width:26%;">注意事項</th></tr></thead><tbody>${cRowsHtml}</tbody></table>
+          <table class="data-table task-table"><thead><tr><th class="col-task-lock" style="width:46px;">鎖定</th><th style="width:12%;">工作事項</th><th style="width:13%;">諮詢師</th><th style="width:12%;">來賓姓名</th><th style="width:19%;">公司名稱</th><th style="width:14%;">邀約人</th><th style="width:24%;">注意事項</th></tr></thead><tbody>${cRowsHtml}</tbody></table>
         `;
         taskWrapper.appendChild(extraCloseDiv);
       }
@@ -4345,27 +4823,6 @@
     
     function compileAllA4PagesData() {
       var allPages = [];
-      var pkg = appData.parsedPackage;
-
-      
-      var origSignPage = appData.currentPageSignIn;
-      var totalSignPages = calcCurrentSignPages();
-      var signTab = document.getElementById('tabSignIn');
-      for (var p = 1; p <= totalSignPages; p++) {
-        appData.currentPageSignIn = p;
-        renderSignInTable();
-        var pEl = signTab.querySelector('.a4-page');
-        if (pEl) {
-          allPages.push({
-            category: '來賓簽到表',
-            pageTitle: '來賓簽到表 (第 ' + p + ' 頁 / 共 ' + totalSignPages + ' 頁)',
-            tabId: 'tabSignIn',
-            dom: pEl.cloneNode(true)
-          });
-        }
-      }
-      appData.currentPageSignIn = origSignPage;
-      renderSignInTable();
 
       
       var origLabelPage = appData.currentPageLabel;
@@ -4388,18 +4845,6 @@
       renderLabels();
 
       
-      var seatTab = document.getElementById('tabSeats');
-      var sEl = seatTab ? seatTab.querySelector('.a4-page') : null;
-      if (sEl) {
-        allPages.push({
-          category: '座位表',
-          pageTitle: '例會座位表',
-          tabId: 'tabSeats',
-          dom: sEl.cloneNode(true)
-        });
-      }
-
-      
       var origTaskPage = appData.currentPageTask || 1;
       var allTaskPages = document.querySelectorAll('#tabTasks .preview-scroll-wrapper .a4-page');
       allTaskPages.forEach(function(pageEl, pIdx) {
@@ -4414,6 +4859,38 @@
       });
       switchTaskPage(origTaskPage);
 
+      
+      var origSignPage = appData.currentPageSignIn;
+      var totalSignPages = calcCurrentSignPages();
+      var signTab = document.getElementById('tabSignIn');
+      for (var p = 1; p <= totalSignPages; p++) {
+        appData.currentPageSignIn = p;
+        renderSignInTable();
+        var pEl = signTab.querySelector('.a4-page');
+        if (pEl) {
+          allPages.push({
+            category: '來賓簽到表',
+            pageTitle: '來賓簽到表 (第 ' + p + ' 頁 / 共 ' + totalSignPages + ' 頁)',
+            tabId: 'tabSignIn',
+            dom: pEl.cloneNode(true)
+          });
+        }
+      }
+      appData.currentPageSignIn = origSignPage;
+      renderSignInTable();
+
+      
+      var seatTab = document.getElementById('tabSeats');
+      var sEl = seatTab ? seatTab.querySelector('.a4-page') : null;
+      if (sEl) {
+        allPages.push({
+          category: '座位表',
+          pageTitle: '例會座位表',
+          tabId: 'tabSeats',
+          dom: sEl.cloneNode(true)
+        });
+      }
+
       return allPages;
     }
 
@@ -4425,7 +4902,169 @@
     };
 
     
-    function toggleInlineFullPreview() {
+    function fitTableCellsTo90Percent(rootScope) {
+      var scope = rootScope || document;
+      
+      scope.querySelectorAll('#tabSignIn table.signin-table tr').forEach(function(tr) {
+        var tds = tr.querySelectorAll('td');
+        if (tds.length === 0) return;
+
+        tds.forEach(function(td, colIdx) {
+          var txt = td.innerText.trim();
+          if (!txt) return;
+          var isBreakfastCol = (colIdx === tds.length - 1);
+          var cellH = td.clientHeight || 56;
+          var cellW = (td.clientWidth || 70) - 8;
+
+          if (isBreakfastCol) {
+            td.style.setProperty('text-align', 'left', 'important');
+            td.style.setProperty('vertical-align', 'middle', 'important');
+            
+            var targetWidth70 = Math.max(30, cellW * 0.70);
+            var charCount = Math.max(4, txt.length);
+            var pxByWidth70 = Math.floor(targetWidth70 / charCount);
+            var pxByHeight70 = Math.floor(cellH * 0.36);
+            var finalBreakfastPx = Math.max(10.5, Math.min(14, pxByWidth70, pxByHeight70));
+            td.style.fontSize = finalBreakfastPx + 'px';
+          } else {
+            td.style.setProperty('text-align', 'center', 'important');
+            td.style.setProperty('vertical-align', 'middle', 'important');
+            var targetPx = Math.min(24, Math.floor(cellH * 0.56));
+            td.style.fontSize = targetPx + 'px';
+            if (td.scrollWidth > cellW && cellW > 12) {
+              var ratio = cellW / td.scrollWidth;
+              td.style.fontSize = Math.max(12, Math.floor(targetPx * ratio * 0.94)) + 'px';
+            }
+          }
+        });
+      });
+
+      
+      scope.querySelectorAll('#tabTasks table.task-table').forEach(function(tbl) {
+        var tblId = tbl.id || '';
+        var hasStdRemarkCol = (tblId === 'tableAdminTasks' || tblId === 'tableFieldTasks' || tblId === 'tableTearDown');
+
+        var firstThText = '';
+        var thList = tbl.querySelectorAll('thead th');
+        if (thList.length >= 6) {
+          firstThText = String(thList[5].innerText || '').trim();
+        }
+        var isNannyTable = (tblId === 'tableNannyTasks' || firstThText.indexOf('想對接') !== -1);
+
+        tbl.querySelectorAll('tbody tr').forEach(function(tr) {
+          var tds = tr.querySelectorAll('td');
+          if (tds.length === 0) return;
+
+          tds.forEach(function(td, colIdx) {
+            var txt = td.innerText.trim();
+            if (!txt) return;
+            var isLastNoteCol = (colIdx === tds.length - 1);
+            var isStdRemarkCol = (hasStdRemarkCol && colIdx === 3);
+            var isTargetIndustryCol = (isNannyTable && colIdx === 5);
+
+            if (isLastNoteCol || isStdRemarkCol) {
+              td.style.setProperty('text-align', 'left', 'important');
+              td.style.setProperty('vertical-align', 'middle', 'important');
+              var cellH = td.clientHeight || 64;
+              var len = txt.length;
+              var basePx = 13;
+              if (len <= 25) {
+                basePx = Math.min(15, Math.max(12.5, Math.floor(cellH * 0.24)));
+              } else if (len <= 80) {
+                basePx = 12.5;
+              } else {
+                basePx = 11.5;
+              }
+              td.style.fontSize = basePx + 'px';
+            } else if (isTargetIndustryCol) {
+              td.style.setProperty('text-align', 'left', 'important');
+              td.style.setProperty('vertical-align', 'middle', 'important');
+              var targetLen = txt.length;
+              if (targetLen <= 8) {
+                td.style.fontSize = '16.5px';
+              } else if (targetLen <= 20) {
+                td.style.fontSize = '14.5px';
+              } else {
+                td.style.fontSize = '13px';
+              }
+            } else {
+              td.style.setProperty('text-align', 'center', 'important');
+              td.style.setProperty('vertical-align', 'middle', 'important');
+              var otherLen = txt.length;
+              if (otherLen <= 10) {
+                td.style.fontSize = '18px';
+              } else if (otherLen <= 35) {
+                td.style.fontSize = '15.5px';
+              } else {
+                td.style.fontSize = '13.5px';
+              }
+            }
+          });
+        });
+      });
+    }
+
+    
+    function buildSeq30A4PageElement(seq30Data) {
+      var pageDiv = document.createElement('div');
+      pageDiv.className = 'a4-page seq30-a4-page';
+      pageDiv.style.cssText = 'width:210mm; height:297mm; padding:6mm 6mm; box-sizing:border-box; background:#FFFFFF; display:flex; flex-direction:column; justify-content:space-between; overflow:hidden;';
+
+      var rows = (seq30Data && seq30Data.rows) ? seq30Data.rows : [];
+      var colWidths = (seq30Data && seq30Data.colWidths && seq30Data.colWidths.length === 15)
+        ? seq30Data.colWidths
+        : [26, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72];
+
+      if (rows.length === 0) {
+        pageDiv.innerHTML = '<div style="margin:auto; font-size:16px; color:#666;">「30秒順序」工作表目前無資料</div>';
+        return pageDiv;
+      }
+
+      var totalColWeight = colWidths.reduce(function(acc, w) { return acc + (w || 70); }, 0);
+      var colgroupHtml = '<colgroup>' + colWidths.map(function(w) {
+        var pct = ((w || 70) / totalColWeight * 100).toFixed(2);
+        return '<col style="width:' + pct + '%;">';
+      }).join('') + '</colgroup>';
+
+      
+      var usableHeightMm = 283;
+      var rowHeightMm = (usableHeightMm / rows.length).toFixed(2);
+      var autoFontPx = Math.max(9.5, Math.min(15, Math.floor((usableHeightMm * 3.78 / rows.length) * 0.62)));
+
+      var tbodyHtml = rows.map(function(rCells) {
+        var tds = rCells.map(function(cell) {
+          if (cell.skip) return '';
+          var bg = cell.bg || '#FFFFFF';
+          var fg = cell.fg || '#111111';
+          var fw = cell.bold ? '700' : '600';
+          var safeTxt = String(cell.text || '').replace(/</g, '<').replace(/>/g, '>');
+          var spanAttrs = '';
+          if (cell.rowSpan && cell.rowSpan > 1) spanAttrs += ' rowspan="' + cell.rowSpan + '"';
+          if (cell.colSpan && cell.colSpan > 1) spanAttrs += ' colspan="' + cell.colSpan + '"';
+
+          
+          var bTop = cell.bTop || 'none';
+          var bBottom = cell.bBottom || 'none';
+          var bLeft = cell.bLeft || 'none';
+          var bRight = cell.bRight || 'none';
+          var fontSz = (cell.colSpan && cell.colSpan >= 6) ? Math.max(13, autoFontPx + 3) : autoFontPx;
+
+          return '<td' + spanAttrs + ' style="background:' + bg + '; color:' + fg + '; font-weight:' + fw + '; border-top:' + bTop + '; border-bottom:' + bBottom + '; border-left:' + bLeft + '; border-right:' + bRight + '; text-align:center; vertical-align:middle; padding:1px 3px; font-size:' + fontSz + 'px; line-height:1.15; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + safeTxt + '</td>';
+        }).join('');
+        return '<tr style="height:' + rowHeightMm + 'mm;">' + tds + '</tr>';
+      }).join('');
+
+      pageDiv.innerHTML =
+        '<table style="width:100%; height:100%; border-collapse:collapse; table-layout:fixed; margin:0;">' +
+          colgroupHtml +
+          '<tbody>' + tbodyHtml + '</tbody>' +
+        '</table>';
+
+      return pageDiv;
+    }
+
+    
+    async function toggleInlineFullPreview() {
       var section = document.getElementById('fullPreviewSection');
       var container = document.getElementById('fullPreviewPagesContainer');
       if (!section || !container) return;
@@ -4439,6 +5078,30 @@
       if (!allPages || allPages.length === 0) {
         showToast('目前尚未生成任何 A4 報表內容！');
         return;
+      }
+
+      
+      var refId = CONFIG_FRONTEND.DEFAULT_REF_SPREADSHEET_ID;
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        showToast('正在讀取試算表「30秒順序」A:O 欄與底色...');
+        try {
+          var seq30Res = await new Promise(function(resolve) {
+            google.script.run
+              .withSuccessHandler(function(r) { resolve(r); })
+              .withFailureHandler(function() { resolve(null); })
+              .getSeq30SheetPreviewData(refId);
+          });
+          if (seq30Res && seq30Res.success && Array.isArray(seq30Res.rows) && seq30Res.rows.length > 0) {
+            allPages.push({
+              category: '30秒順序',
+              pageTitle: '30秒順序 (A:O 欄等比例 A4 最大化)',
+              tabId: 'tabSeq30',
+              dom: buildSeq30A4PageElement(seq30Res)
+            });
+          }
+        } catch (e) {
+          console.error('讀取 30秒順序預覽異常:', e);
+        }
       }
 
       container.innerHTML = '';
@@ -4547,6 +5210,7 @@
       section.style.display = 'block';
       setTimeout(function() {
         fitLabelStickers(container);
+        fitTableCellsTo90Percent(container);
         applyFullPreviewZoom(fullPreviewZoomState.baseFitScale, false);
         section.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 50);
